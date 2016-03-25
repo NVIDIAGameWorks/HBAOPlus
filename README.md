@@ -6,8 +6,10 @@ To begin, clone this repository onto your local drive.
 See Documentation under \doc.
 
 NVIDIA HBAO+ 3.0.
+----------------------
 
 Overview
+---------
 
 HBAO+ is a SSAO algorithm designed to achieve high GPU efficiency. The algorithm is based on HBAO [Bavoil and Sainz 2008], with the following differences:
 
@@ -16,6 +18,7 @@ To avoid over-occlusion artifacts, HBAO+ uses a simpler AO approximation than HB
 To minimize flickering, the HBAO+ is always rendered in full resolution, from full-resolution depths.
 
 Package
+--------
 doc/—this documentation page.
 
 lib/—header file, import libraries and DLLs, for Win32, Win64, Mac OS X and Linux.
@@ -23,6 +26,7 @@ lib/—header file, import libraries and DLLs, for Win32, Win64, Mac OS X and Li
 samples/—source for sample applications demonstrating NVIDIA HBAO+.
 
 Getting Started
+---------------
 INITIALIZE THE LIBRARY:
 
 GFSDK_SSAO_CustomHeap CustomHeap;
@@ -61,6 +65,7 @@ status = pAOContext->RenderAO(pD3D11Context, Input, Params, Output);
 assert(status == GFSDK_SSAO_OK);
 
 Data Flow
+---------
 Input Requirements
 The library has entry points for D3D11, D3D12 and GL3.2+.
 Requires a depth texture to be provided as input, along with associated projection info.
@@ -73,6 +78,7 @@ Defines a sub-area of the input & output full-resolution textures to be sourced 
 The library re-allocates its internal render targets if the Viewport.Width or Viewport.Height changes for a given AO context.
 
 MSAA Support
+------------
 Requirements
 The input depth & normal textures are required to have matching dimensions and MSAA sample count.
 The output render target can have arbitrary dimensions and MSAA sample count.
