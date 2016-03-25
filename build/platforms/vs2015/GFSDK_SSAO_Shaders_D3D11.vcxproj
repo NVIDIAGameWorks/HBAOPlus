@@ -1,0 +1,346 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="debug|Win32">
+      <Configuration>debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="perfdev|Win32">
+      <Configuration>perfdev</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="release|Win32">
+      <Configuration>release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ApplicationEnvironment>title</ApplicationEnvironment>
+    <!-- - - - -->
+    <PlatformToolset>v110</PlatformToolset>
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+    <ProjectGuid>{A64D27A9-CD59-476B-B5CB-0260A408793B}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
+    <OutDir>$(SolutionDir)/out\\</OutDir>
+    <IntDir>./Win32/GFSDK_SSAO_Shaders_D3D11/debug\</IntDir>
+    <TargetExt>.lib</TargetExt>
+    <TargetName>GFSDK_SSAO_Shaders_D3D11</TargetName>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules />
+    <CodeAnalysisRuleAssemblies />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
+    <ClCompile>
+      <MinimalRebuild>true</MinimalRebuild>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>false</OpenMPSupport>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <AdditionalOptions> /d2Zi+</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <OutputFile>$(OutDir)GFSDK_SSAO_Shaders_D3D11.lib</OutputFile>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ProgramDatabaseFile>$(OutDir)/GFSDK_SSAO_Shaders_D3D11.lib.pdb</ProgramDatabaseFile>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+    <ResourceCompile>
+    </ResourceCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">
+    <OutDir>$(SolutionDir)/out\\</OutDir>
+    <IntDir>./Win32/GFSDK_SSAO_Shaders_D3D11/perfdev\</IntDir>
+    <TargetExt>.lib</TargetExt>
+    <TargetName>GFSDK_SSAO_Shaders_D3D11</TargetName>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules />
+    <CodeAnalysisRuleAssemblies />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">
+    <ClCompile>
+      <MinimalRebuild>true</MinimalRebuild>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>false</OpenMPSupport>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <AdditionalOptions> /d2Zi+</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <OutputFile>$(OutDir)GFSDK_SSAO_Shaders_D3D11.lib</OutputFile>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ProgramDatabaseFile>$(OutDir)/GFSDK_SSAO_Shaders_D3D11.lib.pdb</ProgramDatabaseFile>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+    <ResourceCompile>
+    </ResourceCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'">
+    <OutDir>$(SolutionDir)/out\\</OutDir>
+    <IntDir>./Win32/GFSDK_SSAO_Shaders_D3D11/release\</IntDir>
+    <TargetExt>.lib</TargetExt>
+    <TargetName>GFSDK_SSAO_Shaders_D3D11</TargetName>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules />
+    <CodeAnalysisRuleAssemblies />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'">
+    <ClCompile>
+      <MinimalRebuild>true</MinimalRebuild>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>false</OpenMPSupport>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <AdditionalOptions> /d2Zi+</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <OutputFile>$(OutDir)GFSDK_SSAO_Shaders_D3D11.lib</OutputFile>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ProgramDatabaseFile>$(OutDir)/GFSDK_SSAO_Shaders_D3D11.lib.pdb</ProgramDatabaseFile>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+    <ResourceCompile>
+    </ResourceCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\shaders\src\SharedDefines.h">
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\src\shaders\src\CopyDepth_PS.hlsl">
+      <Command Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\CopyDepth_PS.hlsl CopyDepth_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\out\D3D11\CopyDepth_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\CopyDepth_PS.hlsl CopyDepth_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\out\D3D11\CopyDepth_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='release|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\CopyDepth_PS.hlsl CopyDepth_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='release|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\out\D3D11\CopyDepth_PS.h;</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\shaders\src\LinearizeDepth_PS.hlsl">
+      <Command Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\LinearizeDepth_PS.hlsl LinearizeDepth_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\out\D3D11\LinearizeDepth_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\LinearizeDepth_PS.hlsl LinearizeDepth_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\out\D3D11\LinearizeDepth_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='release|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\LinearizeDepth_PS.hlsl LinearizeDepth_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='release|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\out\D3D11\LinearizeDepth_PS.h;</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\shaders\src\DeinterleaveDepth_PS.hlsl">
+      <Command Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\DeinterleaveDepth_PS.hlsl DeinterleaveDepth_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\out\D3D11\DeinterleaveDepth_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\DeinterleaveDepth_PS.hlsl DeinterleaveDepth_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\out\D3D11\DeinterleaveDepth_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='release|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\DeinterleaveDepth_PS.hlsl DeinterleaveDepth_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='release|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\out\D3D11\DeinterleaveDepth_PS.h;</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\shaders\src\DebugNormals_PS.hlsl">
+      <Command Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\DebugNormals_PS.hlsl DebugNormals_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ReconstructNormal_Common.hlsl;..\..\..\src\shaders\src\FetchNormal_Common.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\out\D3D11\DebugNormals_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\DebugNormals_PS.hlsl DebugNormals_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ReconstructNormal_Common.hlsl;..\..\..\src\shaders\src\FetchNormal_Common.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\out\D3D11\DebugNormals_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='release|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\DebugNormals_PS.hlsl DebugNormals_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ReconstructNormal_Common.hlsl;..\..\..\src\shaders\src\FetchNormal_Common.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='release|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\out\D3D11\DebugNormals_PS.h;</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\shaders\src\ReconstructNormal_PS.hlsl">
+      <Command Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\ReconstructNormal_PS.hlsl ReconstructNormal_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ReconstructNormal_Common.hlsl;..\..\..\src\shaders\src\FetchNormal_Common.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\out\D3D11\ReconstructNormal_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\ReconstructNormal_PS.hlsl ReconstructNormal_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ReconstructNormal_Common.hlsl;..\..\..\src\shaders\src\FetchNormal_Common.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\out\D3D11\ReconstructNormal_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='release|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\ReconstructNormal_PS.hlsl ReconstructNormal_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ReconstructNormal_Common.hlsl;..\..\..\src\shaders\src\FetchNormal_Common.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='release|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\out\D3D11\ReconstructNormal_PS.h;</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\shaders\src\CoarseAO_PS.hlsl">
+      <Command Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\CoarseAO_PS.hlsl CoarseAO_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\FetchNormal_Common.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\out\D3D11\CoarseAO_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\CoarseAO_PS.hlsl CoarseAO_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\FetchNormal_Common.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\out\D3D11\CoarseAO_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='release|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\CoarseAO_PS.hlsl CoarseAO_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\FetchNormal_Common.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='release|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\out\D3D11\CoarseAO_PS.h;</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\shaders\src\ReinterleaveAO_PS.hlsl">
+      <Command Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\ReinterleaveAO_PS.hlsl ReinterleaveAO_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\out\D3D11\ReinterleaveAO_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\ReinterleaveAO_PS.hlsl ReinterleaveAO_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\out\D3D11\ReinterleaveAO_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='release|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\ReinterleaveAO_PS.hlsl ReinterleaveAO_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='release|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\out\D3D11\ReinterleaveAO_PS.h;</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\shaders\src\BlurX_PS.hlsl">
+      <Command Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\BlurX_PS.hlsl BlurX_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\Blur_Common.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\out\D3D11\BlurX_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\BlurX_PS.hlsl BlurX_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\Blur_Common.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\out\D3D11\BlurX_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='release|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\BlurX_PS.hlsl BlurX_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\Blur_Common.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='release|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\out\D3D11\BlurX_PS.h;</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\shaders\src\BlurY_PS.hlsl">
+      <Command Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\BlurY_PS.hlsl BlurY_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\Blur_Common.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\out\D3D11\BlurY_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\BlurY_PS.hlsl BlurY_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\Blur_Common.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\out\D3D11\BlurY_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='release|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\BlurY_PS.hlsl BlurY_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\Blur_Common.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;..\..\..\src\shaders\src\ConstantBuffers.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='release|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\out\D3D11\BlurY_PS.h;</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl">
+      <Command Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe vs_5_0 ..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl FullScreenTriangle_VS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\out\D3D11\FullScreenTriangle_VS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe vs_5_0 ..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl FullScreenTriangle_VS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\out\D3D11\FullScreenTriangle_VS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='release|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe vs_5_0 ..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl FullScreenTriangle_VS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='release|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\out\D3D11\FullScreenTriangle_VS.h;</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\shaders\src\DebugAO_PS.hlsl">
+      <Command Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\DebugAO_PS.hlsl DebugAO_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;DebugAO_Common.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\out\D3D11\DebugAO_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\DebugAO_PS.hlsl DebugAO_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;DebugAO_Common.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\out\D3D11\DebugAO_PS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='release|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe ps_5_0 ..\..\..\src\shaders\src\DebugAO_PS.hlsl DebugAO_PS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl;DebugAO_Common.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='release|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\out\D3D11\DebugAO_PS.h;</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\shaders\src\CoarseAO_GS.hlsl">
+      <Command Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe gs_5_0 ..\..\..\src\shaders\src\CoarseAO_GS.hlsl CoarseAO_GS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">..\..\..\src\shaders\out\D3D11\CoarseAO_GS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe gs_5_0 ..\..\..\src\shaders\src\CoarseAO_GS.hlsl CoarseAO_GS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='perfdev|Win32'">..\..\..\src\shaders\out\D3D11\CoarseAO_GS.h;</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='release|Win32'">CMD /C ..\..\..\src\shaders\ShaderBuildTool.exe gs_5_0 ..\..\..\src\shaders\src\CoarseAO_GS.hlsl CoarseAO_GS ..\..\..\src\shaders\out\D3D11 ..\..\..\src\shaders\compile_hlsl.bat D3D11</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\src\SharedDefines.h;..\..\..\src\shaders\src\ConstantBuffers.hlsl;..\..\..\src\shaders\src\FullScreenTriangle_VS.hlsl</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='release|Win32'">FXC - %(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">..\..\..\src\shaders\out\D3D11\CoarseAO_GS.h;</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

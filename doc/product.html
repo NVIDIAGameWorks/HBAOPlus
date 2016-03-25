@@ -1,0 +1,403 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="x-ua-compatible" content="IE=Edge"/>
+    
+    <title>NVIDIA HBAO+ 3.0. &mdash; NVIDIA HBAO+ 3.0. documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/breathe.css" type="text/css" />
+    <link rel="stylesheet" href="_static/application.css" type="text/css" />
+    <link rel="stylesheet" href="_static/styleguide.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.0.',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/bootstrap.js"></script>
+    <link rel="top" title="NVIDIA HBAO+ 3.0. documentation" href="index.html" />
+    <link rel="next" title="Change Log" href="changelog.html" />
+    <link rel="prev" title="NVIDIA HBAO+" href="index.html" /> 
+  </head>
+  <body>
+<nav class="navbar navbar-inverse navbar-default">
+  <div class="row">
+      <div class="navbar-brand">
+             <img class="logo" src="_static/developerzone_gameworks_logo.png" alt="Logo"/>
+      </div>
+  </div>
+</nav>
+<div class="masthead">
+    <div class="row">
+      <ul class="breadcrumb">
+        <li><a href="index.html">NVIDIA HBAO+ 3.0. documentation</a></li> 
+      </ul>
+    </div>
+</div>
+<div class="row">
+  <div class="col-md-3 bs-sidenav">
+<div class="bs-sidebar">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <div id="sidebar_toc">
+  <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">NVIDIA HBAO+ 3.0.</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#package">Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-flow">Data Flow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#input-requirements">Input Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#msaa-support">MSAA Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hbao-pipeline">HBAO+ Pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#occlusion-samples">Occlusion Samples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#parameters">Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ao-radius">AO Radius</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#meterstoviewspaceunits">MetersToViewSpaceUnits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#power-exponent">Power Exponent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ao-bias">AO Bias</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foreground-ao">Foreground AO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#background-ao">Background AO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ao-blur">AO Blur</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#blur-sharpness">Blur Sharpness</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#integration-time-estimates">Integration Time Estimates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#additional-links">Additional Links</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a><ul class="simple">
+</ul>
+</li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">NVIDIA HBAO+</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="changelog.html"
+                        title="next chapter">Change Log</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search form-inline" action="search.html" method="get">
+      <div class="form-group">
+      <input type="text" name="q" class="form-control" />
+      <input type="submit" value="Search" class="btn btn-primary" />
+      </div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+</div>
+  </div>
+    <div class="document col-md-8">
+          <div class="body">
+            
+  <div class="section" id="productname-version">
+<h1>NVIDIA HBAO+ 3.0.<a class="headerlink" href="#productname-version" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>HBAO+ is a SSAO algorithm designed to achieve high GPU efficiency.
+The algorithm is based on HBAO [Bavoil and Sainz 2008], with the following differences:</p>
+<ol class="arabic simple">
+<li>To minimize cache trashing, HBAO+ does not use any randomization texture. Instead, the algorithm uses an Interleaved Rendering approach, generating the AO in multiple passes with a unique jitter value per pass [Bavoil and Jansen 2013].</li>
+<li>To avoid over-occlusion artifacts, HBAO+ uses a simpler AO approximation than HBAO, similar to &#8220;Scalable Ambient Obscurance&#8221; [McGuire et al. 2012] [Bukowski et al. 2012].</li>
+<li>To minimize flickering, the HBAO+ is always rendered in full resolution, from full-resolution depths.</li>
+</ol>
+<img alt="_images/hbao-plus-in-tom-clancys-splinter-cell-blacklist-2.jpg" src="_images/hbao-plus-in-tom-clancys-splinter-cell-blacklist-2.jpg" />
+</div>
+<div class="section" id="package">
+<h2>Package<a class="headerlink" href="#package" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">doc/</span></tt>—this documentation page.</p>
+<p><tt class="docutils literal"><span class="pre">lib/</span></tt>—header file, import libraries and DLLs, for Win32, Win64, Mac OS X and Linux.</p>
+<p><tt class="docutils literal"><span class="pre">samples/</span></tt>—source for sample applications demonstrating NVIDIA HBAO+.</p>
+</div>
+<div class="section" id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">INITIALIZE THE LIBRARY:</p>
+<div class="highlight-python"><pre>GFSDK_SSAO_CustomHeap CustomHeap;
+CustomHeap.new_ = ::operator new;
+CustomHeap.delete_ = ::operator delete;
+
+GFSDK_SSAO_Status status;
+GFSDK_SSAO_Context_D3D11* pAOContext;
+status = GFSDK_SSAO_CreateContext_D3D11(pD3D11Device, &amp;pAOContext, &amp;CustomHeap);
+assert(status == GFSDK_SSAO_OK); // HBAO+ requires feature level 11_0 or above</pre>
+</div>
+</li>
+<li><p class="first">SET INPUT DEPTHS:</p>
+<div class="highlight-python"><pre>GFSDK_SSAO_InputData_D3D11 Input;
+Input.DepthData.DepthTextureType = GFSDK_SSAO_HARDWARE_DEPTHS;
+Input.DepthData.pFullResDepthTextureSRV = pDepthStencilTextureSRV;
+Input.DepthData.ProjectionMatrix.Data = GFSDK_SSAO_Float4x4(pProjectionMatrix);
+Input.DepthData.ProjectionMatrix.Layout = GFSDK_SSAO_ROW_MAJOR_ORDER;
+Input.DepthData.MetersToViewSpaceUnits = SceneScale;</pre>
+</div>
+</li>
+<li><p class="first">SET AO PARAMETERS:</p>
+<div class="highlight-python"><pre>GFSDK_SSAO_Parameters_D3D11 Params;
+Params.Radius = 2.f;
+Params.Bias = 0.1f;
+Params.PowerExponent = 2.f;
+Params.Blur.Enable = true;
+Params.Blur.Radius = GFSDK_SSAO_BLUR_RADIUS_4;
+Params.Blur.Sharpness = 16.f;</pre>
+</div>
+</li>
+<li><p class="first">SET RENDER TARGET:</p>
+<div class="highlight-python"><pre>GFSDK_SSAO_Output_D3D11 Output;
+Output.pRenderTargetView = pOutputColorRTV;
+Output.Blend.Mode = GFSDK_SSAO_OVERWRITE_RGB;</pre>
+</div>
+</li>
+<li><p class="first">RENDER AO:</p>
+<div class="highlight-python"><pre>status = pAOContext-&gt;RenderAO(pD3D11Context, Input, Params, Output);
+assert(status == GFSDK_SSAO_OK);</pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="data-flow">
+<h2>Data Flow<a class="headerlink" href="#data-flow" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="input-requirements">
+<h3>Input Requirements<a class="headerlink" href="#input-requirements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>The library has entry points for D3D11, D3D12 and GL3.2+.</li>
+<li>Requires a depth texture to be provided as input, along with associated projection info.</li>
+<li>Optionally, can also take as input a GBuffer normal texture associated with the input depth texture:<ul>
+<li>Can add normal-mapping details to the AO.</li>
+<li>Can be used to fix normal reconstruction artifacts with dithered LOD dissolves.</li>
+<li>But makes the integration more complex. We recommend starting with input normals disabled.</li>
+</ul>
+</li>
+<li>Optionally, can also take as input a viewport rectangle associated with the input textures:<ul>
+<li>Defines a sub-area of the input &amp; output full-resolution textures to be sourced and rendered to.</li>
+<li>The library re-allocates its internal render targets if the Viewport.Width or Viewport.Height changes for a given AO context.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="msaa-support">
+<h3>MSAA Support<a class="headerlink" href="#msaa-support" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Requirements<ul>
+<li>The input depth &amp; normal textures are required to have matching dimensions and MSAA sample count.</li>
+<li>The output render target can have arbitrary dimensions and MSAA sample count.</li>
+</ul>
+</li>
+<li>Per-Pixel AO Algorithm<ul>
+<li>If the input textures are MSAA, only sample 0 is used to render the AO.</li>
+<li>If the output render target is MSAA, a per-pixel AO value is written to all samples.</li>
+<li>In practice, we have found this strategy to not cause any objectionable artifacts, even when using HBAO+ with TXAA.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="hbao-pipeline">
+<h3>HBAO+ Pipeline<a class="headerlink" href="#hbao-pipeline" title="Permalink to this headline">¶</a></h3>
+<img alt="_images/pipeline_without_input_normals.png" src="_images/pipeline_without_input_normals.png" />
+<img alt="_images/pipeline_with_input_normals.png" src="_images/pipeline_with_input_normals.png" />
+</div>
+<div class="section" id="occlusion-samples">
+<h3>Occlusion Samples<a class="headerlink" href="#occlusion-samples" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>For each pixel, 32 occlusion samples are taken in a variable-radius disk, with a minimum of 4 full-resolution pixels between the center pixel and the sample coordinates.</li>
+<li>The 8 nearest samples to the center pixel are weighted by the NearAO parameter.</li>
+<li>The other samples are weighted by the FarAO parameter.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="ao-radius">
+<h3>AO Radius<a class="headerlink" href="#ao-radius" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Definition</dt>
+<dd>For a given AO receiver point P and AO Radius R, sample point S is ignored if ||P-S|| &gt; R</dd>
+<dt>Impact on search area</dt>
+<dd>The AO radius is a multiplier for the screen-space search radius, and the number of samples is fixed. So if the AO radius is too large, under-sampling artifacts may appear.</dd>
+</dl>
+<img alt="_images/AO_Radius_1.png" src="_images/AO_Radius_1.png" />
+<img alt="_images/AO_Radius_4.png" src="_images/AO_Radius_4.png" />
+</div>
+<div class="section" id="meterstoviewspaceunits">
+<h3>MetersToViewSpaceUnits<a class="headerlink" href="#meterstoviewspaceunits" title="Permalink to this headline">¶</a></h3>
+<p>If you are not sure what to set this value to, you can:</p>
+<ul class="simple">
+<li>Set the <tt class="docutils literal"><span class="pre">AO</span> <span class="pre">Radius</span></tt> parameter to 1.0 and</li>
+<li>Increase <tt class="docutils literal"><span class="pre">MetersToViewSpaceUnits</span></tt> until the AO looks like it&#8217;s being cast up to 1 meter away</li>
+</ul>
+<p><tt class="docutils literal"><span class="pre">MetersToViewSpaceUnits</span></tt> is used internally</p>
+<ul class="simple">
+<li>To convert the AO radius parameter from meters to view-space units</li>
+<li>To adjust the blur sharpness parameter</li>
+</ul>
+</div>
+<div class="section" id="power-exponent">
+<h3>Power Exponent<a class="headerlink" href="#power-exponent" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>The PowerExponent parameter controls the darkness of the final AO: FinalAO = pow(AO, PowerExponent).</li>
+<li>Typical PowerExponent values are in the range [2.0, 3.0].</li>
+</ul>
+</div>
+<div class="section" id="ao-bias">
+<h3>AO Bias<a class="headerlink" href="#ao-bias" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>The AO Bias parameter can be used to hide low-tessellation artifacts</li>
+<li>Can also help reducing false-occlusion artifacts near screen borders</li>
+<li>It weights the AO contributions more strongly for samples towards the normal direction</li>
+</ul>
+<img alt="_images/AOBias_0_0.png" src="_images/AOBias_0_0.png" />
+<img alt="_images/AOBias_0_3.png" src="_images/AOBias_0_3.png" />
+</div>
+<div class="section" id="foreground-ao">
+<h3>Foreground AO<a class="headerlink" href="#foreground-ao" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>When this feature is enabled, the screen-space AO kernel radius is:<ul>
+<li>inversely proportional to ViewDepth for ViewDepth &gt; ForegroundViewDepth</li>
+<li>uniform in screen-space for ViewDepth &lt;= ForegroundViewDepth (instead of getting arbitrarily large)</li>
+</ul>
+</li>
+<li>To tune the ForegroundViewDepth parameter<ul>
+<li>Start with ForegroundViewDepth = 0.f</li>
+<li>Increase the ForegroundViewDepth to get less closer-scale occlusion on the foreground objects.</li>
+</ul>
+</li>
+</ul>
+<img alt="_images/ForegroundAO_OFF.png" src="_images/ForegroundAO_OFF.png" />
+<img alt="_images/ForegroundAO_ON.png" src="_images/ForegroundAO_ON.png" />
+</div>
+<div class="section" id="background-ao">
+<h3>Background AO<a class="headerlink" href="#background-ao" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>When this feature is enabled, the screen-space AO kernel radius is:<ul>
+<li>inversely proportional to ViewDepth for ViewDepth &lt; BackgroundViewDepth</li>
+<li>uniform in screen-space for ViewDepth &gt;= BackgroundViewDepth (instead of falling off to zero).</li>
+</ul>
+</li>
+<li>To tune the BackgroundViewDepth parameter<ul>
+<li>Start from a very large BackgroundViewDepth value (e.g. the camera&#8217;s ZFar)</li>
+<li>Decrease the BackgroundViewDepth to get larger-scale occlusion in the background.</li>
+</ul>
+</li>
+</ul>
+<img alt="_images/BackgroundAO_OFF.png" src="_images/BackgroundAO_OFF.png" />
+<img alt="_images/BackgroundAO_ON.png" src="_images/BackgroundAO_ON.png" />
+</div>
+<div class="section" id="ao-blur">
+<h3>AO Blur<a class="headerlink" href="#ao-blur" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Optional cross-bilateral filter<ul>
+<li>To remove jittered-sampling artifacts (noise)</li>
+<li>To hide under-sampling artifacts (banding) &amp; reduce jittering</li>
+</ul>
+</li>
+<li>3 Modes<ul>
+<li>No Blur</li>
+<li>Blur Radius 2</li>
+<li>Blur Radius 4</li>
+</ul>
+</li>
+</ul>
+<img alt="_images/No_Blur.png" src="_images/No_Blur.png" />
+<img alt="_images/Blur_Radius_4.png" src="_images/Blur_Radius_4.png" />
+</div>
+<div class="section" id="blur-sharpness">
+<h3>Blur Sharpness<a class="headerlink" href="#blur-sharpness" title="Permalink to this headline">¶</a></h3>
+<p>The greater the sharpness parameter, the more the blur preserves edges</p>
+<img alt="_images/Blur_Sharpness_0.png" src="_images/Blur_Sharpness_0.png" />
+<img alt="_images/Blur_Sharpness_8.png" src="_images/Blur_Sharpness_8.png" />
+</div>
+</div>
+<div class="section" id="integration-time-estimates">
+<h2>Integration Time Estimates<a class="headerlink" href="#integration-time-estimates" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Initial integration (for a rendering engineer)<ul>
+<li>&lt;1 man-day with no input normals</li>
+<li>1-2 man-days with input normals</li>
+</ul>
+</li>
+<li>Initial parameter tuning<ul>
+<li>&lt;1 man-hour</li>
+<li>Tuning the parameter should be quick once the input data are correctly fed into the library</li>
+<li>The same HBAO+ parameters may be used globally across the whole game</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="additional-links">
+<h2>Additional Links<a class="headerlink" href="#additional-links" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://www.nvidia.com/object/siggraph-2008-HBAO.html">[Bavoil et al. 2008] &#8220;Image-Space Horizon-Based Ambient Occlusion&#8221;</a></p>
+<p><a class="reference external" href="http://graphics.cs.williams.edu/papers/SAOHPG12/">[McGuire et al. 2012] &#8220;Scalable Ambient Obscurance&#8221;</a></p>
+<p><a class="reference external" href="http://graphics.cs.williams.edu/papers/VVSIGGRAPH12/">[Bukowski et al. 2012] &#8220;Scalable High-Quality Motion Blur and Ambient Occlusion&#8221;</a></p>
+<p><a class="reference external" href="https://developer.nvidia.com/gdc-2013">[Bavoil and Jansen 2013] &#8220;Particle Shadows &amp; Cache-Efficient Post-Processing&#8221;</a></p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+<div class="masthead">
+    <div class="row">
+      <ul class="breadcrumb">
+        <li><a href="index.html">NVIDIA HBAO+ 3.0. documentation</a></li> 
+      </ul>
+    </div>
+</div>
+<footer>
+    <div class="footer-boilerplate">
+        <div class="row">
+            <div class="boilerplate">
+                Copyright &copy; 2016, NVIDIA Corporation &nbsp; | &nbsp; <a href="http://www.nvidia.com/object/about-nvidia.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/about-nvidia.html_1&quot;;return this.s_oc?this.s_oc(e):true">About NVIDIA </a>&nbsp; | &nbsp; <a href="http://www.nvidia.com/object/legal_info.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/legal_info.html_1&quot;;return this.s_oc?this.s_oc(e):true">Legal Information </a>&nbsp; | &nbsp; <a href="http://www.nvidia.com/object/privacy_policy.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/privacy_policy.html_1&quot;;return this.s_oc?this.s_oc(e):true">Privacy Policy </a>
+            </div>
+        </div>
+    </div>
+</div>
+</footer>
+<script>
+$("#sidebar_toc ul li").each(function() {
+    var handleSpan = $("<span></span>")
+        .addClass("toc_handle").prependTo(this);
+
+    if($(this).has("ul li").size() > 0) {
+        handleSpan.addClass("toc_expanded").click(function() {
+            $(this).toggleClass("toc_expanded toc_collapsed")
+                .siblings("ul").toggle();
+        });
+        if(!($(this).hasClass('current'))) {
+            handleSpan.click()
+        }
+    }
+});
+</script>
+  </body>
+</html>

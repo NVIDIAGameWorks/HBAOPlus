@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release_MT|Win32">
+      <Configuration>Release_MT</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_MT|x64">
+      <Configuration>Release_MT</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\GFSDK_SSAO.h" />
+    <ClInclude Include="..\..\..\src\AppState_GL.h" />
+    <ClInclude Include="..\..\..\src\BuildVersion.h" />
+    <ClInclude Include="..\..\..\src\Common.h" />
+    <ClInclude Include="..\..\..\src\Common_GL.h" />
+    <ClInclude Include="..\..\..\src\ConstantBuffers.h" />
+    <ClInclude Include="..\..\..\src\GLSLProgram.h" />
+    <ClInclude Include="..\..\..\src\InputDepthInfo.h" />
+    <ClInclude Include="..\..\..\src\InputNormalInfo.h" />
+    <ClInclude Include="..\..\..\src\InputViewport.h" />
+    <ClInclude Include="..\..\..\src\MathUtil.h" />
+    <ClInclude Include="..\..\..\src\MatrixView.h" />
+    <ClInclude Include="..\..\..\src\OutputInfo.h" />
+    <ClInclude Include="..\..\..\src\PerfMarkers.h" />
+    <ClInclude Include="..\..\..\src\ProjectionMatrixInfo.h" />
+    <ClInclude Include="..\..\..\src\RandomTexture.h" />
+    <ClInclude Include="..\..\..\src\Renderer_GL.h" />
+    <ClInclude Include="..\..\..\src\RenderOptions.h" />
+    <ClInclude Include="..\..\..\src\RenderTargets_GL.h" />
+    <ClInclude Include="..\..\..\src\Shaders_GL.h" />
+    <ClInclude Include="..\..\..\src\States_GL.h" />
+    <ClInclude Include="..\..\..\src\TextureUtil.h" />
+    <ClInclude Include="..\..\..\src\TimestampQueries.h" />
+    <ClInclude Include="..\..\..\src\UserTexture.h" />
+    <ClInclude Include="..\..\..\src\VAO_GL.h" />
+    <ClInclude Include="..\..\..\src\Viewports.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\API.cpp" />
+    <ClCompile Include="..\..\..\src\AppState_GL.cpp" />
+    <ClCompile Include="..\..\..\src\ConstantBuffers.cpp" />
+    <ClCompile Include="..\..\..\src\ProjectionMatrixInfo.cpp" />
+    <ClCompile Include="..\..\..\src\RandomTexture.cpp" />
+    <ClCompile Include="..\..\..\src\Renderer_GL.cpp" />
+    <ClCompile Include="..\..\..\src\Shaders_GL.cpp" />
+    <ClCompile Include="..\..\..\src\States_GL.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>GFSDK_SSAO_GL</ProjectName>
+    <ProjectGuid>{5C00BDFE-5300-4BF1-BFC2-DAB7998C6DED}</ProjectGuid>
+    <RootNamespace>NVUT</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_MT|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_MT|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_MT|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_MT|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release_MT|Win32'">$(ProjectDir)\..\..\..\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release_MT|Win32'">Temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release_MT|Win32'">$(ProjectName).win32</TargetName>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release_MT|x64'">$(ProjectDir)\..\..\..\lib\</OutDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release_MT|x64'">$(ProjectName).win64</TargetName>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release_MT|x64'">Temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_MT|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>$(OUTPUT_DIR_LIB);$(ProjectDir)\..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SUPPORT_GL=1;_WINDLL;GLEW_STATIC;NDEBUG;_WINDOWS;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(ProjectName)_MT.lib</OutputFile>
+    </Lib>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%LIB%</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_MT|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(OUTPUT_DIR_LIB);$(ProjectDir)\..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SUPPORT_GL=1;_WINDLL;GLEW_STATIC;NDEBUG;_WINDOWS;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(ProjectName)_MT.lib</OutputFile>
+    </Lib>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <AdditionalLibraryDirectories>%LIB%</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

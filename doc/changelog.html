@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="x-ua-compatible" content="IE=Edge"/>
+    
+    <title>Change Log &mdash; NVIDIA HBAO+ 3.0. documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/breathe.css" type="text/css" />
+    <link rel="stylesheet" href="_static/application.css" type="text/css" />
+    <link rel="stylesheet" href="_static/styleguide.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.0.',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/bootstrap.js"></script>
+    <link rel="top" title="NVIDIA HBAO+ 3.0. documentation" href="index.html" />
+    <link rel="prev" title="NVIDIA HBAO+ 3.0." href="product.html" /> 
+  </head>
+  <body>
+<nav class="navbar navbar-inverse navbar-default">
+  <div class="row">
+      <div class="navbar-brand">
+             <img class="logo" src="_static/developerzone_gameworks_logo.png" alt="Logo"/>
+      </div>
+  </div>
+</nav>
+<div class="masthead">
+    <div class="row">
+      <ul class="breadcrumb">
+        <li><a href="index.html">NVIDIA HBAO+ 3.0. documentation</a></li> 
+      </ul>
+    </div>
+</div>
+<div class="row">
+  <div class="col-md-3 bs-sidenav">
+<div class="bs-sidebar">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <div id="sidebar_toc">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="product.html">NVIDIA HBAO+ 3.0.</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="product.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="product.html#package">Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="product.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="product.html#data-flow">Data Flow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="product.html#input-requirements">Input Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="product.html#msaa-support">MSAA Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="product.html#hbao-pipeline">HBAO+ Pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="product.html#occlusion-samples">Occlusion Samples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="product.html#parameters">Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="product.html#ao-radius">AO Radius</a></li>
+<li class="toctree-l3"><a class="reference internal" href="product.html#meterstoviewspaceunits">MetersToViewSpaceUnits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="product.html#power-exponent">Power Exponent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="product.html#ao-bias">AO Bias</a></li>
+<li class="toctree-l3"><a class="reference internal" href="product.html#foreground-ao">Foreground AO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="product.html#background-ao">Background AO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="product.html#ao-blur">AO Blur</a></li>
+<li class="toctree-l3"><a class="reference internal" href="product.html#blur-sharpness">Blur Sharpness</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="product.html#integration-time-estimates">Integration Time Estimates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="product.html#additional-links">Additional Links</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Change Log</a><ul class="simple">
+</ul>
+</li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="product.html"
+                        title="previous chapter">NVIDIA HBAO+ 3.0.</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search form-inline" action="search.html" method="get">
+      <div class="form-group">
+      <input type="text" name="q" class="form-control" />
+      <input type="submit" value="Search" class="btn btn-primary" />
+      </div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+</div>
+  </div>
+    <div class="document col-md-8">
+          <div class="body">
+            
+  <div class="section" id="change-log">
+<h1>Change Log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h1>
+<p><strong>NVIDIA HBAO+ 3.0.</strong></p>
+<p><strong>New in release 3.0</strong></p>
+<ul class="simple">
+<li>Added entry points for D3D12.</li>
+<li>Now shipping separate DLLs and LIB files for D3D11 and GL.</li>
+<li>Replaced the DetailAO &amp; CoarseAO parameters with NearAO &amp; FarAO.</li>
+<li>Replaced pointers with references in the API.</li>
+<li>Added the ForegroundAO &amp; BackgroundAO parameters.</li>
+<li>Added per-component debug-normal visualization modes in GFSDK_SSAO_RenderMask.</li>
+<li>Added support for two-pass AO blending + depth-stencil masking.</li>
+<li>Removed the BLUR_RADIUS_8 mode (BLUR_RADIUS_4 looks better in general, and runs faster).</li>
+<li>Removed the PER_SAMPLE_AO MSAA mode.</li>
+</ul>
+<p><strong>New in release 2.4</strong></p>
+<ul class="simple">
+<li>Added support for Mac OS X.</li>
+<li>Added the DepthClampMode parameter.</li>
+<li>Added the GFSDK_SSAO_GetVersion function.</li>
+<li>The input viewport and matrices are now passed by value instead of by pointer.</li>
+<li>The input viewport parameter is now optional. By default, a full-resolution viewport is used.</li>
+</ul>
+<p><strong>New in release 2.3</strong></p>
+<ul class="simple">
+<li>The input normal data are now passed by value instead of by pointer (less error prone).</li>
+<li>Removed the INVALID_VIEWPORT_DIMENSIONS error code. Input viewports larger than the input textures are now supported.</li>
+<li>Added support for MSAA input VIEW_DEPTHS for DX11 and GL.</li>
+<li>Added support for VIEW_DEPTHS with partial input viewports for DX11.</li>
+<li>Added the DepthStorage parameter in GFSDK_SSAO_Parameters.</li>
+</ul>
+<p><strong>New in release 2.2</strong></p>
+<ul class="simple">
+<li>GL: The RenderAO call now saves &amp; restores all the relevant GL states it alters internally.</li>
+<li>GL: Added the GFSDK_SSAO_GLFunctions argument to GFSDK_SSAO_CreateContext_GL.</li>
+<li>GL: Added support for MSAA input textures.</li>
+<li>The GFSDK_SSAO_DRAW_DEBUG_N mode now outputs float4(-InternalViewNormal.xyz, 0).</li>
+<li>Changed the blur weights of BLUR_RADIUS_2 and BLUR_RADIUS_4 to support larger sharpness values.</li>
+</ul>
+<p><strong>New in release 2.1</strong></p>
+<ul class="simple">
+<li>Optimize the case of Params.DetailAO == 0.f and Input.pNormalData != NULL.</li>
+<li>Added a parameter to control the sharpness of the optional GFSDK_SSAO_DepthThreshold.</li>
+<li>GL: Added quality/performance parameters in GFSDK_SSAO_Parameters_GL.</li>
+</ul>
+<p><strong>New in release 2.0</strong></p>
+<ul class="simple">
+<li>Added entry points for OpenGL 3.2.</li>
+<li>Added support for non-zero input viewport origins.</li>
+<li>Added the GFSDK_SSAO_BLUR_RADIUS_2 mode.</li>
+</ul>
+<p><strong>New in release 1.5</strong></p>
+<ul class="simple">
+<li>Renamed the SceneScale parameter to MetersToViewSpaceUnits.</li>
+<li>Added the GFSDK_SSAO_HARDWARE_DEPTHS_SUB_RANGE depth-texture type.</li>
+<li>Added option to supersample the AO when using MSAA input and output textures (GFSDK_SSAO_PER_SAMPLE_AO).</li>
+<li>Added PreCreateRenderTargets entry point (optional).</li>
+</ul>
+<p><strong>New in release 1.4</strong></p>
+<ul class="simple">
+<li>Added error codes: GFSDK_SSAO_INVALID_VIEWPORT_DEPTH_RANGE and GFSDK_SSAO_UNSUPPORTED_VIEWPORT_DIMENSIONS.</li>
+<li>Removed the GFSDK_SSAO_PERFORMANCE mode.</li>
+</ul>
+<p><strong>New in release 1.3</strong></p>
+<ul class="simple">
+<li>Moved the API to a class interface.</li>
+<li>Added an optional SSAO_DepthThreshold parameter, to hide potential z-buffer precision artifacts.</li>
+<li>Added support for input-texture dimensions being larger than the viewport dimensions.</li>
+<li>Added GFSDK_SSAO_BlurRadius option.</li>
+<li>Added GFSDK_SSAO_BlurSharpnessProfile option.</li>
+<li>Added GFSDK_SSAO_GPUConfiguration option.</li>
+</ul>
+<p><strong>New in release 1.2</strong></p>
+<ul class="simple">
+<li>Merged the SetInputDepths and SetInputNormals functions into a single SetInputData.</li>
+<li>Removed the SetParameters function. The parameters are now passed as an argument to RenderAO.</li>
+<li>Let the user specify a BlendState for compositing the AO to the OutputRTV. See CustomBlendState.</li>
+<li>Added a normal-visualization debug mode: by calling RenderAO with RenderMask = RENDER_DEBUG_NORMAL_Z.</li>
+<li>Added a GetBuildString function.</li>
+</ul>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+</div>
+
+
+          </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+<div class="masthead">
+    <div class="row">
+      <ul class="breadcrumb">
+        <li><a href="index.html">NVIDIA HBAO+ 3.0. documentation</a></li> 
+      </ul>
+    </div>
+</div>
+<footer>
+    <div class="footer-boilerplate">
+        <div class="row">
+            <div class="boilerplate">
+                Copyright &copy; 2016, NVIDIA Corporation &nbsp; | &nbsp; <a href="http://www.nvidia.com/object/about-nvidia.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/about-nvidia.html_1&quot;;return this.s_oc?this.s_oc(e):true">About NVIDIA </a>&nbsp; | &nbsp; <a href="http://www.nvidia.com/object/legal_info.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/legal_info.html_1&quot;;return this.s_oc?this.s_oc(e):true">Legal Information </a>&nbsp; | &nbsp; <a href="http://www.nvidia.com/object/privacy_policy.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/privacy_policy.html_1&quot;;return this.s_oc?this.s_oc(e):true">Privacy Policy </a>
+            </div>
+        </div>
+    </div>
+</div>
+</footer>
+<script>
+$("#sidebar_toc ul li").each(function() {
+    var handleSpan = $("<span></span>")
+        .addClass("toc_handle").prependTo(this);
+
+    if($(this).has("ul li").size() > 0) {
+        handleSpan.addClass("toc_expanded").click(function() {
+            $(this).toggleClass("toc_expanded toc_collapsed")
+                .siblings("ul").toggle();
+        });
+        if(!($(this).hasClass('current'))) {
+            handleSpan.click()
+        }
+    }
+});
+</script>
+  </body>
+</html>

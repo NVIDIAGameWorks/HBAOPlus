@@ -1,0 +1,95 @@
+
+Change Log
+=======================================
+
+|PRODUCTNAMEDOCRELEASEBOLD|
+
+**New in release 3.0**
+
+* Added entry points for D3D12.
+* Now shipping separate DLLs and LIB files for D3D11 and GL.
+* Replaced the DetailAO & CoarseAO parameters with NearAO & FarAO.
+* Replaced pointers with references in the API.
+* Added the ForegroundAO & BackgroundAO parameters.
+* Added per-component debug-normal visualization modes in GFSDK_SSAO_RenderMask.
+* Added support for two-pass AO blending + depth-stencil masking.
+* Removed the BLUR_RADIUS_8 mode (BLUR_RADIUS_4 looks better in general, and runs faster).
+* Removed the PER_SAMPLE_AO MSAA mode.
+
+**New in release 2.4**
+
+* Added support for Mac OS X.
+* Added the DepthClampMode parameter.
+* Added the GFSDK_SSAO_GetVersion function.
+* The input viewport and matrices are now passed by value instead of by pointer.
+* The input viewport parameter is now optional. By default, a full-resolution viewport is used.
+
+**New in release 2.3**
+
+* The input normal data are now passed by value instead of by pointer (less error prone).
+* Removed the INVALID_VIEWPORT_DIMENSIONS error code. Input viewports larger than the input textures are now supported.
+* Added support for MSAA input VIEW_DEPTHS for DX11 and GL.
+* Added support for VIEW_DEPTHS with partial input viewports for DX11.
+* Added the DepthStorage parameter in GFSDK_SSAO_Parameters.
+
+**New in release 2.2**
+
+* GL: The RenderAO call now saves & restores all the relevant GL states it alters internally.
+* GL: Added the GFSDK_SSAO_GLFunctions argument to GFSDK_SSAO_CreateContext_GL.
+* GL: Added support for MSAA input textures.
+* The GFSDK_SSAO_DRAW_DEBUG_N mode now outputs float4(-InternalViewNormal.xyz, 0).
+* Changed the blur weights of BLUR_RADIUS_2 and BLUR_RADIUS_4 to support larger sharpness values.
+
+**New in release 2.1**
+
+* Optimize the case of Params.DetailAO == 0.f and Input.pNormalData != NULL.
+* Added a parameter to control the sharpness of the optional GFSDK_SSAO_DepthThreshold.
+* GL: Added quality/performance parameters in GFSDK_SSAO_Parameters_GL.
+
+**New in release 2.0**
+
+* Added entry points for OpenGL 3.2.
+* Added support for non-zero input viewport origins.
+* Added the GFSDK_SSAO_BLUR_RADIUS_2 mode.
+
+**New in release 1.5**
+
+* Renamed the SceneScale parameter to MetersToViewSpaceUnits.
+* Added the GFSDK_SSAO_HARDWARE_DEPTHS_SUB_RANGE depth-texture type.
+* Added option to supersample the AO when using MSAA input and output textures (GFSDK_SSAO_PER_SAMPLE_AO).
+* Added PreCreateRenderTargets entry point (optional).
+
+**New in release 1.4**
+
+* Added error codes: GFSDK_SSAO_INVALID_VIEWPORT_DEPTH_RANGE and GFSDK_SSAO_UNSUPPORTED_VIEWPORT_DIMENSIONS.
+* Removed the GFSDK_SSAO_PERFORMANCE mode.
+
+**New in release 1.3**
+
+* Moved the API to a class interface.
+* Added an optional SSAO_DepthThreshold parameter, to hide potential z-buffer precision artifacts.
+* Added support for input-texture dimensions being larger than the viewport dimensions.
+* Added GFSDK_SSAO_BlurRadius option.
+* Added GFSDK_SSAO_BlurSharpnessProfile option.
+* Added GFSDK_SSAO_GPUConfiguration option.
+
+**New in release 1.2**
+
+* Merged the SetInputDepths and SetInputNormals functions into a single SetInputData.
+* Removed the SetParameters function. The parameters are now passed as an argument to RenderAO.
+* Let the user specify a BlendState for compositing the AO to the OutputRTV. See CustomBlendState.
+* Added a normal-visualization debug mode: by calling RenderAO with RenderMask = RENDER_DEBUG_NORMAL_Z.
+* Added a GetBuildString function.
+
+.. -----------------------
+
+.. * `Forums`_
+
+.. * `Report a bug`_
+
+.. If links above are used, replace URL below. 
+.. _Forums: http://devtalk.nvidia.com
+.. _Report a bug: http://developer.nvidia.com/contact
+
+.. toctree::
+   :maxdepth: 1

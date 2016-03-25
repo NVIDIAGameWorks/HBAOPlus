@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<Filter Include="Shader Includes"><!--  -->
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\..\src\shaders\src\SharedDefines.h">
+			<Filter>Shader Includes</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="Shaders"><!-- compile_shader_glsl -->
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<CustomBuild Include="..\..\..\src\shaders\src\CopyDepth_PS.hlsl">
+			<Filter>Shaders</Filter>
+		</CustomBuild>
+		<CustomBuild Include="..\..\..\src\shaders\src\LinearizeDepth_PS.hlsl">
+			<Filter>Shaders</Filter>
+		</CustomBuild>
+		<CustomBuild Include="..\..\..\src\shaders\src\DeinterleaveDepth_PS.hlsl">
+			<Filter>Shaders</Filter>
+		</CustomBuild>
+		<CustomBuild Include="..\..\..\src\shaders\src\DebugNormals_PS.hlsl">
+			<Filter>Shaders</Filter>
+		</CustomBuild>
+		<CustomBuild Include="..\..\..\src\shaders\src\ReconstructNormal_PS.hlsl">
+			<Filter>Shaders</Filter>
+		</CustomBuild>
+		<CustomBuild Include="..\..\..\src\shaders\src\CoarseAO_PS.hlsl">
+			<Filter>Shaders</Filter>
+		</CustomBuild>
+		<CustomBuild Include="..\..\..\src\shaders\src\ReinterleaveAO_PS.hlsl">
+			<Filter>Shaders</Filter>
+		</CustomBuild>
+		<CustomBuild Include="..\..\..\src\shaders\src\BlurX_PS.hlsl">
+			<Filter>Shaders</Filter>
+		</CustomBuild>
+		<CustomBuild Include="..\..\..\src\shaders\src\BlurY_PS.hlsl">
+			<Filter>Shaders</Filter>
+		</CustomBuild>
+	</ItemGroup>
+</Project>

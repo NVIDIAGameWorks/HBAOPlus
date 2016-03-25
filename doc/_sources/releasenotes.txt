@@ -1,0 +1,35 @@
+.. Replace existing content with product specific content. Layout for this page should be consistent for all products. 
+
+Release Notes 
+=======================================
+
+|PRODUCTNAMEDOCRELEASEBOLD|
+
+NVIDIA HBAO+ improves upon existing Ambient Occlusion techniques to add richer, more detailed, more realistic shadows around objects that occlude rays of light. Compared to previous techniques, HBAO+ is faster, more efficient, and significantly better.
+
+
+What's New
+-----------------------
+
+**General**
+
+|VERSIONBOLD|
+
+* Added entry points for D3D12.
+* Now shipping separate DLLs and LIB files for D3D11 and GL.
+* Added the BackgroundAO parameter, which can be used to add larger-scale occlusion in the distance.
+* Removed the BLUR_RADIUS_8 mode (BLUR_RADIUS_4 looks better in general, and runs faster).
+* Added per-component debug-normal visualization modes in GFSDK_SSAO_RenderMask.
+
+.. -----------------------
+
+.. * `Forums`_
+
+.. * `Report a bug`_
+
+.. If links above are used, replace URL below. 
+.. _Forums: http://devtalk.nvidia.com
+.. _Report a bug: http://developer.nvidia.com/contact
+
+.. toctree::
+   :maxdepth: 1

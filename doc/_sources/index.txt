@@ -1,0 +1,37 @@
+.. Replace existing content with product specific content. Layout for this page should be consistent for all products. 
+   Use the root `toctree` directive to include documents
+
+|PRODUCTNAME| 
+======================================
+
+.. Replace the content. Layout should not change
+
+NVIDIA ShadowWorks - HBAO+ improves upon existing Ambient Occlusion techniques to add richer, more detailed, more realistic shadows around objects that occlude rays of light. Compared to previous techniques, HBAO+ is faster, more efficient, and significantly better.
+
+
+Learn more about |PRODUCTNAME|
+------------------------------
+* Visit the `product home page`_ on `NVIDIA Developer`_
+
+* View Documentation :ref:`search`
+
+.. Other links to highlight:
+.. Link to archived docs
+.. Any other archived (version-specific) docs can be linked here as well.
+
+**Browse Documentation**
+
+.. toctree::
+   :maxdepth: 1
+   
+   product
+   changelog
+.. releasenotes
+
+.. Reference only product TOT pages here. 
+..   productOld
+..   productOlder
+
+
+
+
