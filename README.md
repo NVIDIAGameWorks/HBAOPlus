@@ -4,8 +4,11 @@ Welcome to NVIDIA's HBAO+ source code repository.
 To begin, clone this repository onto your local drive.
 
 See Documentation under \doc.
+
 NVIDIA HBAO+ 3.0.
+
 Overview
+
 HBAO+ is a SSAO algorithm designed to achieve high GPU efficiency. The algorithm is based on HBAO [Bavoil and Sainz 2008], with the following differences:
 
 To minimize cache trashing, HBAO+ does not use any randomization texture. Instead, the algorithm uses an Interleaved Rendering approach, generating the AO in multiple passes with a unique jitter value per pass [Bavoil and Jansen 2013].
