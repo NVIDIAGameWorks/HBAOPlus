@@ -70,7 +70,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\..\..\lib;$(WindowsSDK_IncludePath);$(ProjectDir)..\..\..\include;$(ProjectDir);$(VC_IncludePath);$(ProjectDir)..\external\imgui\examples\directx12_example;$(ProjectDir)..\external\imgui\</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\include;$(WindowsSDK_IncludePath);$(ProjectDir);$(VC_IncludePath);$(ProjectDir)..\external\imgui\examples\directx12_example;$(ProjectDir)..\external\imgui\</IncludePath>
     <LibraryPath>$(ProjectDir)..\..\..\lib;$(WindowsSDK_LibraryPath_x86);$(VC_LibraryPath_x86)</LibraryPath>
     <OutDir>..\Bin\</OutDir>
     <IntDir>..\Temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
@@ -78,7 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\..\..\lib;$(WindowsSDK_IncludePath);$(ProjectDir)..\..\..\include;$(ProjectDir);$(VC_IncludePath);$(ProjectDir)..\external\imgui\examples\directx12_example;$(ProjectDir)..\external\imgui\</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\include;$(WindowsSDK_IncludePath);$(ProjectDir);$(VC_IncludePath);$(ProjectDir)..\external\imgui\examples\directx12_example;$(ProjectDir)..\external\imgui\</IncludePath>
     <LibraryPath>$(ProjectDir)..\..\..\lib;$(WindowsSDK_LibraryPath_x64);$(VC_LibraryPath_x64)</LibraryPath>
     <OutDir>..\Bin\</OutDir>
     <IntDir>..\Temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
@@ -86,7 +86,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\..\..\lib;$(WindowsSDK_IncludePath);$(ProjectDir)..\..\..\include;$(ProjectDir);$(VC_IncludePath);$(ProjectDir)..\external\imgui\examples\directx12_example;$(ProjectDir)..\external\imgui\</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\include;$(WindowsSDK_IncludePath);$(ProjectDir);$(VC_IncludePath);$(ProjectDir)..\external\imgui\examples\directx12_example;$(ProjectDir)..\external\imgui\</IncludePath>
     <LibraryPath>$(ProjectDir)..\..\..\lib;$(WindowsSDK_LibraryPath_x86);$(VC_LibraryPath_x86)</LibraryPath>
     <OutDir>..\Bin\</OutDir>
     <IntDir>..\Temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
@@ -94,7 +94,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\..\..\lib;$(WindowsSDK_IncludePath);$(ProjectDir)..\..\..\include;$(ProjectDir);$(VC_IncludePath);$(ProjectDir)..\external\imgui\examples\directx12_example;$(ProjectDir)..\external\imgui\</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\include;$(WindowsSDK_IncludePath);$(ProjectDir);$(VC_IncludePath);$(ProjectDir)..\external\imgui\examples\directx12_example;$(ProjectDir)..\external\imgui\</IncludePath>
     <LibraryPath>$(ProjectDir)..\..\..\lib;$(WindowsSDK_LibraryPath_x64);$(VC_LibraryPath_x64)</LibraryPath>
     <OutDir>..\Bin\</OutDir>
     <IntDir>..\Temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
