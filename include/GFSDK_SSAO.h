@@ -83,7 +83,7 @@ up to 46 MB of video memory and 2.3 ms / frame on GeForce GTX 680.
 
 (3.) SET AO PARAMETERS
 
-    GFSDK_SSAO_Parameters_D3D11 Params;
+    GFSDK_SSAO_Parameters Params;
     Params.Radius = 2.f;
     Params.Bias = 0.1f;
     Params.PowerExponent = 2.f;
