@@ -24,7 +24,6 @@ struct VertexShader
 {
     VertexShader()
     {
-        // Use proper heap here @jihoc
         VS.BytecodeLength = 0;
         VS.pShaderBytecode = nullptr;
     }

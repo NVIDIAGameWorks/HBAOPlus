@@ -175,7 +175,6 @@ public:
     RTTexture2DArray()
         : RTTexture2D()
     {
-        // @jihoc How to initialize handles?
         ZERO_ARRAY(SRVs);
         ZERO_ARRAY(RTVs);
     }

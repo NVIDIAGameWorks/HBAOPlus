@@ -198,7 +198,7 @@ struct GFSDK_SSAO_Version
         : Major(3)
         , Minor(0)
         , Branch(0)
-        , Revision(20573789)
+        , Revision(20666007)
     {
     }
 
@@ -641,8 +641,8 @@ struct GFSDK_SSAO_Parameters
 {
     GFSDK_SSAO_FLOAT                Radius;                     // The AO radius in meters
     GFSDK_SSAO_FLOAT                Bias;                       // To hide low-tessellation artifacts // 0.0~0.5
-    GFSDK_SSAO_FLOAT                NearAO;                     // Scale factor for the near-range AO, the greater the darker // 1.0~4.0
-    GFSDK_SSAO_FLOAT                FarAO;                      // Scale factor for the far-range AO, the greater the darker // 1.0~4.0
+    GFSDK_SSAO_FLOAT                NearAO;                     // Scale factor for the near-range AO, the greater the darker // 0.0~4.0
+    GFSDK_SSAO_FLOAT                FarAO;                      // Scale factor for the far-range AO, the greater the darker // 0.0~4.0
     GFSDK_SSAO_FLOAT                PowerExponent;              // The final AO output is pow(AO, powerExponent) // 1.0~8.0
     GFSDK_SSAO_ForegroundAO         ForegroundAO;               // To limit the occlusion scale in the foreground
     GFSDK_SSAO_BackgroundAO         BackgroundAO;               // To add larger-scale occlusion in the distance
