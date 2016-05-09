@@ -8,7 +8,7 @@ Change Log
 
 * Added entry points for D3D12.
 * Now shipping separate DLLs and LIB files for D3D11 and GL.
-* Replaced the DetailAO & CoarseAO parameters with NearAO & FarAO.
+* Replaced the DetailAO & CoarseAO parameters with SmallScaleAO & LargeScaleAO.
 * Replaced pointers with references in the API.
 * Added the ForegroundAO & BackgroundAO parameters.
 * Added per-component debug-normal visualization modes in GFSDK_SSAO_RenderMask.
