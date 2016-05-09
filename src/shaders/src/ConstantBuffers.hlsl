@@ -56,10 +56,10 @@ CBUFFER GlobalConstantBuffer REGISTER(b0)
     DECLARE_CONSTANT(float, fNegInvR2);
     DECLARE_CONSTANT(float, fNDotVBias);
 
-    DECLARE_CONSTANT(float, fNearAOAmount);
-    DECLARE_CONSTANT(float, fFarAOAmount);
+    DECLARE_CONSTANT(float, fSmallScaleAOAmount);
+    DECLARE_CONSTANT(float, fLargeScaleAOAmount);
     DECLARE_CONSTANT(float, fPowExponent);
-    DECLARE_CONSTANT(int, iTrue);
+    DECLARE_CONSTANT(int, iUnused);
 
     DECLARE_CONSTANT(float, fBlurViewDepth0);
     DECLARE_CONSTANT(float, fBlurViewDepth1);

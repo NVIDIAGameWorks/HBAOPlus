@@ -143,8 +143,8 @@ float ComputeCoarseAO(float2 FullResUV, float3 ViewPosition, float3 ViewNormal, 
 #endif
 
     const float Alpha = 2.0 * GFSDK_PI / NUM_DIRECTIONS;
-    float NearAO = 0;
-    float FarAO = 0;
+    float SmallScaleAO = 0;
+    float LargeScaleAO = 0;
 
     [unroll]
     for (float DirectionIndex = 0; DirectionIndex < NUM_DIRECTIONS; ++DirectionIndex)
@@ -167,7 +167,7 @@ float ComputeCoarseAO(float2 FullResUV, float3 ViewPosition, float3 ViewNormal, 
             float3 S = FetchQuarterResViewPos(SnappedUV);
             RayPixels += StepSizePixels;
 
-            NearAO += ComputeAO(ViewPosition, ViewNormal, S, Params);
+            SmallScaleAO += ComputeAO(ViewPosition, ViewNormal, S, Params);
         }
 
         [unroll]
@@ -177,11 +177,11 @@ float ComputeCoarseAO(float2 FullResUV, float3 ViewPosition, float3 ViewNormal, 
             float3 S = FetchQuarterResViewPos(SnappedUV);
             RayPixels += StepSizePixels;
 
-            FarAO += ComputeAO(ViewPosition, ViewNormal, S, Params);
+            LargeScaleAO += ComputeAO(ViewPosition, ViewNormal, S, Params);
         }
     }
 
-    float AO = (NearAO * g_fNearAOAmount) + (FarAO * g_fFarAOAmount);
+    float AO = (SmallScaleAO * g_fSmallScaleAOAmount) + (LargeScaleAO * g_fLargeScaleAOAmount);
 
     AO /= (NUM_DIRECTIONS * NUM_STEPS);
 

@@ -121,8 +121,8 @@ float4 DebugAO_PS(PostProc_VSOut IN) : SV_TARGET
     float3 N = normalize(cross(MinDiff(P, Pr, Pl), MinDiff(P, Pt, Pb)));
 
     const float Alpha = 2.0 * GFSDK_PI / NUM_DIRECTIONS;
-    float NearAO = 0;
-    float FarAO = 0;
+    float SmallScaleAO = 0;
+    float LargeScaleAO = 0;
 
     [unroll]
     for (float DirectionIndex = 0; DirectionIndex < NUM_DIRECTIONS; ++DirectionIndex)
@@ -148,16 +148,16 @@ float4 DebugAO_PS(PostProc_VSOut IN) : SV_TARGET
 
             if (StepIndex == 0)
             {
-                NearAO += ComputeAO(P, N, S);
+                SmallScaleAO += ComputeAO(P, N, S);
             }
             else
             {
-                FarAO += ComputeAO(P, N, S);
+                LargeScaleAO += ComputeAO(P, N, S);
             }
         }
     }
 
-    float AO = (NearAO * g_fNearAOAmount) + (FarAO * g_fFarAOAmount);
+    float AO = (SmallScaleAO * g_fSmallScaleAOAmount) + (LargeScaleAO * g_fLargeScaleAOAmount);
     AO /= (NUM_DIRECTIONS * NUM_STEPS);
     AO = saturate(1.0 - AO * 2.0);
 

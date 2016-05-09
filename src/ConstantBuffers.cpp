@@ -77,8 +77,8 @@ void GFSDK::SSAO::GlobalConstants::SetAOParameters(const GFSDK_SSAO_Parameters& 
     m_Data.fNDotVBias = Clamp(Params.Bias, 0.0f, 0.5f);
 
     const float AOAmountScaleFactor = 1.f / (1.f - m_Data.fNDotVBias);
-    m_Data.fNearAOAmount = Clamp(Params.NearAO, 0.f, 4.f) * AOAmountScaleFactor * 2.f;
-    m_Data.fFarAOAmount = Clamp(Params.FarAO, 0.f, 4.f) * AOAmountScaleFactor;
+    m_Data.fSmallScaleAOAmount = Clamp(Params.SmallScaleAO, 0.f, 4.f) * AOAmountScaleFactor * 2.f;
+    m_Data.fLargeScaleAOAmount = Clamp(Params.LargeScaleAO, 0.f, 4.f) * AOAmountScaleFactor;
 }
 
 //--------------------------------------------------------------------------------

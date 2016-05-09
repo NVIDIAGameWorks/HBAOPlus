@@ -198,7 +198,7 @@ struct GFSDK_SSAO_Version
         : Major(3)
         , Minor(0)
         , Branch(0)
-        , Revision(20666007)
+        , Revision(20735892)
     {
     }
 
@@ -634,15 +634,15 @@ struct GFSDK_SSAO_BlurParameters
 
 //---------------------------------------------------------------------------------------------------
 // Remarks:
-//    * The final occlusion is a weighted sum of 2 occlusion contributions. The NearAO and FarAO parameters are the weights.
+//    * The final occlusion is a weighted sum of 2 occlusion contributions. The SmallScaleAO and LargeScaleAO parameters are the weights.
 //    * Setting the DepthStorage parameter to FP16_VIEW_DEPTHS is fastest but may introduce minor false-occlusion artifacts for large depths.
 //---------------------------------------------------------------------------------------------------
 struct GFSDK_SSAO_Parameters
 {
     GFSDK_SSAO_FLOAT                Radius;                     // The AO radius in meters
     GFSDK_SSAO_FLOAT                Bias;                       // To hide low-tessellation artifacts // 0.0~0.5
-    GFSDK_SSAO_FLOAT                NearAO;                     // Scale factor for the near-range AO, the greater the darker // 0.0~4.0
-    GFSDK_SSAO_FLOAT                FarAO;                      // Scale factor for the far-range AO, the greater the darker // 0.0~4.0
+    GFSDK_SSAO_FLOAT                SmallScaleAO;               // Scale factor for the small-scale AO, the greater the darker // 0.0~4.0
+    GFSDK_SSAO_FLOAT                LargeScaleAO;               // Scale factor for the large-scale AO, the greater the darker // 0.0~4.0
     GFSDK_SSAO_FLOAT                PowerExponent;              // The final AO output is pow(AO, powerExponent) // 1.0~8.0
     GFSDK_SSAO_ForegroundAO         ForegroundAO;               // To limit the occlusion scale in the foreground
     GFSDK_SSAO_BackgroundAO         BackgroundAO;               // To add larger-scale occlusion in the distance
@@ -654,8 +654,8 @@ struct GFSDK_SSAO_Parameters
     GFSDK_SSAO_Parameters()
         : Radius(1.f)
         , Bias(0.1f)
-        , NearAO(1.f)
-        , FarAO(1.f)
+        , SmallScaleAO(1.f)
+        , LargeScaleAO(1.f)
         , PowerExponent(2.f)
         , DepthStorage(GFSDK_SSAO_FP16_VIEW_DEPTHS)
         , DepthClampMode(GFSDK_SSAO_CLAMP_TO_EDGE)

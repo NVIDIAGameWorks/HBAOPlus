@@ -67,7 +67,8 @@ public:
         , m_BlurAO(true)
         , m_BlurSharpness(32.f)
         , m_PowerExponent(2.f)
-        , m_NearAO(1.f)
+        , m_SmallScaleAO(1.f)
+        , m_LargeScaleAO(1.f)
         , m_pVB(NULL)
         , m_pIB(NULL)
         , m_pConstantBuffer(NULL)
@@ -208,7 +209,8 @@ private:
 
         TwAddVarRW(bar, "Radius", TW_TYPE_FLOAT, &m_AORadius, "min=1.0 max=8.0 group=AO");
         TwAddVarRW(bar, "Bias", TW_TYPE_FLOAT, &m_AOBias, "min=0.0 max=0.5 group=AO");
-        TwAddVarRW(bar, "NearAO", TW_TYPE_FLOAT, &m_NearAO, "min=1.0 max=4.0 group=AO");
+        TwAddVarRW(bar, "SmallScaleAO", TW_TYPE_FLOAT, &m_SmallScaleAO, "min=0.0 max=2.0 group=AO");
+        TwAddVarRW(bar, "LargeScaleAO", TW_TYPE_FLOAT, &m_LargeScaleAO, "min=0.0 max=2.0 group=AO");
         TwAddVarRW(bar, "Power Exponent", TW_TYPE_FLOAT, &m_PowerExponent, "min=0.0 max=4.0 group=AO");
         TwAddVarRW(bar, "Enable Blur", TW_TYPE_BOOLCPP, &m_BlurAO, "group=Blur");
         TwAddVarRW(bar, "Blur Sharpness", TW_TYPE_FLOAT, &m_BlurSharpness, "group=Blur min=0.0 max=100.0");
@@ -219,7 +221,7 @@ private:
     void UpdateUI()
     {
         const int barWidth = 200;
-        const int barHeight = 200;
+        const int barHeight = 220;
         const int border = 20;
 
         char buffer[2048];
@@ -497,8 +499,8 @@ private:
         GFSDK_SSAO_Parameters AOParams;
         AOParams.Radius = m_AORadius;
         AOParams.Bias = m_AOBias;
-        AOParams.NearAO = m_NearAO;
-        AOParams.FarAO = 1.f;
+        AOParams.SmallScaleAO = m_SmallScaleAO;
+        AOParams.LargeScaleAO = m_LargeScaleAO;
         AOParams.PowerExponent = m_PowerExponent;
         AOParams.Blur.Enable = m_BlurAO;
         AOParams.Blur.Sharpness = m_BlurSharpness;
@@ -537,7 +539,8 @@ private:
     bool m_BlurAO;
     float m_BlurSharpness;
     float m_PowerExponent;
-    float m_NearAO;
+    float m_SmallScaleAO;
+    float m_LargeScaleAO;
 
     Mesh m_Mesh;
     ID3D11Buffer* m_pVB;

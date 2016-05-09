@@ -952,8 +952,8 @@ public:
             ImGui::DragFloat("PowerExponent", &mAOParams.PowerExponent, 0.05f, 1.f, 8.f);
             ImGui::DragFloat("Bias", &mAOParams.Bias, 0.001f, 0, 0.5f);
 
-            ImGui::DragFloat("NearAO", &mAOParams.NearAO, 0.01f, 1.f, 2.f);
-            ImGui::DragFloat("FarAO", &mAOParams.FarAO, 0.01f, 1.f, 2.f);
+            ImGui::DragFloat("SmallScaleAO", &mAOParams.SmallScaleAO, 0.01f, 0.f, 2.f);
+            ImGui::DragFloat("LargeScaleAO", &mAOParams.LargeScaleAO, 0.01f, 0.f, 2.f);
 
             bool BlurEnabled = mAOParams.Blur.Enable ? true : false;
             ImGui::Checkbox("Blur.Enable", &BlurEnabled);

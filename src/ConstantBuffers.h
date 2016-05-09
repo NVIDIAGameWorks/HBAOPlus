@@ -27,7 +27,6 @@ public:
     GlobalConstants()
     {
         ZERO_STRUCT(m_Data);
-        m_Data.iTrue = 1;
 
         // Can be useful for figuring out the HBAO+ version from an APIC or NSight capture
         m_Data.u4BuildVersion = GFSDK_SSAO_Version();
