@@ -28,7 +28,7 @@ samples/—source for sample applications demonstrating NVIDIA HBAO+.
 Getting Started
 ---------------
 
-#### INITIALIZE THE LIBRARY:
+INITIALIZE THE LIBRARY:
 ```
 GFSDK_SSAO_CustomHeap CustomHeap;
 CustomHeap.new_ = ::operator new;
@@ -40,7 +40,7 @@ status = GFSDK_SSAO_CreateContext_D3D11(pD3D11Device, &pAOContext, &CustomHeap);
 assert(status == GFSDK_SSAO_OK); // HBAO+ requires feature level 11_0 or above
 ```
 
-#### SET INPUT DEPTHS:
+SET INPUT DEPTHS:
 ```
 GFSDK_SSAO_InputData_D3D11 Input;
 Input.DepthData.DepthTextureType = GFSDK_SSAO_HARDWARE_DEPTHS;
@@ -50,7 +50,7 @@ Input.DepthData.ProjectionMatrix.Layout = GFSDK_SSAO_ROW_MAJOR_ORDER;
 Input.DepthData.MetersToViewSpaceUnits = SceneScale;
 ```
 
-#### SET AO PARAMETERS:
+SET AO PARAMETERS:
 ```
 GFSDK_SSAO_Parameters Params;
 Params.Radius = 2.f;
@@ -61,14 +61,14 @@ Params.Blur.Radius = GFSDK_SSAO_BLUR_RADIUS_4;
 Params.Blur.Sharpness = 16.f;
 ```
 
-#### SET RENDER TARGET:
+SET RENDER TARGET:
 ```
 GFSDK_SSAO_Output_D3D11 Output;
 Output.pRenderTargetView = pOutputColorRTV;
 Output.Blend.Mode = GFSDK_SSAO_OVERWRITE_RGB;
 ```
 
-#### RENDER AO:
+RENDER AO:
 ```
 status = pAOContext->RenderAO(pD3D11Context, Input, Params, Output);
 assert(status == GFSDK_SSAO_OK);
