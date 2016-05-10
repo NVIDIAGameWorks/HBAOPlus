@@ -1,4 +1,4 @@
-# HBAOPlus
+﻿# HBAOPlus
 
 Welcome to NVIDIA's HBAO+ source code repository.
 To begin, clone this repository onto your local drive.
@@ -19,7 +19,7 @@ To minimize flickering, the HBAO+ is always rendered in full resolution, from fu
 
 Package
 --------
-doc/—this documentation page.
+doc/—HTML documentation
 
 lib/—header file, import libraries and DLLs, for Win32, Win64, Mac OS X and Linux.
 
@@ -27,7 +27,8 @@ samples/—source for sample applications demonstrating NVIDIA HBAO+.
 
 Getting Started
 ---------------
-INITIALIZE THE LIBRARY:
+
+### INITIALIZE THE LIBRARY:
 
 GFSDK_SSAO_CustomHeap CustomHeap;
 CustomHeap.new_ = ::operator new;
@@ -37,7 +38,8 @@ GFSDK_SSAO_Status status;
 GFSDK_SSAO_Context_D3D11* pAOContext;
 status = GFSDK_SSAO_CreateContext_D3D11(pD3D11Device, &pAOContext, &CustomHeap);
 assert(status == GFSDK_SSAO_OK); // HBAO+ requires feature level 11_0 or above
-SET INPUT DEPTHS:
+
+### SET INPUT DEPTHS:
 
 GFSDK_SSAO_InputData_D3D11 Input;
 Input.DepthData.DepthTextureType = GFSDK_SSAO_HARDWARE_DEPTHS;
@@ -45,21 +47,24 @@ Input.DepthData.pFullResDepthTextureSRV = pDepthStencilTextureSRV;
 Input.DepthData.ProjectionMatrix.Data = GFSDK_SSAO_Float4x4(pProjectionMatrix);
 Input.DepthData.ProjectionMatrix.Layout = GFSDK_SSAO_ROW_MAJOR_ORDER;
 Input.DepthData.MetersToViewSpaceUnits = SceneScale;
-SET AO PARAMETERS:
 
-GFSDK_SSAO_Parameters_D3D11 Params;
+### SET AO PARAMETERS:
+
+GFSDK_SSAO_Parameters Params;
 Params.Radius = 2.f;
 Params.Bias = 0.1f;
 Params.PowerExponent = 2.f;
 Params.Blur.Enable = true;
 Params.Blur.Radius = GFSDK_SSAO_BLUR_RADIUS_4;
 Params.Blur.Sharpness = 16.f;
-SET RENDER TARGET:
+
+### SET RENDER TARGET:
 
 GFSDK_SSAO_Output_D3D11 Output;
 Output.pRenderTargetView = pOutputColorRTV;
 Output.Blend.Mode = GFSDK_SSAO_OVERWRITE_RGB;
-RENDER AO:
+
+### RENDER AO:
 
 status = pAOContext->RenderAO(pD3D11Context, Input, Params, Output);
 assert(status == GFSDK_SSAO_OK);
