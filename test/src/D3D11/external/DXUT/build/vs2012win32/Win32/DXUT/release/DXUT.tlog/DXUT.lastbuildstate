@@ -1,0 +1,2 @@
+#TargetFrameworkVersion=v4.0:PlatformToolSet=v140:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit
+release|Win32|D:\depot\sw\devrel\libdev\hbao+\dev\main\test\src\|

@@ -1,0 +1,102 @@
+<XPJ version="4">
+  <Project name="DXUT" version="1">
+
+    <Template file="common.xpjt"/>  
+    <Apply-template name="exports"/>
+    
+    <Target name="DXUT">
+      <Var name="PlatformAlias" platform="win32" value="x86"/>
+      <Var name="PlatformAlias" platform="win64" value="x64"/>
+         
+      <Apply-template name="exports"/>
+
+      <Files name="DXUT" root="../../src" type="source">
+        Core/*.h
+        Core/*.cpp
+        Optional/*.h
+        Optional/*.cpp
+      </Files>
+
+      <CFlags>
+        /wd4005 <!-- disable macro refinition on vs2012 -->
+      </CFlags>
+
+      <Configuration name="default" type="lib" platforms="win32 win64">
+        <OutDir>../../lib/${xpj:PLATFORM}</OutDir>
+
+        <Preprocessor type="define" platform="win32">
+          WIN32
+        </Preprocessor>
+        <Preprocessor type="define" platform="win64">
+          WIN64
+        </Preprocessor>
+
+        <Preprocessor type="define">
+          D3DXFX_LARGEADDRESS_HANDLE
+          _UNICODE
+          UNICODE
+          _WINDOWS
+          _CRT_SECURE_NO_DEPRECATE
+          _LIB
+        </Preprocessor>
+
+        <WarningLevel>4</WarningLevel>
+        
+        <CFlags tool="vc8">/wd4996 /wd4505</CFlags>
+        <LFlags tool="vc8">/NODEFAULTLIB:libcp.lib</LFlags>
+
+        <SearchPaths type="header">
+          ../../src
+          ../../src/Core
+          ../../src/Optional
+          ../../../DXSDK/June_2010/Include
+        </SearchPaths>
+
+        <SearchPaths type="library">
+          ../../../DXSDK/June_2010/Lib/${user:PlatformAlias}
+        </SearchPaths>
+
+        <Libraries>
+        </Libraries>
+      </Configuration>
+
+      <!-- **************************************** -->
+      <!--   WIN32/WIN64-DEBUG configuration        -->
+      <!-- **************************************** -->
+
+      <Configuration name="debug" platforms="win32 win64">
+        <OutFile>DXUTDEBUG.lib</OutFile>
+        <CFlags>
+          /fp:fast /MDd /Zi /Oi /Oy- /EHsc /GS /Gd /nologo
+          /wd4748
+        </CFlags>
+        <LFlags>/MACHINE:${user:PlatformAlias} /SUBSYSTEM:WINDOWS /NOLOGO </LFlags>
+        <Preprocessor type=define>
+          _DEBUG
+          PROFILE
+          _ITERATOR_DEBUG_LEVEL=0
+        </Preprocessor>
+        <Libraries>
+        </Libraries>
+      </Configuration>
+
+      <!-- **************************************** -->
+      <!--   WIN32/WIN64-RELEASE configuration      -->
+      <!-- **************************************** -->
+
+      <Configuration name="release" platforms="win32 win64">
+        <OutFile>DXUT.lib</OutFile>
+        <CFlags>
+          /fp:fast /MD /Zi /Oi /Oy- /GL /EHsc /GS /Gy /nologo 
+          /wd4748
+        </CFlags>
+        <LFlags>/MACHINE:${user:PlatformAlias} /SUBSYSTEM:WINDOWS /NOLOGO </LFlags>
+        <Preprocessor type="define">
+          NDEBUG
+        </Preprocessor>
+        <Libraries>
+        </Libraries>
+      </Configuration>
+    </Target>
+  </Project>
+</XPJ>

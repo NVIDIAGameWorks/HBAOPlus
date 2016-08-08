@@ -1,0 +1,399 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Profile|Win32">
+      <Configuration>Profile</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Profile|x64">
+      <Configuration>Profile</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>TwoPassBlend</ProjectName>
+    <ProjectGuid>{99219418-FA94-4BE1-A3CF-E2751E76190D}</ProjectGuid>
+    <RootNamespace>EmptyProject10</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v100</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v100</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v100</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v100</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v100</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v100</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>11.0.50727.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)\..\bin\D3D11\</OutDir>
+    <IntDir>.\Temp\$(Configuration)\$(ProjectName)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <GenerateManifest>true</GenerateManifest>
+    <EmbedManifest>true</EmbedManifest>
+    <TargetName>$(ProjectName)d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\..\Bin\</OutDir>
+    <IntDir>..\..\Temp\$(Configuration)\$(ProjectName)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <EmbedManifest>false</EmbedManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)\..\bin\D3D11\</OutDir>
+    <IntDir>.\Temp\$(Configuration)\$(ProjectName)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <GenerateManifest>true</GenerateManifest>
+    <EmbedManifest>true</EmbedManifest>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\..\Bin\</OutDir>
+    <IntDir>..\..\Temp\$(Configuration)\$(ProjectName)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <EmbedManifest>false</EmbedManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">
+    <OutDir>..\..\Bin\</OutDir>
+    <IntDir>..\..\Temp\$(Configuration)\$(ProjectName)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <EmbedManifest>false</EmbedManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
+    <IntDir>.\Temp\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)\..\bin\D3D11\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\external\DXSDK\June_2010\Include;.\external\DXUT\src\Core;.\external\DXUT\src\Optional;.\external\zlib\1.2.8\src;..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>DEBUG;SUPPORT_D3D11=1;SUPPORT_GL=0;ENABLE_DEBUG_MODES=1;ENABLE_RENDER_TIMES=1;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <PrecompiledHeader />
+      <PrecompiledHeaderFile>DXUT.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <Culture>0x0000</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalOptions>/IGNORE:4089 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>dxerr.lib;dxguid.lib;d3d9.lib;d3dx9.lib;d3dx10.lib;d3dx11.lib;winmm.lib;comctl32.lib;dxgi.lib;d3dcompiler.lib;DXUTDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)d.exe</OutputFile>
+      <AdditionalLibraryDirectories>.\external\DXSDK\June_2010\Lib\x86;.\external\DXUT\lib\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ManifestFile>$(IntDir)$(ProjectName).manifest</ManifestFile>
+      <IgnoreSpecificDefaultLibraries>LIBCMT;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(TargetDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\external\DXSDK\June_2010\Include;.\external\DXUT\src\Core;.\external\DXUT\src\Optional;.\external\zlib\1.2.8\src;..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;PROFILE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>DXUT.h</PrecompiledHeaderFile>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>/IGNORE:4089 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>dxerr9.lib;dxguid.lib;d3dx9d.lib;d3d9.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)EmptyProject10.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalIncludeDirectories>.\external\DXSDK\June_2010\Include;.\external\DXUT\src\Core;.\external\DXUT\src\Optional;.\external\zlib\1.2.8\src;..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SUPPORT_D3D11=1;SUPPORT_GL=0;ENABLE_RENDER_TIMES=1;ENABLE_PERF_MARKERS=1;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <PrecompiledHeader />
+      <PrecompiledHeaderFile>DXUT.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <Culture>0x0000</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalOptions>/IGNORE:4089 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>dxerr.lib;dxguid.lib;d3d9.lib;d3dx9.lib;d3dx10.lib;d3dx11.lib;winmm.lib;comctl32.lib;dxgi.lib;d3dcompiler.lib;DXUT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>.\external\DXSDK\June_2010\Lib\x86;.\external\DXUT\lib\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ManifestFile>$(IntDir)$(ProjectName).manifest</ManifestFile>
+      <IgnoreSpecificDefaultLibraries>LIBCMT;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalIncludeDirectories>.\external\DXSDK\June_2010\Include;.\external\DXUT\src\Core;.\external\DXUT\src\Optional;.\external\zlib\1.2.8\src;..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling />
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>DXUT.h</PrecompiledHeaderFile>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>/IGNORE:4089 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>dxerr9.lib;dxguid.lib;d3dx9.lib;d3d9.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)EmptyProject10.exe</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalIncludeDirectories>.\external\DXSDK\June_2010\Include;.\external\DXUT\src\Core;.\external\DXUT\src\Optional;.\external\zlib\1.2.8\src;..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;PROFILE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling />
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>DXUT.h</PrecompiledHeaderFile>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>/IGNORE:4089 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>dxerr9.lib;dxguid.lib;d3dx9.lib;d3d9.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)EmptyProject10.exe</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\external\DXSDK\June_2010\Include;.\external\DXUT\src\Core;.\external\DXUT\src\Optional;.\external\zlib\1.2.8\src;..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SUPPORT_D3D11=1;SUPPORT_GL=0;ENABLE_RENDER_TIMES=1;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>.\external\DXSDK\June_2010\Lib\x86;.\external\DXUT\lib\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>dxerr.lib;dxguid.lib;d3d9.lib;d3dx9.lib;d3dx10.lib;d3dx11.lib;winmm.lib;comctl32.lib;dxgi.lib;d3dcompiler.lib;DXUT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\API.cpp" />
+    <ClCompile Include="..\..\..\src\AppState_DX11.cpp" />
+    <ClCompile Include="..\..\..\src\AppState_GL.cpp" />
+    <ClCompile Include="..\..\..\src\ConstantBuffers.cpp" />
+    <ClCompile Include="..\..\..\src\PipelineStateObjects_DX12.cpp" />
+    <ClCompile Include="..\..\..\src\ProjectionMatrixInfo.cpp" />
+    <ClCompile Include="..\..\..\src\RandomTexture.cpp" />
+    <ClCompile Include="..\..\..\src\Renderer_DX11.cpp" />
+    <ClCompile Include="..\..\..\src\Renderer_DX12.cpp" />
+    <ClCompile Include="..\..\..\src\Renderer_GL.cpp" />
+    <ClCompile Include="..\..\..\src\Shaders_DX11.cpp" />
+    <ClCompile Include="..\..\..\src\Shaders_DX12.cpp" />
+    <ClCompile Include="..\..\..\src\Shaders_GL.cpp" />
+    <ClCompile Include="..\..\..\src\States_DX11.cpp" />
+    <ClCompile Include="..\..\..\src\States_DX12.cpp" />
+    <ClCompile Include="..\..\..\src\States_GL.cpp" />
+    <ClCompile Include="external\zlib\1.2.8\src\adler32.c" />
+    <ClCompile Include="external\zlib\1.2.8\src\compress.c" />
+    <ClCompile Include="external\zlib\1.2.8\src\crc32.c" />
+    <ClCompile Include="external\zlib\1.2.8\src\deflate.c" />
+    <ClCompile Include="external\zlib\1.2.8\src\gzclose.c" />
+    <ClCompile Include="external\zlib\1.2.8\src\gzlib.c" />
+    <ClCompile Include="external\zlib\1.2.8\src\gzread.c" />
+    <ClCompile Include="external\zlib\1.2.8\src\gzwrite.c" />
+    <ClCompile Include="external\zlib\1.2.8\src\infback.c" />
+    <ClCompile Include="external\zlib\1.2.8\src\inffast.c" />
+    <ClCompile Include="external\zlib\1.2.8\src\inflate.c" />
+    <ClCompile Include="external\zlib\1.2.8\src\inftrees.c" />
+    <ClCompile Include="external\zlib\1.2.8\src\trees.c" />
+    <ClCompile Include="external\zlib\1.2.8\src\uncompr.c" />
+    <ClCompile Include="external\zlib\1.2.8\src\zutil.c" />
+    <ClCompile Include="Scene3D.cpp" />
+    <ClCompile Include="TwoPassBlend.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\Media\directx.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\GFSDK_SSAO.h" />
+    <ClInclude Include="..\..\..\src\AppState_DX11.h" />
+    <ClInclude Include="..\..\..\src\AppState_GL.h" />
+    <ClInclude Include="..\..\..\src\BuildVersion.h" />
+    <ClInclude Include="..\..\..\src\Common.h" />
+    <ClInclude Include="..\..\..\src\Common_DX12.h" />
+    <ClInclude Include="..\..\..\src\Common_GL.h" />
+    <ClInclude Include="..\..\..\src\ConstantBuffers.h" />
+    <ClInclude Include="..\..\..\src\d3dx12.h" />
+    <ClInclude Include="..\..\..\src\d3dx12p.h" />
+    <ClInclude Include="..\..\..\src\GLSLProgram.h" />
+    <ClInclude Include="..\..\..\src\InputDepthInfo.h" />
+    <ClInclude Include="..\..\..\src\InputNormalInfo.h" />
+    <ClInclude Include="..\..\..\src\InputViewport.h" />
+    <ClInclude Include="..\..\..\src\MathUtil.h" />
+    <ClInclude Include="..\..\..\src\MatrixView.h" />
+    <ClInclude Include="..\..\..\src\OutputInfo.h" />
+    <ClInclude Include="..\..\..\src\PerfMarkers.h" />
+    <ClInclude Include="..\..\..\src\PipelineStateObjects_DX12.h" />
+    <ClInclude Include="..\..\..\src\ProjectionMatrixInfo.h" />
+    <ClInclude Include="..\..\..\src\RandomTexture.h" />
+    <ClInclude Include="..\..\..\src\Renderer_DX11.h" />
+    <ClInclude Include="..\..\..\src\Renderer_DX12.h" />
+    <ClInclude Include="..\..\..\src\Renderer_GL.h" />
+    <ClInclude Include="..\..\..\src\RenderOptions.h" />
+    <ClInclude Include="..\..\..\src\RenderTargets_DX11.h" />
+    <ClInclude Include="..\..\..\src\RenderTargets_DX12.h" />
+    <ClInclude Include="..\..\..\src\RenderTargets_GL.h" />
+    <ClInclude Include="..\..\..\src\Shaders_DX11.h" />
+    <ClInclude Include="..\..\..\src\Shaders_DX12.h" />
+    <ClInclude Include="..\..\..\src\Shaders_GL.h" />
+    <ClInclude Include="..\..\..\src\States_DX11.h" />
+    <ClInclude Include="..\..\..\src\States_DX12.h" />
+    <ClInclude Include="..\..\..\src\States_GL.h" />
+    <ClInclude Include="..\..\..\src\TextureUtil.h" />
+    <ClInclude Include="..\..\..\src\TimestampQueries.h" />
+    <ClInclude Include="..\..\..\src\UserTexture.h" />
+    <ClInclude Include="..\..\..\src\VAO_GL.h" />
+    <ClInclude Include="..\..\..\src\Viewports.h" />
+    <ClInclude Include="external\zlib\1.2.8\src\crc32.h" />
+    <ClInclude Include="external\zlib\1.2.8\src\deflate.h" />
+    <ClInclude Include="external\zlib\1.2.8\src\gzguts.h" />
+    <ClInclude Include="external\zlib\1.2.8\src\inffast.h" />
+    <ClInclude Include="external\zlib\1.2.8\src\inffixed.h" />
+    <ClInclude Include="external\zlib\1.2.8\src\inflate.h" />
+    <ClInclude Include="external\zlib\1.2.8\src\inftrees.h" />
+    <ClInclude Include="external\zlib\1.2.8\src\trees.h" />
+    <ClInclude Include="external\zlib\1.2.8\src\zconf.h" />
+    <ClInclude Include="external\zlib\1.2.8\src\zlib.h" />
+    <ClInclude Include="external\zlib\1.2.8\src\zutil.h" />
+    <ClInclude Include="GPUProfiler.h" />
+    <ClInclude Include="Scene3D.h" />
+    <ClInclude Include="SceneRTs.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

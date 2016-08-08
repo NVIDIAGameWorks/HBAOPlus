@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<Templates>
+  <Template name="exports">
+	<Var name="ToolAlias" tool="vc9" value="vs2008"/>
+	<Var name="ToolAlias" tool="vc10" value="vs2010"/>  
+	<Var name="ToolAlias" tool="vc11" value="vs2012"/>  
+    <Export platforms="win32 win64">../${user:ToolAlias}${xpj:PLATFORM}</Export>
+  </Template>
+</Templates>
