@@ -152,7 +152,7 @@ float ComputeCoarseAO(float2 FullResUV, float3 ViewPosition, float3 ViewNormal, 
         float Angle = Alpha * DirectionIndex;
 
         // Compute normalized 2D direction
-        float2 Direction = RotateDirection(float2(cos(Angle), sin(Angle)), Rand.xy);
+        float2 Direction = RotateDirection(Rand.xy, float2(cos(Angle), sin(Angle)));
 
 #if API_GL
         // To match the reference D3D11 implementation
