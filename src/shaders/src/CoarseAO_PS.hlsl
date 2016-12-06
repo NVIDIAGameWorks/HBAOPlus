@@ -64,13 +64,13 @@ float3 FetchQuarterResViewPos(float2 UV)
 }
 
 //----------------------------------------------------------------------------------
-float2 RotateDirection(float2 Direction, float2 RotationCosSin)
+float2 RotateDirection(float2 V, float2 RotationCosSin)
 {
-    // Dir is the normalized 2D direction to be rotated
+    // V is the normalized 2D vector to be rotated
     // RotationCosSin is (cos(alpha),sin(alpha)) where alpha is the rotation angle
     // A 2D rotation matrix is applied (see https://en.wikipedia.org/wiki/Rotation_matrix)
-    return float2(Direction.x*RotationCosSin.x - Direction.y*RotationCosSin.y,
-                  Direction.x*RotationCosSin.y + Direction.y*RotationCosSin.x);
+    return float2(V.x*RotationCosSin.x - V.y*RotationCosSin.y,
+                  V.x*RotationCosSin.y + V.y*RotationCosSin.x);
 }
 
 //----------------------------------------------------------------------------------
