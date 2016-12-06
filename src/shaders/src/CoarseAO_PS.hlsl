@@ -64,10 +64,13 @@ float3 FetchQuarterResViewPos(float2 UV)
 }
 
 //----------------------------------------------------------------------------------
-float2 RotateDirection(float2 Dir, float2 CosSin)
+float2 RotateDirection(float2 Direction, float2 RotationCosSin)
 {
-    return float2(Dir.x*CosSin.x - Dir.y*CosSin.y,
-                  Dir.x*CosSin.y + Dir.y*CosSin.x);
+    // Dir is the normalized 2D direction to be rotated
+    // RotationCosSin is (cos(alpha),sin(alpha)) where alpha is the rotation angle
+    // A 2D rotation matrix is applied (see https://en.wikipedia.org/wiki/Rotation_matrix)
+    return float2(Direction.x*RotationCosSin.x - Direction.y*RotationCosSin.y,
+                  Direction.x*RotationCosSin.y + Direction.y*RotationCosSin.x);
 }
 
 //----------------------------------------------------------------------------------
@@ -152,7 +155,7 @@ float ComputeCoarseAO(float2 FullResUV, float3 ViewPosition, float3 ViewNormal, 
         float Angle = Alpha * DirectionIndex;
 
         // Compute normalized 2D direction
-        float2 Direction = RotateDirection(Rand.xy, float2(cos(Angle), sin(Angle)));
+        float2 Direction = RotateDirection(float2(cos(Angle), sin(Angle)), Rand.xy);
 
 #if API_GL
         // To match the reference D3D11 implementation
