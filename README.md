@@ -5,7 +5,7 @@ To begin, clone this repository onto your local drive.
 
 See Documentation under \doc.
 
-NVIDIA HBAO+ 3.0.
+NVIDIA HBAO+ 3.1.
 ----------------------
 
 Overview
@@ -21,7 +21,7 @@ Package
 --------
 doc/—HTML documentation
 
-lib/—header file, import libraries and DLLs, for Win32, Win64, Mac OS X and Linux.
+lib/—header file, import libraries and DLLs, for Win32 and Win64.
 
 samples/—source for sample applications demonstrating NVIDIA HBAO+.
 
