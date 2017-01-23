@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2016, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -26,10 +26,10 @@ class States
 public:
     States()
     {
+        Init();
     }
 
-    void Create(GFSDK_D3D12_GraphicsContext* pD3DDevice);
-    void Release();
+    void Init();
 
     D3D12_BLEND_DESC* GetBlendStateMultiplyPreserveAlpha()
     {

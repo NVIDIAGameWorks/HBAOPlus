@@ -45,6 +45,9 @@
     <ClCompile Include="..\..\..\src\Shaders_DX11.cpp" />
     <ClCompile Include="..\..\..\src\States_DX11.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectName>GFSDK_SSAO_D3D11_UWP</ProjectName>
     <ProjectGuid>{D213334C-5B95-414B-AED9-F203FFD1D00D}</ProjectGuid>
@@ -81,7 +84,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>$(OUTPUT_DIR_LIB);$(ProjectDir)\..\..\..\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>SUPPORT_D3D11=1;_WINDLL;GLEW_STATIC;NDEBUG;_WINDOWS;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SUPPORT_D3D11=1;SUPPORT_UWP=1;_WINDLL;GLEW_STATIC;NDEBUG;_WINDOWS;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level4</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -101,7 +104,7 @@
     <ClCompile>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>$(OUTPUT_DIR_LIB);$(ProjectDir)\..\..\..\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>SUPPORT_D3D11=1;_WINDLL;GLEW_STATIC;NDEBUG;_WINDOWS;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SUPPORT_D3D11=1;SUPPORT_UWP=1;_WINDLL;GLEW_STATIC;NDEBUG;_WINDOWS;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WarningLevel>Level4</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
       <CompileAsWinRT>true</CompileAsWinRT>

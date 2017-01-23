@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2016, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -13,6 +13,10 @@
 #pragma once
 #include "Common.h"
 #include "RenderOptions.h"
+
+#if USE_NVAPI
+#include "nvapi.h"
+#endif
 
 namespace GFSDK
 {
@@ -90,6 +94,20 @@ public:
             THROW_IF_FAILED(pDevice->CreateTexture2D(&Desc, NULL, &pTexture));
             THROW_IF_FAILED(pDevice->CreateShaderResourceView(pTexture, NULL, &pSRV));
             THROW_IF_FAILED(pDevice->CreateRenderTargetView(pTexture, NULL, &pRTV));
+
+#if USE_NVAPI
+            NvAPI_Status Status = NvAPI_Initialize();
+            NVDX_ObjectHandle NVHandle = nullptr;
+            if (Status == NVAPI_OK)
+            {
+                Status = NvAPI_D3D_GetObjectHandleForResource(pDevice, pTexture, &NVHandle);
+                if (NVHandle)
+                {
+                    NvU32 HintValue = 1;
+                    Status = NvAPI_D3D_SetResourceHint(pDevice, NVHandle, NVAPI_D3D_SRH_CATEGORY_SLI, NVAPI_D3D_SRH_SLI_APP_CONTROLLED_INTERFRAME_CONTENT_SYNC, &HintValue);
+                }
+            }
+#endif
 
             m_AllocatedSizeInBytes = Width * Height * ArraySize * GetFormatSizeInBytes(Format);
         }

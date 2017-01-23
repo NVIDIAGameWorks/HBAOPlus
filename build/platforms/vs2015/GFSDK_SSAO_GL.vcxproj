@@ -48,6 +48,9 @@
     <ClCompile Include="..\..\..\src\Shaders_GL.cpp" />
     <ClCompile Include="..\..\..\src\States_GL.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectName>GFSDK_SSAO_GL</ProjectName>
     <ProjectGuid>{5C00BDFE-5300-4BF1-BFC2-DAB7998C6DED}</ProjectGuid>

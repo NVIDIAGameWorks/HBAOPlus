@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2016, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -159,17 +159,6 @@ public:
         : mBufferWidth(Width), mBufferHeight(Height), mDev(nullptr), mFrameIndex(0), mSSAO(nullptr)
     {
         CHK(CreateDXGIFactory1(IID_PPV_ARGS(mDxgiFactory.ReleaseAndGetAddressOf())));
-
-#if _DEBUG
-        ID3D12Debug* debug = nullptr;
-        D3D12GetDebugInterface(IID_PPV_ARGS(&debug));
-        if (debug)
-        {
-            debug->EnableDebugLayer();
-            debug->Release();
-            debug = nullptr;
-        }
-#endif /* _DEBUG */
 
         ZeroMemory(mFenceValues, sizeof(mFenceValues));
 

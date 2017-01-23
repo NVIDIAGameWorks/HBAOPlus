@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2016, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -592,12 +592,14 @@ ID3D12PipelineState* GFSDK::SSAO::D3D12::BlurYPSO::GetPSO(
         m_EnableSharpnessProfilePermutation != EnableSharpnessProfilePermutation ||
         m_BlurKernelRadiusPermutation != BlurKernelRadiusPermutation ||
         m_RTSampleCount != Output.RenderTarget.SampleCount ||
-        m_RTFormat != Output.RenderTarget.Format)
+        m_RTFormat != Output.RenderTarget.Format ||
+        m_BlendMode != Output.Blend.Mode)
     {
         m_EnableSharpnessProfilePermutation = EnableSharpnessProfilePermutation;
         m_BlurKernelRadiusPermutation = BlurKernelRadiusPermutation;
         m_RTSampleCount = Output.RenderTarget.SampleCount;
         m_RTFormat = Output.RenderTarget.Format;
+        m_BlendMode = Output.Blend.Mode;
 
         m_BlurYPSO.Desc.pRootSignature = m_BlurYRS;
         m_BlurYPSO.Desc.NumRenderTargets = 1;

@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2016, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -30,7 +30,6 @@ void GFSDK::SSAO::D3D12::States::CreateBlendStates()
     }
 
     m_pBlendState_Disabled = BlendStateDesc;
-    //SAFE_D3D_CALL(pD3DDevice->CreateBlendState(&BlendStateDesc, &m_pBlendState_Disabled));
 
     //
     // Create BlendState_Multiply_PreserveAlpha
@@ -46,7 +45,6 @@ void GFSDK::SSAO::D3D12::States::CreateBlendStates()
     BlendStateDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
 
     m_pBlendState_Multiply_PreserveAlpha = BlendStateDesc;
-    //SAFE_D3D_CALL(pD3DDevice->CreateBlendState(&BlendStateDesc, &m_pBlendState_Multiply_PreserveAlpha));
 
     //
     // Create BlendState_Disabled_PreserveAlpha
@@ -55,7 +53,6 @@ void GFSDK::SSAO::D3D12::States::CreateBlendStates()
     BlendStateDesc.RenderTarget[0].BlendEnable = FALSE;
 
     m_pBlendState_Disabled_PreserveAlpha = BlendStateDesc;
-    //SAFE_D3D_CALL(pD3DDevice->CreateBlendState(&BlendStateDesc, &m_pBlendState_Disabled_PreserveAlpha));
 }
 
 //--------------------------------------------------------------------------------
@@ -87,7 +84,6 @@ void GFSDK::SSAO::D3D12::States::CreateDepthStencilStates()
     };
 
     m_pDepthStencilState_Disabled = DepthStencilDesc;
-    //SAFE_D3D_CALL(pD3DDevice->CreateDepthStencilState(&DepthStencilDesc, &m_pDepthStencilState_Disabled));
 }
 
 //--------------------------------------------------------------------------------
@@ -97,7 +93,7 @@ void GFSDK::SSAO::D3D12::States::CreateRasterizerStates()
     // Create RasterizerState_Fullscreen_NoScissor
     //
 
-    static D3D12_RASTERIZER_DESC D3D12_RASTERIZER_DESC_0 =
+    static D3D12_RASTERIZER_DESC Desc =
     { D3D12_FILL_MODE_SOLID, //FillMode
     D3D12_CULL_MODE_BACK, //CullMode
     0x0, //FrontCounterClockwise
@@ -110,8 +106,7 @@ void GFSDK::SSAO::D3D12::States::CreateRasterizerStates()
     0x0  //AntialiasedLineEnable
     };
 
-    m_pRasterizerState_Fullscreen_NoScissor = D3D12_RASTERIZER_DESC_0;
-    //SAFE_D3D_CALL(pD3DDevice->CreateRasterizerState(&D3D12_RASTERIZER_DESC_0, &m_pRasterizerState_Fullscreen_NoScissor));
+    m_pRasterizerState_Fullscreen_NoScissor = Desc;
 }
 
 //--------------------------------------------------------------------------------
@@ -135,7 +130,6 @@ void GFSDK::SSAO::D3D12::States::CreateSamplerStates()
     SamplerDesc.MaxLOD = 0;
 
     m_pSamplerState_PointClamp = SamplerDesc;
-    //SAFE_D3D_CALL(pD3DDevice->CreateSamplerState(&SamplerDesc, &m_pSamplerState_PointClamp));
 
     //
     // Create SamplerState_PointBorder
@@ -145,7 +139,6 @@ void GFSDK::SSAO::D3D12::States::CreateSamplerStates()
     SamplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
 
     m_pSamplerState_PointBorder = SamplerDesc;
-    //SAFE_D3D_CALL(pD3DDevice->CreateSamplerState(&SamplerDesc, &m_pSamplerState_PointBorder));
 
     //
     // Create SamplerState_LinearClamp
@@ -156,7 +149,6 @@ void GFSDK::SSAO::D3D12::States::CreateSamplerStates()
     SamplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
     
     m_pSamplerState_LinearClamp = SamplerDesc;
-    //SAFE_D3D_CALL(pD3DDevice->CreateSamplerState(&SamplerDesc, &m_pSamplerState_LinearClamp));
 
 #if ENABLE_DEBUG_MODES
     //
@@ -168,33 +160,16 @@ void GFSDK::SSAO::D3D12::States::CreateSamplerStates()
     SamplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 
     m_pSamplerState_PointWrap = SamplerDesc;
-    //SAFE_D3D_CALL(pD3DDevice->CreateSamplerState(&SamplerDesc, &m_pSamplerState_PointWrap));
 #endif
 }
 
 //--------------------------------------------------------------------------------
-void GFSDK::SSAO::D3D12::States::Create(GFSDK_D3D12_GraphicsContext* pD3DDevice)
+void GFSDK::SSAO::D3D12::States::Init()
 {
     CreateBlendStates();
     CreateDepthStencilStates();
     CreateRasterizerStates();
     CreateSamplerStates();
-}
-
-//--------------------------------------------------------------------------------
-void GFSDK::SSAO::D3D12::States::Release()
-{
-    //SAFE_RELEASE(m_pBlendState_Disabled);
-    //SAFE_RELEASE(m_pBlendState_Multiply_PreserveAlpha);
-    //SAFE_RELEASE(m_pBlendState_Disabled_PreserveAlpha);
-    //SAFE_RELEASE(m_pDepthStencilState_Disabled);
-    //SAFE_RELEASE(m_pRasterizerState_Fullscreen_NoScissor);
-    //SAFE_RELEASE(m_pSamplerState_PointClamp);
-    //SAFE_RELEASE(m_pSamplerState_PointBorder);
-    //SAFE_RELEASE(m_pSamplerState_LinearClamp);
-#if ENABLE_DEBUG_MODES
-    //SAFE_RELEASE(m_pSamplerState_PointWrap);
-#endif
 }
 
 #endif // SUPPORT_D3D12

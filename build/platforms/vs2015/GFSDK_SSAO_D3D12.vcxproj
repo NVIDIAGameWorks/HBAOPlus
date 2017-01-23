@@ -47,6 +47,9 @@
     <ClCompile Include="..\..\..\src\Shaders_DX12.cpp" />
     <ClCompile Include="..\..\..\src\States_DX12.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectName>GFSDK_SSAO_D3D12</ProjectName>
     <ProjectGuid>{9E9A59CE-F50F-454A-A922-17324373A3A5}</ProjectGuid>

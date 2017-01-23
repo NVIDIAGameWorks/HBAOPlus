@@ -4,6 +4,12 @@ Change Log
 
 |PRODUCTNAMEDOCRELEASEBOLD|
 
+**New in release 3.1**
+
+* The D3D11 non-UWP DLL now calls NVAPI (when available) to disable any SLI transfers for all render targets.
+* The D3D12 RenderAO call now resets the ScissorRect.
+* The PowerExponent parameter is now clamped to 4.f (was 8.f).
+
 **New in release 3.0**
 
 * Added entry points for D3D12.

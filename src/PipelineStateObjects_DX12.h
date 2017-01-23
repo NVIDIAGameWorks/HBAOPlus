@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2016, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -548,6 +548,7 @@ private:
     int m_BlurKernelRadiusPermutation;
     UINT m_RTSampleCount;
     DXGI_FORMAT m_RTFormat;
+    int m_BlendMode;
 
 public:
     BlurYPSO()
@@ -556,6 +557,7 @@ public:
         , m_BlurKernelRadiusPermutation(-1)
         , m_RTSampleCount(0)
         , m_RTFormat(DXGI_FORMAT_UNKNOWN)
+        , m_BlendMode(-1)
     {
     }
 

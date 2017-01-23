@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2016, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -73,12 +73,12 @@ void GFSDK::SSAO::GlobalConstants::SetAOParameters(const GFSDK_SSAO_Parameters& 
     SetBlurConstants(Params.Blur, InputDepth);
     SetDepthThresholdConstants(Params.DepthThreshold);
 
-    m_Data.fPowExponent = Clamp(Params.PowerExponent, 1.f, 8.f);
+    m_Data.fPowExponent = Clamp(Params.PowerExponent, 1.f, 4.f);
     m_Data.fNDotVBias = Clamp(Params.Bias, 0.0f, 0.5f);
 
     const float AOAmountScaleFactor = 1.f / (1.f - m_Data.fNDotVBias);
-    m_Data.fSmallScaleAOAmount = Clamp(Params.SmallScaleAO, 0.f, 4.f) * AOAmountScaleFactor * 2.f;
-    m_Data.fLargeScaleAOAmount = Clamp(Params.LargeScaleAO, 0.f, 4.f) * AOAmountScaleFactor;
+    m_Data.fSmallScaleAOAmount = Clamp(Params.SmallScaleAO, 0.f, 2.f) * AOAmountScaleFactor * 2.f;
+    m_Data.fLargeScaleAOAmount = Clamp(Params.LargeScaleAO, 0.f, 2.f) * AOAmountScaleFactor;
 }
 
 //--------------------------------------------------------------------------------

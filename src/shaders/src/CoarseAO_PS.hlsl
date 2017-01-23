@@ -6,7 +6,7 @@
 */
 
 /* 
-* Copyright (c) 2008-2016, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -66,7 +66,6 @@ float3 FetchQuarterResViewPos(float2 UV)
 //----------------------------------------------------------------------------------
 float2 RotateDirection(float2 V, float2 RotationCosSin)
 {
-    // V is the normalized 2D vector to be rotated
     // RotationCosSin is (cos(alpha),sin(alpha)) where alpha is the rotation angle
     // A 2D rotation matrix is applied (see https://en.wikipedia.org/wiki/Rotation_matrix)
     return float2(V.x*RotationCosSin.x - V.y*RotationCosSin.y,

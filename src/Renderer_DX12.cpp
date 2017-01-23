@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2016, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -34,7 +34,6 @@ private:
 //--------------------------------------------------------------------------------
 void GFSDK::SSAO::D3D12::Renderer::CreateResources(GFSDK_D3D12_GraphicsContext* pGraphicsContext)
 {
-    m_States.Create(pGraphicsContext);
     m_Shaders.Create(pGraphicsContext->pDevice);
 
     m_GlobalCB.Create(pGraphicsContext, eGlobalCB, 0);
@@ -75,7 +74,6 @@ void GFSDK::SSAO::D3D12::Renderer::ReleaseResources()
     m_BlurXPSO.Release();
     m_BlurYPSO.Release();
 
-    m_States.Release();
     m_Shaders.Release();
     m_RTs.Release();
 }
@@ -565,6 +563,13 @@ void GFSDK::SSAO::D3D12::Renderer::Render(GFSDK_D3D12_GraphicsContext* pGraphics
 #endif
 
     m_GraphicsContext.pCmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+    D3D12_RECT ScissorRect = {};
+    ScissorRect.left = 0;
+    ScissorRect.top = 0;
+    ScissorRect.right = 16384;
+    ScissorRect.bottom = 16384;
+    m_GraphicsContext.pCmdList->RSSetScissorRects(1, &ScissorRect);
 
     m_GlobalCB.UpdateBuffer(pGraphicsContext, RenderMask);
 

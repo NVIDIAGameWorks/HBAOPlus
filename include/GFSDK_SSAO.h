@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2016, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -84,7 +84,7 @@ up to 46 MB of video memory and 2.3 ms / frame on GeForce GTX 680.
 (3.) SET AO PARAMETERS
 
     GFSDK_SSAO_Parameters Params;
-    Params.Radius = 2.f;
+    Params.Radius = 1.f;
     Params.Bias = 0.1f;
     Params.PowerExponent = 2.f;
     Params.Blur.Enable = true;
@@ -196,9 +196,9 @@ struct GFSDK_SSAO_Version
 {
     GFSDK_SSAO_Version()
         : Major(3)
-        , Minor(0)
+        , Minor(1)
         , Branch(0)
-        , Revision(20735892)
+        , Revision(21602716)
     {
     }
 
@@ -641,9 +641,9 @@ struct GFSDK_SSAO_Parameters
 {
     GFSDK_SSAO_FLOAT                Radius;                     // The AO radius in meters
     GFSDK_SSAO_FLOAT                Bias;                       // To hide low-tessellation artifacts // 0.0~0.5
-    GFSDK_SSAO_FLOAT                SmallScaleAO;               // Scale factor for the small-scale AO, the greater the darker // 0.0~4.0
-    GFSDK_SSAO_FLOAT                LargeScaleAO;               // Scale factor for the large-scale AO, the greater the darker // 0.0~4.0
-    GFSDK_SSAO_FLOAT                PowerExponent;              // The final AO output is pow(AO, powerExponent) // 1.0~8.0
+    GFSDK_SSAO_FLOAT                SmallScaleAO;               // Scale factor for the small-scale AO, the greater the darker // 0.0~2.0
+    GFSDK_SSAO_FLOAT                LargeScaleAO;               // Scale factor for the large-scale AO, the greater the darker // 0.0~2.0
+    GFSDK_SSAO_FLOAT                PowerExponent;              // The final AO output is pow(AO, powerExponent) // 1.0~4.0
     GFSDK_SSAO_ForegroundAO         ForegroundAO;               // To limit the occlusion scale in the foreground
     GFSDK_SSAO_BackgroundAO         BackgroundAO;               // To add larger-scale occlusion in the distance
     GFSDK_SSAO_DepthStorage         DepthStorage;               // Quality / performance tradeoff
