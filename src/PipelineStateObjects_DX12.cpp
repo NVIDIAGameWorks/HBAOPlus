@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -13,7 +13,7 @@
 #include "PipelineStateObjects_DX12.h"
 
 //--------------------------------------------------------------------------------
-#if _DEBUG
+#if ENABLE_DEBUG_NAMES
 #define SET_PSO_DEBUG_NAME(Name) \
     m_##Name.pPSO->SetName(L#Name);
 #define SET_RS_DEBUG_NAME(Name) \
@@ -31,6 +31,7 @@ void GFSDK::SSAO::D3D12::LinearDepthPSO::Create(GFSDK_D3D12_GraphicsContext* pGr
     CD3DX12_DESCRIPTOR_RANGE DescRanges[RootParameters::Count];
     DescRanges[RootParameters::Buffer0] = CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);
     DescRanges[RootParameters::Texture0] = CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
+    DescRanges[RootParameters::Texture1] = CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
 
     CD3DX12_ROOT_PARAMETER RootParams[RootParameters::Count];
     for (UINT ParamIndex = 0; ParamIndex < SIZEOF_ARRAY(RootParams); ++ParamIndex)
@@ -54,31 +55,44 @@ ID3D12PipelineState* GFSDK::SSAO::D3D12::LinearDepthPSO::GetPSO(
     GFSDK_D3D12_GraphicsContext* pGraphicsContext,
     Shaders &Shaders,
     Generated::ShaderPermutations::RESOLVE_DEPTH ResolveDepthPermutation,
+    Generated::ShaderPermutations::DEPTH_LAYER_COUNT DepthLayerCountPermutation,
     GFSDK_SSAO_DepthTextureType InputDepthTextureType)
 {
     if (!m_LinearDepthPSO.pPSO ||
         m_ResolveDepthPermutation != ResolveDepthPermutation ||
+        m_DepthLayerCountPermutation != DepthLayerCountPermutation ||
         m_InputDepthTextureType != InputDepthTextureType)
     {
         m_ResolveDepthPermutation = ResolveDepthPermutation;
+        m_DepthLayerCountPermutation = DepthLayerCountPermutation;
         m_InputDepthTextureType = InputDepthTextureType;
 
         GFSDK_D3D12_PixelShader* pPS = (m_InputDepthTextureType == GFSDK_SSAO_VIEW_DEPTHS) ?
-            Shaders.CopyDepth_PS.Get(ResolveDepthPermutation) :
-            Shaders.LinearizeDepth_PS.Get(ResolveDepthPermutation);
+            Shaders.CopyDepth_PS.Get(ResolveDepthPermutation, DepthLayerCountPermutation) :
+            Shaders.LinearizeDepth_PS.Get(ResolveDepthPermutation, DepthLayerCountPermutation);
 
         GFSDK_D3D12_VertexShader* pVS = Shaders.FullScreenTriangle_VS.Get();
 
+        if (DepthLayerCountPermutation == Generated::ShaderPermutations::DEPTH_LAYER_COUNT_2)
+        {
+            m_LinearDepthPSO.Desc.NumRenderTargets = 2;
+            m_LinearDepthPSO.Desc.RTVFormats[0] = DXGI_FORMAT_R32_FLOAT;
+            m_LinearDepthPSO.Desc.RTVFormats[1] = DXGI_FORMAT_R32_FLOAT;
+        }
+        else
+        {
+            m_LinearDepthPSO.Desc.NumRenderTargets = 1;
+            m_LinearDepthPSO.Desc.RTVFormats[0] = DXGI_FORMAT_R32_FLOAT;
+            m_LinearDepthPSO.Desc.RTVFormats[1] = DXGI_FORMAT_UNKNOWN;
+        }
+
         m_LinearDepthPSO.Desc.pRootSignature = m_LinearDepthRS;
-        m_LinearDepthPSO.Desc.NumRenderTargets = 1;
-        m_LinearDepthPSO.Desc.RTVFormats[0] = DXGI_FORMAT_R32_FLOAT;
         m_LinearDepthPSO.Desc.SampleDesc.Count = 1;
         m_LinearDepthPSO.Desc.NodeMask = pGraphicsContext->NodeMask;
         m_LinearDepthPSO.SetVertexShader(pVS);
         m_LinearDepthPSO.SetPixelShader(pPS);
 
-        SAFE_RELEASE(m_LinearDepthPSO.pPSO);
-        CreateGraphicsPipelineState(pGraphicsContext, &m_LinearDepthPSO.Desc, IID_PPV_ARGS(&m_LinearDepthPSO.pPSO));
+        SafeCreateGraphicsPipelineState(pGraphicsContext, m_LinearDepthPSO);
         SET_PSO_DEBUG_NAME(LinearDepthPSO);
     }
 
@@ -149,8 +163,7 @@ ID3D12PipelineState* GFSDK::SSAO::D3D12::DebugNormalsPSO::GetPSO(
         m_DebugNormalsPSO.SetVertexShader(pVS);
         m_DebugNormalsPSO.SetPixelShader(pPS);
 
-        SAFE_RELEASE(m_DebugNormalsPSO.pPSO);
-        CreateGraphicsPipelineState(pGraphicsContext, &m_DebugNormalsPSO.Desc, IID_PPV_ARGS(&m_DebugNormalsPSO.pPSO));
+        SafeCreateGraphicsPipelineState(pGraphicsContext, m_DebugNormalsPSO);
         SET_PSO_DEBUG_NAME(DebugNormalsPSO);
     }
 
@@ -168,6 +181,7 @@ void GFSDK::SSAO::D3D12::DeinterleavedDepthPSO::Create(
     DescRanges[RootParameters::Buffer0] = CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);
     DescRanges[RootParameters::Buffer1] = CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 1);
     DescRanges[RootParameters::Texture0] = CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
+    DescRanges[RootParameters::Texture1] = CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
 
     CD3DX12_ROOT_PARAMETER RootParams[RootParameters::Count];
     for (UINT ParamIndex = 0; ParamIndex < SIZEOF_ARRAY(RootParams); ++ParamIndex)
@@ -196,16 +210,19 @@ ID3D12PipelineState* GFSDK::SSAO::D3D12::DeinterleavedDepthPSO::GetPSO(
     GFSDK::SSAO::D3D12::Shaders &Shaders,
     GFSDK::SSAO::D3D12::States &States,
     GFSDK::SSAO::D3D12::RenderTargets& RTs,
-    GFSDK_SSAO_DepthStorage DepthStorage)
+    GFSDK_SSAO_DepthStorage DepthStorage,
+    Generated::ShaderPermutations::DEPTH_LAYER_COUNT DepthLayerCountPermutation)
 {
     if (!m_DeinterleavedDepthPSO.pPSO ||
-        m_DepthStorage != DepthStorage)
+        m_DepthStorage != DepthStorage ||
+        m_DepthLayerCountPermutation != DepthLayerCountPermutation)
     {
         m_DepthStorage = DepthStorage;
+        m_DepthLayerCountPermutation = DepthLayerCountPermutation;
 
         m_DeinterleavedDepthPSO.Desc.pRootSignature = m_DeinterleavedDepthRS;
         m_DeinterleavedDepthPSO.Desc.NumRenderTargets = MRT_COUNT;
-        DXGI_FORMAT Format = RTs.GetViewDepthTextureFormat(DepthStorage);
+        DXGI_FORMAT Format = (DepthLayerCountPermutation == Generated::ShaderPermutations::DEPTH_LAYER_COUNT_2) ? DXGI_FORMAT_R16G16_FLOAT : RTs.GetViewDepthTextureFormat(DepthStorage);
         for (UINT Idx = 0; Idx < MRT_COUNT; ++Idx)
         {
             m_DeinterleavedDepthPSO.Desc.RTVFormats[Idx] = Format;
@@ -213,10 +230,9 @@ ID3D12PipelineState* GFSDK::SSAO::D3D12::DeinterleavedDepthPSO::GetPSO(
         m_DeinterleavedDepthPSO.Desc.SampleDesc.Count = 1;
         m_DeinterleavedDepthPSO.Desc.NodeMask = pGraphicsContext->NodeMask;
         m_DeinterleavedDepthPSO.SetVertexShader(Shaders.FullScreenTriangle_VS.Get());
-        m_DeinterleavedDepthPSO.SetPixelShader(Shaders.DeinterleaveDepth_PS.Get());
+        m_DeinterleavedDepthPSO.SetPixelShader(Shaders.DeinterleaveDepth_PS.Get(DepthLayerCountPermutation));
 
-        SAFE_RELEASE(m_DeinterleavedDepthPSO.pPSO);
-        CreateGraphicsPipelineState(pGraphicsContext, &m_DeinterleavedDepthPSO.Desc, IID_PPV_ARGS(&m_DeinterleavedDepthPSO.pPSO));
+        SafeCreateGraphicsPipelineState(pGraphicsContext, m_DeinterleavedDepthPSO);
         SET_PSO_DEBUG_NAME(DeinterleavedDepthPSO);
     }
 
@@ -233,6 +249,7 @@ void GFSDK::SSAO::D3D12::ReconstructNormalPSO::Create(
     CD3DX12_DESCRIPTOR_RANGE DescRanges[RootParameters::Count];
     DescRanges[RootParameters::Buffer0] = CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);
     DescRanges[RootParameters::Texture0] = CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
+    DescRanges[RootParameters::Texture1] = CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
 
     CD3DX12_ROOT_PARAMETER RootParams[RootParameters::Count];
     for (UINT ParamIndex = 0; ParamIndex < SIZEOF_ARRAY(RootParams); ++ParamIndex)
@@ -242,6 +259,7 @@ void GFSDK::SSAO::D3D12::ReconstructNormalPSO::Create(
 
     RootParams[RootParameters::Buffer0].InitAsDescriptorTable(1, &DescRanges[RootParameters::Buffer0]);
     RootParams[RootParameters::Texture0].InitAsDescriptorTable(1, &DescRanges[RootParameters::Texture0], D3D12_SHADER_VISIBILITY_PIXEL);
+    RootParams[RootParameters::Texture1].InitAsDescriptorTable(1, &DescRanges[RootParameters::Texture1], D3D12_SHADER_VISIBILITY_PIXEL);
 
     CD3DX12_STATIC_SAMPLER_DESC StaticSamplers[1];
     StaticSamplers[0].Init(0);
@@ -274,8 +292,7 @@ ID3D12PipelineState* GFSDK::SSAO::D3D12::ReconstructNormalPSO::GetPSO(
         m_ReconstructNormalPSO.SetVertexShader(Shaders.FullScreenTriangle_VS.Get());
         m_ReconstructNormalPSO.SetPixelShader(Shaders.ReconstructNormal_PS.Get());
 
-        SAFE_RELEASE(m_ReconstructNormalPSO.pPSO);
-        CreateGraphicsPipelineState(pGraphicsContext, &m_ReconstructNormalPSO.Desc, IID_PPV_ARGS(&m_ReconstructNormalPSO.pPSO));
+        SafeCreateGraphicsPipelineState(pGraphicsContext, m_ReconstructNormalPSO);
         SET_PSO_DEBUG_NAME(ReconstructNormalPSO);
     }
 
@@ -321,21 +338,18 @@ void GFSDK::SSAO::D3D12::CoarseAOPSO::Create(
 ID3D12PipelineState* GFSDK::SSAO::D3D12::CoarseAOPSO::GetPSO(
     GFSDK_D3D12_GraphicsContext* pGraphicsContext,
     Shaders &Shaders,
-    Generated::ShaderPermutations::ENABLE_FOREGROUND_AO EnableForegroundAOPermutation,
-    Generated::ShaderPermutations::ENABLE_BACKGROUND_AO EnableBackgroundAOPermutation,
-    Generated::ShaderPermutations::ENABLE_DEPTH_THRESHOLD EnableDepthThresholdPermutation,
-    Generated::ShaderPermutations::FETCH_GBUFFER_NORMAL FetchNormalPermutation)
+    Generated::ShaderPermutations::FETCH_GBUFFER_NORMAL FetchNormalPermutation,
+    Generated::ShaderPermutations::DEPTH_LAYER_COUNT DepthLayerCountPermutation,
+    Generated::ShaderPermutations::NUM_STEPS NumStepsPermutation)
 {
     if (!m_CoarseAOPSO.pPSO ||
-        m_EnableForegroundAOPermutation != EnableForegroundAOPermutation ||
-        m_EnableBackgroundAOPermutation != EnableBackgroundAOPermutation ||
-        m_EnableDepthThresholdPermutation != EnableDepthThresholdPermutation ||
-        m_FetchNormalPermutation != FetchNormalPermutation)
+        m_FetchNormalPermutation != FetchNormalPermutation ||
+        m_DepthLayerCountPermutation != DepthLayerCountPermutation ||
+        m_NumStepsPermutation != NumStepsPermutation)
     {
-        m_EnableForegroundAOPermutation = EnableForegroundAOPermutation;
-        m_EnableBackgroundAOPermutation = EnableBackgroundAOPermutation;
-        m_EnableDepthThresholdPermutation = EnableDepthThresholdPermutation;
         m_FetchNormalPermutation = FetchNormalPermutation;
+        m_DepthLayerCountPermutation = DepthLayerCountPermutation;
+        m_NumStepsPermutation = NumStepsPermutation;
 
         m_CoarseAOPSO.Desc.pRootSignature = m_CoarseAORS;
         m_CoarseAOPSO.Desc.NumRenderTargets = 1;
@@ -343,11 +357,10 @@ ID3D12PipelineState* GFSDK::SSAO::D3D12::CoarseAOPSO::GetPSO(
         m_CoarseAOPSO.Desc.SampleDesc.Count = 1;
         m_CoarseAOPSO.Desc.NodeMask = pGraphicsContext->NodeMask;
         m_CoarseAOPSO.SetVertexShader(Shaders.FullScreenTriangle_VS.Get());
-        m_CoarseAOPSO.SetPixelShader(Shaders.CoarseAO_PS.Get(EnableForegroundAOPermutation, EnableBackgroundAOPermutation, EnableDepthThresholdPermutation, FetchNormalPermutation));
+        m_CoarseAOPSO.SetPixelShader(Shaders.CoarseAO_PS.Get(FetchNormalPermutation, DepthLayerCountPermutation, NumStepsPermutation));
         m_CoarseAOPSO.SetGeometryShader(Shaders.CoarseAO_GS.Get());
 
-        SAFE_RELEASE(m_CoarseAOPSO.pPSO);
-        CreateGraphicsPipelineState(pGraphicsContext, &m_CoarseAOPSO.Desc, IID_PPV_ARGS(&m_CoarseAOPSO.pPSO));
+        SafeCreateGraphicsPipelineState(pGraphicsContext, m_CoarseAOPSO);
         SET_PSO_DEBUG_NAME(CoarseAOPSO);
     }
 
@@ -365,6 +378,7 @@ void GFSDK::SSAO::D3D12::ReinterleavedAOBlurPSO::Create(
     DescRanges[RootParameters::Buffer0] = CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);
     DescRanges[RootParameters::Texture0] = CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
     DescRanges[RootParameters::Texture1] = CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
+    DescRanges[RootParameters::Texture2] = CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 2);
 
     CD3DX12_ROOT_PARAMETER RootParams[RootParameters::Count];
     for (UINT ParamIndex = 0; ParamIndex < SIZEOF_ARRAY(RootParams); ++ParamIndex)
@@ -390,10 +404,14 @@ void GFSDK::SSAO::D3D12::ReinterleavedAOBlurPSO::Create(
 //--------------------------------------------------------------------------------
 ID3D12PipelineState* GFSDK::SSAO::D3D12::ReinterleavedAOBlurPSO::GetPSO(
     GFSDK_D3D12_GraphicsContext* pGraphicsContext,
-    Shaders &Shaders)
+    Shaders &Shaders,
+    Generated::ShaderPermutations::DEPTH_LAYER_COUNT DepthLayerCountPermutation)
 {
-    if (!m_ReinterleavedAOBlurPSO.pPSO)
+    if (!m_ReinterleavedAOBlurPSO.pPSO || 
+        m_DepthLayerCountPermutation != DepthLayerCountPermutation)
     {
+        m_DepthLayerCountPermutation = DepthLayerCountPermutation;
+
         m_ReinterleavedAOBlurPSO.Desc.pRootSignature = m_ReinterleavedAOBlurRS;
         m_ReinterleavedAOBlurPSO.Desc.NumRenderTargets = 1;
         m_ReinterleavedAOBlurPSO.Desc.SampleDesc.Count = 1;
@@ -401,10 +419,9 @@ ID3D12PipelineState* GFSDK::SSAO::D3D12::ReinterleavedAOBlurPSO::GetPSO(
         m_ReinterleavedAOBlurPSO.Desc.NodeMask = pGraphicsContext->NodeMask;
 
         m_ReinterleavedAOBlurPSO.SetVertexShader(Shaders.FullScreenTriangle_VS.Get());
-        m_ReinterleavedAOBlurPSO.SetPixelShader(Shaders.ReinterleaveAO_PS.Get(Generated::ShaderPermutations::ENABLE_BLUR_1));
+        m_ReinterleavedAOBlurPSO.SetPixelShader(Shaders.ReinterleaveAO_PS.Get(Generated::ShaderPermutations::ENABLE_BLUR_1, DepthLayerCountPermutation));
 
-        SAFE_RELEASE(m_ReinterleavedAOBlurPSO.pPSO);
-        CreateGraphicsPipelineState(pGraphicsContext, &m_ReinterleavedAOBlurPSO.Desc, IID_PPV_ARGS(&m_ReinterleavedAOBlurPSO.pPSO));
+        SafeCreateGraphicsPipelineState(pGraphicsContext, m_ReinterleavedAOBlurPSO);
         SET_PSO_DEBUG_NAME(ReinterleavedAOBlurPSO);
     }
 
@@ -448,16 +465,19 @@ ID3D12PipelineState* GFSDK::SSAO::D3D12::ReinterleavedAOPSO::GetPSO(
     GFSDK_D3D12_GraphicsContext* pGraphicsContext,
     Shaders &Shaders,
     States& States,
-    OutputInfo& Output)
+    OutputInfo& Output,
+    Generated::ShaderPermutations::DEPTH_LAYER_COUNT DepthLayerCountPermutation)
 {
     if (!m_ReinterleavedAOPSO.pPSO ||
         m_RTSampleCount != Output.RenderTarget.SampleCount ||
         m_RTFormat != Output.RenderTarget.Format ||
-        m_BlendMode != Output.Blend.Mode)
+        m_BlendMode != Output.Blend.Mode ||
+        m_DepthLayerCountPermutation != DepthLayerCountPermutation)
     {
         m_RTSampleCount = Output.RenderTarget.SampleCount;
         m_RTFormat = Output.RenderTarget.Format;
         m_BlendMode = Output.Blend.Mode;
+        m_DepthLayerCountPermutation = DepthLayerCountPermutation;
 
         m_ReinterleavedAOPSO.Desc.pRootSignature = m_ReinterleavedAORS;
         m_ReinterleavedAOPSO.Desc.NumRenderTargets = 1;
@@ -468,10 +488,9 @@ ID3D12PipelineState* GFSDK::SSAO::D3D12::ReinterleavedAOPSO::GetPSO(
         m_ReinterleavedAOPSO.Desc.NodeMask = pGraphicsContext->NodeMask;
 
         m_ReinterleavedAOPSO.SetVertexShader(Shaders.FullScreenTriangle_VS.Get());
-        m_ReinterleavedAOPSO.SetPixelShader(Shaders.ReinterleaveAO_PS.Get(Generated::ShaderPermutations::ENABLE_BLUR_0));
+        m_ReinterleavedAOPSO.SetPixelShader(Shaders.ReinterleaveAO_PS.Get(Generated::ShaderPermutations::ENABLE_BLUR_0, DepthLayerCountPermutation));
 
-        SAFE_RELEASE(m_ReinterleavedAOPSO.pPSO);
-        CreateGraphicsPipelineState(pGraphicsContext, &m_ReinterleavedAOPSO.Desc, IID_PPV_ARGS(&m_ReinterleavedAOPSO.pPSO));
+        SafeCreateGraphicsPipelineState(pGraphicsContext, m_ReinterleavedAOPSO);
         SET_PSO_DEBUG_NAME(ReinterleavedAOPSO);
     }
 
@@ -536,8 +555,7 @@ ID3D12PipelineState* GFSDK::SSAO::D3D12::BlurXPSO::GetPSO(
         m_BlurXPSO.SetVertexShader(Shaders.FullScreenTriangle_VS.Get());
         m_BlurXPSO.SetPixelShader(Shaders.BlurX_PS.Get(EnableSharpnessProfilePermutation, BlurKernelRadiusPermutation));
 
-        SAFE_RELEASE(m_BlurXPSO.pPSO);
-        CreateGraphicsPipelineState(pGraphicsContext, &m_BlurXPSO.Desc, IID_PPV_ARGS(&m_BlurXPSO.pPSO));
+        SafeCreateGraphicsPipelineState(pGraphicsContext, m_BlurXPSO);
         SET_PSO_DEBUG_NAME(BlurXPSO);
     }
 
@@ -612,8 +630,7 @@ ID3D12PipelineState* GFSDK::SSAO::D3D12::BlurYPSO::GetPSO(
         m_BlurYPSO.SetVertexShader(Shaders.FullScreenTriangle_VS.Get());
         m_BlurYPSO.SetPixelShader(Shaders.BlurY_PS.Get(EnableSharpnessProfilePermutation, BlurKernelRadiusPermutation));
 
-        SAFE_RELEASE(m_BlurYPSO.pPSO);
-        CreateGraphicsPipelineState(pGraphicsContext, &m_BlurYPSO.Desc, IID_PPV_ARGS(&m_BlurYPSO.pPSO));
+        SafeCreateGraphicsPipelineState(pGraphicsContext, m_BlurYPSO);
         SET_PSO_DEBUG_NAME(BlurYPSO);
     }
 

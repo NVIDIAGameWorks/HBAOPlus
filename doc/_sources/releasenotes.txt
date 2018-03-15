@@ -15,11 +15,8 @@ What's New
 
 |VERSIONBOLD|
 
-* Added entry points for D3D12.
-* Now shipping separate DLLs and LIB files for D3D11 and GL.
-* Added the BackgroundAO parameter, which can be used to add larger-scale occlusion in the distance.
-* Removed the BLUR_RADIUS_8 mode (BLUR_RADIUS_4 looks better in general, and runs faster).
-* Added per-component debug-normal visualization modes in GFSDK_SSAO_RenderMask.
+* Added support for a second input depth texture (to reduce halo artifacts behind foreground objects)
+* Removed support for OpenGL.
 
 .. -----------------------
 

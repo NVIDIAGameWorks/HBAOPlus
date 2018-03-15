@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -33,17 +33,9 @@ enum GpuTimeRegimeIndex
     REGIME_TIME_COUNT
 };
 
-enum GpuTimeRenderPassIndex
-{
-    RENDER_PASS_0,
-    RENDER_PASS_1,
-    RENDER_PASS_COUNT,
-};
-
 struct RenderTimes
 {
-    static GpuTimeRenderPassIndex SSAO::RenderTimes::CurrentPassIndex;
-    float GPUTimeMS[RENDER_PASS_COUNT][REGIME_TIME_COUNT];
+    float GPUTimeMS[REGIME_TIME_COUNT];
 };
 
 #if SUPPORT_D3D11
@@ -118,12 +110,12 @@ public:
                             (pDeviceContext->GetData(m_pTimestampQueriesEnd[i],   &TimestampValueEnd,   sizeof(UINT64), D3D11_ASYNC_GETDATA_DONOTFLUSH) == S_OK))
                         {
                             m_TimestampQueryInFlight[i] = false;
-                            pRenderTimes->GPUTimeMS[GFSDK::SSAO::RenderTimes::CurrentPassIndex][i] = float(double(TimestampValueEnd - TimestampValueBegin) * InvFrequencyMS);
+                            pRenderTimes->GPUTimeMS[i] = float(double(TimestampValueEnd - TimestampValueBegin) * InvFrequencyMS);
                         }
                     }
                     else
                     {
-                        pRenderTimes->GPUTimeMS[GFSDK::SSAO::RenderTimes::CurrentPassIndex][i] = 0.f;
+                        pRenderTimes->GPUTimeMS[i] = 0.f;
                     }
                 }
             }
@@ -183,156 +175,6 @@ private:
 } //namespace D3D11
 
 #endif //SUPPORT_D3D11
-
-#if SUPPORT_GL
-
-namespace GL
-{
-
-#if defined(_MSC_VER) && _MSC_VER < 1400
-typedef __int64 GLint64EXT;
-typedef unsigned __int64 GLuint64EXT;
-#elif defined(_MSC_VER) || defined(__BORLANDC__)
-typedef signed long long GLint64EXT;
-typedef unsigned long long GLuint64EXT;
-#else
-#  if defined(__MINGW32__) || defined(__CYGWIN__)
-#include <inttypes.h>
-#  endif
-typedef int64_t GLint64EXT;
-typedef uint64_t GLuint64EXT;
-#endif
-typedef GLint64EXT  GLint64;
-typedef GLuint64EXT GLuint64;
-
-//--------------------------------------------------------------------------------
-struct TimerQuery
-{
-    GLuint Query;
-    GLint64EXT Duration;
-    bool InFlight;
-};
-
-//--------------------------------------------------------------------------------
-class TimestampQueries
-{
-public:
-    typedef struct
-    {
-        void (GFSDK_SSAO_STDCALL * glGenQueries) (GLsizei n, GLuint* ids);
-        void (GFSDK_SSAO_STDCALL * glDeleteQueries) (GLsizei n, const GLuint* ids);
-        void (GFSDK_SSAO_STDCALL * glGetQueryObjectiv) (GLuint id, GLenum pname, GLint* params);
-        void (GFSDK_SSAO_STDCALL * glGetQueryObjecti64vEXT) (GLuint id, GLenum pname, GLint64EXT *params);
-        void (GFSDK_SSAO_STDCALL * glBeginQuery) (GLenum target, GLuint id);
-        void (GFSDK_SSAO_STDCALL * glEndQuery) (GLenum target);
-    } GLFunctions;
-
-    static GLFunctions GL;
-
-    void Create()
-    {
-        for (UINT i = 0; i < REGIME_TIME_COUNT; i++)
-        {
-            GL.glGenQueries(1, &m_TimerQueries[i].Query);
-            m_TimerQueries[i].Duration = 0;
-            m_TimerQueries[i].InFlight = false;
-        }
-    }
-
-    void Release()
-    {
-        for (UINT i = 0; i < REGIME_TIME_COUNT; i++)
-        {
-            GL.glDeleteQueries(1, &m_TimerQueries[i].Query);
-            m_TimerQueries[i].Query = 0;
-            m_TimerQueries[i].Duration = 0;
-            m_TimerQueries[i].InFlight = false;
-        }
-    }
-
-    void UpdateTotalGpuTime(SSAO::RenderTimes* pRenderTimes)
-    {
-        pRenderTimes->GPUTimeMS[SSAO::RenderTimes::CurrentPassIndex][REGIME_TIME_TOTAL] = 0.f;
-
-        for (UINT i = 0; i < REGIME_TIME_COUNT; ++i)
-        {
-            if (i != REGIME_TIME_TOTAL)
-            {
-                pRenderTimes->GPUTimeMS[SSAO::RenderTimes::CurrentPassIndex][REGIME_TIME_TOTAL] += pRenderTimes->GPUTimeMS[SSAO::RenderTimes::CurrentPassIndex][i];
-            }
-        }
-    }
-
-    void GetAvailableTimers(SSAO::RenderTimes* pRenderTimes)
-    {
-        for (UINT i = 0; i < REGIME_TIME_COUNT; ++i)
-        {
-            if (m_TimerQueries[i].InFlight)
-            {
-                GLint Available = 0;
-                GL.glGetQueryObjectiv(m_TimerQueries[i].Query, GL_QUERY_RESULT_AVAILABLE, &Available);
-
-                if (Available)
-                {
-                    GL.glGetQueryObjecti64vEXT(m_TimerQueries[i].Query, GL_QUERY_RESULT, &m_TimerQueries[i].Duration);
-                    pRenderTimes->GPUTimeMS[SSAO::RenderTimes::CurrentPassIndex][i] = float(double(m_TimerQueries[i].Duration * 1.e-6));
-                    m_TimerQueries[i].InFlight = false;
-                }
-            }
-            else
-            {
-                pRenderTimes->GPUTimeMS[SSAO::RenderTimes::CurrentPassIndex][i] = 0.f;
-            }
-        }
-
-        UpdateTotalGpuTime(pRenderTimes);
-    }
-
-    void StartTimer(GpuTimeRegimeIndex Id)
-    {
-        if (!m_TimerQueries[Id].InFlight)
-        {
-            GL.glBeginQuery(GL_TIME_ELAPSED_EXT, m_TimerQueries[Id].Query);
-        }
-    }
-
-    void StopTimer(GpuTimeRegimeIndex Id)
-    {
-        if (!m_TimerQueries[Id].InFlight)
-        {
-            GL.glEndQuery(GL_TIME_ELAPSED_EXT);
-        }
-        m_TimerQueries[Id].InFlight = true;
-    }
-
-private:
-    TimerQuery m_TimerQueries[REGIME_TIME_COUNT];
-};
-
-//--------------------------------------------------------------------------------
-class GPUTimer
-{
-public:
-    GPUTimer(TimestampQueries* pTimestampQueries, GpuTimeRegimeIndex Id)
-        : m_pTimestampQueries(pTimestampQueries)
-        , m_GpuTimeRegimeIndex(Id)
-    {
-        m_pTimestampQueries->StartTimer(Id);
-    }
-
-    ~GPUTimer()
-    {
-        m_pTimestampQueries->StopTimer(m_GpuTimeRegimeIndex);
-    }
-
-private:
-    TimestampQueries* m_pTimestampQueries;
-    GpuTimeRegimeIndex m_GpuTimeRegimeIndex;
-};
-
-} //namespace GL
-
-#endif //SUPPORT_GL
 
 } // namespace SSAO
 } // namespace GFSDK

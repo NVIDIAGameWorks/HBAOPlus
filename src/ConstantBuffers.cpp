@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -44,7 +44,7 @@ void GFSDK::SSAO::GlobalConstants::SetDepthThresholdConstants(const GFSDK_SSAO_D
     else
     {
         m_Data.fViewDepthThresholdNegInv = 0.f;
-        m_Data.fViewDepthThresholdSharpness = 1.f;
+        m_Data.fViewDepthThresholdSharpness = -1.f;
     }
 }
 
@@ -60,10 +60,10 @@ void GFSDK::SSAO::GlobalConstants::SetAORadiusConstants(const GFSDK_SSAO_Paramet
     m_Data.fRadiusToScreen = R * 0.5f / TanHalfFovy * InputDepth.Viewport.Height;
 
     const float BackgroundViewDepth = Max(Params.BackgroundAO.BackgroundViewDepth, EPSILON);
-    m_Data.fBackgroundAORadiusPixels = m_Data.fRadiusToScreen / BackgroundViewDepth;
+    m_Data.fBackgroundAORadiusPixels = Params.BackgroundAO.Enable ? (m_Data.fRadiusToScreen / BackgroundViewDepth) : -1.f;
 
     const float ForegroundViewDepth = Max(Params.ForegroundAO.ForegroundViewDepth, EPSILON);
-    m_Data.fForegroundAORadiusPixels = m_Data.fRadiusToScreen / ForegroundViewDepth;
+    m_Data.fForegroundAORadiusPixels = Params.ForegroundAO.Enable ? (m_Data.fRadiusToScreen / ForegroundViewDepth) : -1.f;
 }
 
 //--------------------------------------------------------------------------------

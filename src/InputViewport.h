@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -71,16 +71,6 @@ struct InputViewport : public D3D11_VIEWPORT
         }
 
         return InitFromViewport(Viewport, Texture);
-    }
-
-    GFSDK_SSAO_Status InitFromTexture(const GFSDK_SSAO_InputViewport& Viewport, const SSAO::UserTextureDesc& Texture)
-    {
-        if (Viewport.Enable)
-        {
-            return GFSDK_SSAO_GL_UNSUPPORTED_VIEWPORT;
-        }
-
-        return InitFromTexture(Texture);
     }
 
     bool RectCoversFullInputTexture;

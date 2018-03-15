@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -11,11 +11,6 @@
 // Number of sampled directions per pixel
 #ifndef NUM_DIRECTIONS
 #define NUM_DIRECTIONS 8
-#endif
-
-// Number of steps per direction
-#ifndef NUM_STEPS
-#define NUM_STEPS 4
 #endif
 
 // To disable the per-pixel randomization

@@ -1,12 +1,11 @@
 /*
-#permutation ENABLE_FOREGROUND_AO 0 1
-#permutation ENABLE_BACKGROUND_AO 0 1
-#permutation ENABLE_DEPTH_THRESHOLD 0 1
 #permutation FETCH_GBUFFER_NORMAL 0 1 2
+#permutation DEPTH_LAYER_COUNT 1 2
+#permutation NUM_STEPS 4 8
 */
 
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -21,12 +20,11 @@
 #include "FetchNormal_Common.hlsl"
 #endif
 
-#if API_GL
-#define QuarterResDepthTexture      g_t0
-#define ReconstructedNormalTexture  g_t1
-#endif
-
+#if DEPTH_LAYER_COUNT==2
+Texture2DArray<float2>   QuarterResDepthTexture      : register(t0);
+#else
 Texture2DArray<float>   QuarterResDepthTexture      : register(t0);
+#endif
 
 #if !FETCH_GBUFFER_NORMAL
 Texture2D<float3>       ReconstructedNormalTexture  : register(t1);
@@ -52,16 +50,20 @@ float3 FetchFullResViewNormal(PostProc_VSOut IN)
 }
 
 //----------------------------------------------------------------------------------
+#if DEPTH_LAYER_COUNT==2
+void FetchQuarterResViewPos(float2 UV, out float3 OutViewPos0, out float3 OutViewPos1)
+{
+    float2 ViewDepths = QuarterResDepthTexture.SampleLevel(PointClampSampler, float3(UV, 0), 0).rg;
+    OutViewPos0 = UVToView(UV, ViewDepths.r);
+    OutViewPos1 = UVToView(UV, ViewDepths.g);
+}
+#else
 float3 FetchQuarterResViewPos(float2 UV)
 {
-#if API_GL
-    float fSliceIndex = g_PerPassConstants.fSliceIndex;
-#else
-    float fSliceIndex = 0;
-#endif
-    float ViewDepth = QuarterResDepthTexture.SampleLevel(PointClampSampler, float3(UV,fSliceIndex), 0);
+    float ViewDepth = QuarterResDepthTexture.SampleLevel(PointClampSampler, float3(UV, 0), 0);
     return UVToView(UV, ViewDepth);
 }
+#endif
 
 //----------------------------------------------------------------------------------
 float2 RotateDirection(float2 V, float2 RotationCosSin)
@@ -99,13 +101,15 @@ AORadiusParams GetAORadiusParams(float ViewDepth)
     Params.fRadiusPixels = g_fRadiusToScreen / ViewDepth;
     Params.fNegInvR2 = g_fNegInvR2;
 
-#if ENABLE_BACKGROUND_AO
-    ScaleAORadius(Params, max(1.0, g_fBackgroundAORadiusPixels / Params.fRadiusPixels));
-#endif
+    [branch] if (g_fBackgroundAORadiusPixels != -1.f)
+    {
+        ScaleAORadius(Params, max(1.0, g_fBackgroundAORadiusPixels / Params.fRadiusPixels));
+    }
 
-#if ENABLE_FOREGROUND_AO
-    ScaleAORadius(Params, min(1.0, g_fForegroundAORadiusPixels / Params.fRadiusPixels));
-#endif
+    [branch] if (g_fForegroundAORadiusPixels != -1.f)
+    {
+        ScaleAORadius(Params, min(1.0, g_fForegroundAORadiusPixels / Params.fRadiusPixels));
+    }
 
     return Params;
 }
@@ -133,6 +137,38 @@ float ComputeAO(float3 P, float3 N, float3 S, AORadiusParams Params)
 }
 
 //----------------------------------------------------------------------------------
+void AccumulateAO(
+    inout float AO,
+    inout float RayPixels,
+    float StepSizePixels,
+    float2 Direction,
+    float2 FullResUV,
+    float3 ViewPosition,
+    float3 ViewNormal,
+    AORadiusParams Params
+)
+{
+    float2 SnappedUV = round(RayPixels * Direction) * g_f2InvQuarterResolution + FullResUV;
+
+#if DEPTH_LAYER_COUNT == 2
+    float3 S0, S1;
+    FetchQuarterResViewPos(SnappedUV, S0, S1);
+#else
+    float3 S = FetchQuarterResViewPos(SnappedUV);
+#endif
+
+    RayPixels += StepSizePixels;
+
+#if DEPTH_LAYER_COUNT == 2
+    AO += max(
+        ComputeAO(ViewPosition, ViewNormal, S0, Params),
+        ComputeAO(ViewPosition, ViewNormal, S1, Params));
+#else
+    AO += ComputeAO(ViewPosition, ViewNormal, S, Params);
+#endif
+}
+
+//----------------------------------------------------------------------------------
 float ComputeCoarseAO(float2 FullResUV, float3 ViewPosition, float3 ViewNormal, AORadiusParams Params)
 {
     // Divide by NUM_STEPS+1 so that the farthest samples are not fully attenuated
@@ -156,30 +192,17 @@ float ComputeCoarseAO(float2 FullResUV, float3 ViewPosition, float3 ViewNormal, 
         // Compute normalized 2D direction
         float2 Direction = RotateDirection(float2(cos(Angle), sin(Angle)), Rand.xy);
 
-#if API_GL
-        // To match the reference D3D11 implementation
-        Direction.y = -Direction.y;
-#endif
-
         // Jitter starting sample within the first step
         float RayPixels = (Rand.z * StepSizePixels + 1.0);
 
         {
-            float2 SnappedUV = round(RayPixels * Direction) * g_f2InvQuarterResolution + FullResUV;
-            float3 S = FetchQuarterResViewPos(SnappedUV);
-            RayPixels += StepSizePixels;
-
-            SmallScaleAO += ComputeAO(ViewPosition, ViewNormal, S, Params);
+            AccumulateAO(SmallScaleAO, RayPixels, StepSizePixels, Direction, FullResUV, ViewPosition, ViewNormal, Params);
         }
 
         [unroll]
         for (float StepIndex = 1; StepIndex < NUM_STEPS; ++StepIndex)
         {
-            float2 SnappedUV = round(RayPixels * Direction) * g_f2InvQuarterResolution + FullResUV;
-            float3 S = FetchQuarterResViewPos(SnappedUV);
-            RayPixels += StepSizePixels;
-
-            LargeScaleAO += ComputeAO(ViewPosition, ViewNormal, S, Params);
+            AccumulateAO(LargeScaleAO, RayPixels, StepSizePixels, Direction, FullResUV, ViewPosition, ViewNormal, Params);
         }
     }
 
@@ -197,7 +220,14 @@ float CoarseAO_PS(PostProc_VSOut IN) : SV_TARGET
     IN.uv = IN.pos.xy * (g_f2InvQuarterResolution / 4.0);
 
     // Batch 2 texture fetches before the branch
+#if DEPTH_LAYER_COUNT==2
+    float3 ViewPosition;
+    float3 ViewPosition1;
+    FetchQuarterResViewPos(IN.uv, ViewPosition, ViewPosition1);
+#else
     float3 ViewPosition = FetchQuarterResViewPos(IN.uv);
+#endif // DEPTH_LAYER_COUNT==2
+
     float3 ViewNormal = FetchFullResViewNormal(IN);
 
     AORadiusParams Params = GetAORadiusParams(ViewPosition.z);
@@ -211,9 +241,11 @@ float CoarseAO_PS(PostProc_VSOut IN) : SV_TARGET
 
     float AO = ComputeCoarseAO(IN.uv, ViewPosition, ViewNormal, Params);
 
-#if ENABLE_DEPTH_THRESHOLD
-    AO *= DepthThresholdFactor(ViewPosition.z);
-#endif
+    [branch]
+    if (g_fViewDepthThresholdSharpness != -1.f)
+    {
+        AO *= DepthThresholdFactor(ViewPosition.z);
+    }
 
     return saturate(1.0 - AO * 2.0);
 }

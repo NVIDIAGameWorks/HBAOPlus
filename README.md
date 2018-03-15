@@ -5,17 +5,42 @@ To begin, clone this repository onto your local drive.
 
 See Documentation under \doc.
 
-NVIDIA HBAO+ 3.1.
+NVIDIA HBAO+ 4.0.
 ----------------------
 
-Overview
----------
+HBAO+ is a SSAO algorithm designed to achieve high efficiency on DX11 GPUs.
+The algorithm is based on HBAO [Bavoil and Sainz 2008], with the following differences:
 
-HBAO+ is a SSAO algorithm designed to achieve high GPU efficiency. The algorithm is based on HBAO [Bavoil and Sainz 2008], with the following differences:
+(1.) To minimize cache trashing, HBAO+ does not use any randomization texture.
+Instead, the algorithm uses an Interleaved Rendering approach, generating the AO
+in multiple passes with a unique jitter value per pass [Bavoil and Jansen 2013].
 
-To minimize cache trashing, HBAO+ does not use any randomization texture. Instead, the algorithm uses an Interleaved Rendering approach, generating the AO in multiple passes with a unique jitter value per pass [Bavoil and Jansen 2013].
-To avoid over-occlusion artifacts, HBAO+ uses a simpler AO approximation than HBAO, similar to “Scalable Ambient Obscurance” [McGuire et al. 2012] [Bukowski et al. 2012].
-To minimize flickering, the HBAO+ is always rendered in full resolution, from full-resolution depths.
+(2.) To avoid over-occlusion artifacts, HBAO+ uses a simpler AO approximation than HBAO,
+similar to "Scalable Ambient Obscurance" [McGuire et al. 2012] [Bukowski et al. 2012].
+
+(3.) To minimize flickering, the HBAO+ is always rendered in full resolution,
+from full-resolution depths.
+
+(4.) To reduce halo artifacts behind foreground objects, HBAO+ can take as input a second depth layer, 
+using the multi-layer SSAO approach from [Bavoil and Sainz 2009] and [McGuire et al. 2013].
+
+[Bavoil et al. 2008] "Image-Space Horizon-Based Ambient Occlusion"
+http://www.nvidia.com/object/siggraph-2008-HBAO.html
+
+[Bavoil and Sainz 2009] "Multi-Layer Dual-Resolution Screen-Space Ambient Occlusion"
+https://dl.acm.org/citation.cfm?id=1598035
+
+[McGuire et al. 2012] "Scalable Ambient Obscurance"
+http://graphics.cs.williams.edu/papers/SAOHPG12/
+
+[Bukowski et al. 2012] "Scalable High-Quality Motion Blur and Ambient Occlusion"
+http://graphics.cs.williams.edu/papers/VVSIGGRAPH12/
+
+[Bavoil and Jansen 2013] "Particle Shadows & Cache-Efficient Post-Processing"
+https://developer.nvidia.com/gdc-2013
+
+[McGuire et al. 2013] "Lighting Deep G-Buffers: Single-Pass, Layered Depth Images with Minimum Separation Applied to Indirect Illumination"
+http://research.nvidia.com/publication/lighting-deep-g-buffers-single-pass-layered-depth-images-minimum-separation-applied
 
 Package
 --------
@@ -23,7 +48,7 @@ doc/—HTML documentation
 
 lib/—header file, import libraries and DLLs, for Win32 and Win64.
 
-samples/—source for sample applications demonstrating NVIDIA HBAO+.
+samples/—source for DX11 & DX12 sample applications demonstrating NVIDIA HBAO+.
 
 Getting Started
 ---------------
@@ -77,7 +102,7 @@ assert(status == GFSDK_SSAO_OK);
 Data Flow
 ---------
 Input Requirements
-The library has entry points for D3D11, D3D12 and GL3.2+.
+The library has entry points for DX11 and DX12.
 Requires a depth texture to be provided as input, along with associated projection info.
 Optionally, can also take as input a GBuffer normal texture associated with the input depth texture:
 Can add normal-mapping details to the AO.

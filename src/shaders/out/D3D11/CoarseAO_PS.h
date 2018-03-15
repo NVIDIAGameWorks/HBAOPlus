@@ -7,36 +7,6 @@ namespace Generated
 namespace ShaderPermutations
 {
 
-#ifndef ENABLE_FOREGROUND_AO_DEFINED
-#define ENABLE_FOREGROUND_AO_DEFINED
-    enum ENABLE_FOREGROUND_AO
-    {
-        ENABLE_FOREGROUND_AO_0,
-        ENABLE_FOREGROUND_AO_1,
-        ENABLE_FOREGROUND_AO_COUNT,
-    };
-#endif
-
-#ifndef ENABLE_BACKGROUND_AO_DEFINED
-#define ENABLE_BACKGROUND_AO_DEFINED
-    enum ENABLE_BACKGROUND_AO
-    {
-        ENABLE_BACKGROUND_AO_0,
-        ENABLE_BACKGROUND_AO_1,
-        ENABLE_BACKGROUND_AO_COUNT,
-    };
-#endif
-
-#ifndef ENABLE_DEPTH_THRESHOLD_DEFINED
-#define ENABLE_DEPTH_THRESHOLD_DEFINED
-    enum ENABLE_DEPTH_THRESHOLD
-    {
-        ENABLE_DEPTH_THRESHOLD_0,
-        ENABLE_DEPTH_THRESHOLD_1,
-        ENABLE_DEPTH_THRESHOLD_COUNT,
-    };
-#endif
-
 #ifndef FETCH_GBUFFER_NORMAL_DEFINED
 #define FETCH_GBUFFER_NORMAL_DEFINED
     enum FETCH_GBUFFER_NORMAL
@@ -48,24 +18,43 @@ namespace ShaderPermutations
     };
 #endif
 
+#ifndef DEPTH_LAYER_COUNT_DEFINED
+#define DEPTH_LAYER_COUNT_DEFINED
+    enum DEPTH_LAYER_COUNT
+    {
+        DEPTH_LAYER_COUNT_1,
+        DEPTH_LAYER_COUNT_2,
+        DEPTH_LAYER_COUNT_COUNT,
+    };
+#endif
+
+#ifndef NUM_STEPS_DEFINED
+#define NUM_STEPS_DEFINED
+    enum NUM_STEPS
+    {
+        NUM_STEPS_4,
+        NUM_STEPS_8,
+        NUM_STEPS_COUNT,
+    };
+#endif
+
 };
 
 struct CoarseAO_PS
 {
     void Create(DevicePointer Device);
     void Release(DevicePointer Device);
-    PixelShader& Get(ShaderPermutations::ENABLE_FOREGROUND_AO A, ShaderPermutations::ENABLE_BACKGROUND_AO B, ShaderPermutations::ENABLE_DEPTH_THRESHOLD C, ShaderPermutations::FETCH_GBUFFER_NORMAL D)
+    PixelShader& Get(ShaderPermutations::FETCH_GBUFFER_NORMAL A, ShaderPermutations::DEPTH_LAYER_COUNT B, ShaderPermutations::NUM_STEPS C)
     {
-        return m_Shader[A][B][C][D];
+        return m_Shader[A][B][C];
     }
 
 private:
-    PixelShader m_Shader[ShaderPermutations::ENABLE_FOREGROUND_AO_COUNT][ShaderPermutations::ENABLE_BACKGROUND_AO_COUNT][ShaderPermutations::ENABLE_DEPTH_THRESHOLD_COUNT][ShaderPermutations::FETCH_GBUFFER_NORMAL_COUNT];
+    PixelShader m_Shader[ShaderPermutations::FETCH_GBUFFER_NORMAL_COUNT][ShaderPermutations::DEPTH_LAYER_COUNT_COUNT][ShaderPermutations::NUM_STEPS_COUNT];
 #if _WIN32
-    static_assert(ShaderPermutations::ENABLE_FOREGROUND_AO_COUNT == 2, "");
-    static_assert(ShaderPermutations::ENABLE_BACKGROUND_AO_COUNT == 2, "");
-    static_assert(ShaderPermutations::ENABLE_DEPTH_THRESHOLD_COUNT == 2, "");
     static_assert(ShaderPermutations::FETCH_GBUFFER_NORMAL_COUNT == 3, "");
+    static_assert(ShaderPermutations::DEPTH_LAYER_COUNT_COUNT == 2, "");
+    static_assert(ShaderPermutations::NUM_STEPS_COUNT == 2, "");
 #endif
 };
 

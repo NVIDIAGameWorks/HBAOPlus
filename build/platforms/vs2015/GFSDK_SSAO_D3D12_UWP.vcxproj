@@ -28,7 +28,6 @@
     <ClInclude Include="..\..\..\src\ProjectionMatrixInfo.h" />
     <ClInclude Include="..\..\..\src\RandomTexture.h" />
     <ClInclude Include="..\..\..\src\Renderer_DX12.h" />
-    <ClInclude Include="..\..\..\src\RenderOptions.h" />
     <ClInclude Include="..\..\..\src\RenderTargets_DX12.h" />
     <ClInclude Include="..\..\..\src\Shaders_DX12.h" />
     <ClInclude Include="..\..\..\src\States_DX12.h" />

@@ -10,11 +10,6 @@
 
 #include "ConstantBuffers.hlsl"
 
-#if API_GL
-#define FullResNormalTexture    g_t1
-#define FullResNormalTextureMS  g_t1
-#endif
-
 #if FETCH_GBUFFER_NORMAL == 2
 Texture2DMS<float3> FullResNormalTextureMS  : register(t1);
 #else

@@ -1,9 +1,10 @@
 /*
 #permutation ENABLE_BLUR 0 1
+#permutation DEPTH_LAYER_COUNT 1 2
 */
 
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -15,15 +16,16 @@
 #include "ConstantBuffers.hlsl"
 #include "FullScreenTriangle_VS.hlsl"
 
-#define USE_INTEGER_MATH !API_GL
-
-#if API_GL
-#define AOTexture       g_t0
-#define DepthTexture    g_t1
-#endif
+#define USE_INTEGER_MATH 1
 
 Texture2DArray<float> AOTexture     : register(t0);
+#if DEPTH_LAYER_COUNT==2
+Texture2D<float> DepthTexture1      : register(t1);
+Texture2D<float> DepthTexture2      : register(t2);
+#else
 Texture2D<float> DepthTexture       : register(t1);
+#endif
+
 sampler PointSampler                : register(s0);
 
 //----------------------------------------------------------------------------------
@@ -57,12 +59,18 @@ PSOut ReinterleaveAO_PS(PostProc_VSOut IN)
     float2 QuarterResPos = FullResPos / 4.0;
 #endif
 
+
+    float AO = AOTexture.Load(int4(QuarterResPos, SliceId, 0));
 #if ENABLE_BLUR
-    float AO = AOTexture.Load(int4(QuarterResPos, SliceId, 0));
-    float ViewDepth = DepthTexture.Sample(PointSampler, IN.uv);
-    OUT.AOZ = float2(AO, ViewDepth);
+#if DEPTH_LAYER_COUNT==2
+    float ViewDepth1 = DepthTexture1.Sample(PointSampler, IN.uv);
+    float ViewDepth2 = DepthTexture2.Sample(PointSampler, IN.uv);
+    float ViewDepth = min(ViewDepth1, ViewDepth2);
 #else
-    float AO = AOTexture.Load(int4(QuarterResPos, SliceId, 0));
+    float ViewDepth = DepthTexture.Sample(PointSampler, IN.uv);
+#endif
+    OUT.AOZ = float2(AO, ViewDepth);
+#else    
     OUT.AO = pow(saturate(AO), g_fPowExponent);
 #endif
 

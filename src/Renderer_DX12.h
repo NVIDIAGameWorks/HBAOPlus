@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -16,7 +16,6 @@
 #include "OutputInfo.h"
 #include "ProjectionMatrixInfo.h"
 #include "RandomTexture.h"
-#include "RenderOptions.h"
 #include "RenderTargets_DX12.h"
 #include "Shaders_DX12.h"
 #include "PipelineStateObjects_DX12.h"
@@ -81,31 +80,26 @@ public:
     //
 
 private:
+    Generated::ShaderPermutations::NUM_STEPS GetNumStepsPermutation()
+    {
+        return (m_Options.StepCount == GFSDK_SSAO_STEP_COUNT_4) ? Generated::ShaderPermutations::NUM_STEPS_4 :
+                                                                  Generated::ShaderPermutations::NUM_STEPS_8;
+    }
+    Generated::ShaderPermutations::DEPTH_LAYER_COUNT GetDepthLayerCountPermutation()
+    {
+        return (m_Options.EnableDualLayerAO) ? Generated::ShaderPermutations::DEPTH_LAYER_COUNT_2 :
+                                               Generated::ShaderPermutations::DEPTH_LAYER_COUNT_1;
+    }
     Generated::ShaderPermutations::RESOLVE_DEPTH GetResolveDepthPermutation()
     {
-        return (m_InputDepth.Texture.SampleCount == 1) ? Generated::ShaderPermutations::RESOLVE_DEPTH_0 :
-                                                         Generated::ShaderPermutations::RESOLVE_DEPTH_1;
+        return (m_InputDepth.Texture0.SampleCount == 1) ? Generated::ShaderPermutations::RESOLVE_DEPTH_0 :
+                                                          Generated::ShaderPermutations::RESOLVE_DEPTH_1;
     }
     Generated::ShaderPermutations::FETCH_GBUFFER_NORMAL GetFetchNormalPermutation()
     {
         return (!m_InputNormal.Texture.IsSet()) ?           Generated::ShaderPermutations::FETCH_GBUFFER_NORMAL_0 :
                (m_InputNormal.Texture.SampleCount == 1) ?   Generated::ShaderPermutations::FETCH_GBUFFER_NORMAL_1 :
                                                             Generated::ShaderPermutations::FETCH_GBUFFER_NORMAL_2;
-    }
-    Generated::ShaderPermutations::ENABLE_FOREGROUND_AO GetEnableForegroundAOPermutation()
-    {
-        return (m_Options.EnableForegroundAO) ?     Generated::ShaderPermutations::ENABLE_FOREGROUND_AO_1 :
-                                                    Generated::ShaderPermutations::ENABLE_FOREGROUND_AO_0;
-    }
-    Generated::ShaderPermutations::ENABLE_BACKGROUND_AO GetEnableBackgroundAOPermutation()
-    {
-        return (m_Options.EnableBackgroundAO) ?     Generated::ShaderPermutations::ENABLE_BACKGROUND_AO_1 :
-                                                    Generated::ShaderPermutations::ENABLE_BACKGROUND_AO_0;
-    }
-    Generated::ShaderPermutations::ENABLE_DEPTH_THRESHOLD GetEnableDepthThresholdPermutation()
-    {
-        return (m_Options.EnableDepthThreshold) ?   Generated::ShaderPermutations::ENABLE_DEPTH_THRESHOLD_1 :
-                                                    Generated::ShaderPermutations::ENABLE_DEPTH_THRESHOLD_0;
     }
     Generated::ShaderPermutations::ENABLE_BLUR GetEnableBlurPermutation()
     {
@@ -174,9 +168,8 @@ private:
     GFSDK::SSAO::D3D12::Shaders m_Shaders;
     GFSDK::SSAO::D3D12::States m_States;
     GFSDK::SSAO::D3D12::RandomTexture m_RandomTexture;
-    GFSDK::SSAO::RenderOptions m_Options;
+    GFSDK_SSAO_Parameters m_Options;
     GFSDK::SSAO::Viewports m_Viewports;
-    ShaderResourceView m_FullResViewDepthSRV;
     GFSDK::SSAO::BuildVersion m_BuildVersion;
     GFSDK_SSAO_CustomHeap m_NewDelete;
 

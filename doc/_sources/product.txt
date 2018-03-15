@@ -16,6 +16,7 @@ The algorithm is based on HBAO [Bavoil and Sainz 2008], with the following diffe
 
 #. To minimize flickering, the HBAO+ is always rendered in full resolution, from full-resolution depths.
 
+#. To reduce halo artifacts behind foreground objects, HBAO+ can take as input a second depth layer, using the multi-layer SSAO approach from [Bavoil and Sainz 2009] and [McGuire et al. 2013].
 
 .. image:: \_static\hbao-plus-in-tom-clancys-splinter-cell-blacklist-2.jpg
 
@@ -24,7 +25,7 @@ Package
 
 ``doc/``\—this documentation page.
 
-``lib/``\—header file, import libraries and DLLs, for Win32, Win64, Mac OS X and Linux.
+``lib/``\—header file, import libraries and DLLs, for Win32 and Win64.
 
 ``samples/``\—source for sample applications demonstrating NVIDIA HBAO+.
 
@@ -47,6 +48,7 @@ Getting Started
     GFSDK_SSAO_InputData_D3D11 Input;
     Input.DepthData.DepthTextureType = GFSDK_SSAO_HARDWARE_DEPTHS;
     Input.DepthData.pFullResDepthTextureSRV = pDepthStencilTextureSRV;
+    Input.DepthData.pFullResDepthTexture2ndLayerSRV = pDepthStencilTexture2ndLayerSRV; // Required only if Params.DualLayerAO=true
     Input.DepthData.ProjectionMatrix.Data = GFSDK_SSAO_Float4x4(pProjectionMatrix);
     Input.DepthData.ProjectionMatrix.Layout = GFSDK_SSAO_ROW_MAJOR_ORDER;
     Input.DepthData.MetersToViewSpaceUnits = SceneScale;
@@ -60,6 +62,7 @@ Getting Started
     Params.Blur.Enable = true;
     Params.Blur.Radius = GFSDK_SSAO_BLUR_RADIUS_4;
     Params.Blur.Sharpness = 16.f;
+    Params.DualLayerAO = true;
 
 #. SET RENDER TARGET::
 
@@ -95,6 +98,12 @@ Input Requirements
   * Defines a sub-area of the input & output full-resolution textures to be sourced and rendered to.
 
   * The library re-allocates its internal render targets if the Viewport.Width or Viewport.Height changes for a given AO context.
+
+* Optionally, can also take as input a second depth texture (second depth layer), to add information about the scene geometry that is hidden behind the first depth layer.
+
+  * This enables removing halo artifacts behind foreground characters, and that with a single call to RenderAO.
+
+  * The second depth layer can simply be a copy of the scene depth buffer before the dynamic geometry is rendered into it.
 
 MSAA Support
 ++++++++++++++++++++
@@ -248,6 +257,23 @@ The greater the sharpness parameter, the more the blur preserves edges
 
 .. image:: \_static\Blur_Sharpness_8.png  
 
+Dual Layer
+++++++++++++++++++++
+
+The dual layer feature increases the overall quality of the AO, by removing halo artifacts behind foreground objects. To use this feature, the application needs to provide a second depth texture via Input.DepthData.pFullResDepthTexture2ndLayerSRV, and set Params.DualLayerAO = true.
+
+Here are screenshots from our DX11 sample app, which is drawing
+
+* the shader-ball object into a first depth buffer
+
+* the shader-ball and background box into a second depth buffer
+
+and feeding these 2 depth layers as input to RenderAO.
+
+.. image:: \_static\DualLayer_Disabled.png
+
+.. image:: \_static\DualLayer_Enabled.png
+
 Integration Time Estimates
 ##########################
 
@@ -270,12 +296,15 @@ Additional Links
 
 `[Bavoil et al. 2008] "Image-Space Horizon-Based Ambient Occlusion" <http://www.nvidia.com/object/siggraph-2008-HBAO.html>`_
 
+`[Bavoil and Sainz 2009] "Multi-Layer Dual-Resolution Screen-Space Ambient Occlusion" <https://dl.acm.org/citation.cfm?id=1598035>`_
+
 `[McGuire et al. 2012] "Scalable Ambient Obscurance" <http://graphics.cs.williams.edu/papers/SAOHPG12/>`_
 
 `[Bukowski et al. 2012] "Scalable High-Quality Motion Blur and Ambient Occlusion" <http://graphics.cs.williams.edu/papers/VVSIGGRAPH12/>`_
 
 `[Bavoil and Jansen 2013] "Particle Shadows & Cache-Efficient Post-Processing" <https://developer.nvidia.com/gdc-2013>`_
 
+`[McGuire et al. 2013] "Lighting Deep G-Buffers: Single-Pass, Layered Depth Images with Minimum Separation Applied to Indirect Illumination" <http://research.nvidia.com/publication/lighting-deep-g-buffers-single-pass-layered-depth-images-minimum-separation-applied>`_
 
 .. Un-comment out if section is used
 .. Additional Links

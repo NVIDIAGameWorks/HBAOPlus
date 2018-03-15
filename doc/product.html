@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="x-ua-compatible" content="IE=Edge"/>
     
-    <title>NVIDIA HBAO+ 3.1. &mdash; NVIDIA HBAO+ 3.1. documentation</title>
+    <title>NVIDIA HBAO+ 4.0. &mdash; NVIDIA HBAO+ 4.0. documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.1.',
+        VERSION:     '4.0.',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/bootstrap.js"></script>
-    <link rel="top" title="NVIDIA HBAO+ 3.1. documentation" href="index.html" />
+    <link rel="top" title="NVIDIA HBAO+ 4.0. documentation" href="index.html" />
     <link rel="next" title="Change Log" href="changelog.html" />
     <link rel="prev" title="NVIDIA HBAO+" href="index.html" /> 
   </head>
@@ -44,7 +44,7 @@
 <div class="masthead">
     <div class="row">
       <ul class="breadcrumb">
-        <li><a href="index.html">NVIDIA HBAO+ 3.1. documentation</a></li> 
+        <li><a href="index.html">NVIDIA HBAO+ 4.0. documentation</a></li> 
       </ul>
     </div>
 </div>
@@ -54,7 +54,7 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <div id="sidebar_toc">
   <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="">NVIDIA HBAO+ 3.1.</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="">NVIDIA HBAO+ 4.0.</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#package">Package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting Started</a></li>
@@ -74,6 +74,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#background-ao">Background AO</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ao-blur">AO Blur</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#blur-sharpness">Blur Sharpness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dual-layer">Dual Layer</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#integration-time-estimates">Integration Time Estimates</a></li>
@@ -115,7 +116,7 @@
           <div class="body">
             
   <div class="section" id="productname-version">
-<h1>NVIDIA HBAO+ 3.1.<a class="headerlink" href="#productname-version" title="Permalink to this headline">¶</a></h1>
+<h1>NVIDIA HBAO+ 4.0.<a class="headerlink" href="#productname-version" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>HBAO+ is a SSAO algorithm designed to achieve high GPU efficiency.
@@ -124,6 +125,7 @@ The algorithm is based on HBAO [Bavoil and Sainz 2008], with the following diffe
 <li>To minimize cache trashing, HBAO+ does not use any randomization texture. Instead, the algorithm uses an Interleaved Rendering approach, generating the AO in multiple passes with a unique jitter value per pass [Bavoil and Jansen 2013].</li>
 <li>To avoid over-occlusion artifacts, HBAO+ uses a simpler AO approximation than HBAO, similar to &#8220;Scalable Ambient Obscurance&#8221; [McGuire et al. 2012] [Bukowski et al. 2012].</li>
 <li>To minimize flickering, the HBAO+ is always rendered in full resolution, from full-resolution depths.</li>
+<li>To reduce halo artifacts behind foreground objects, HBAO+ can take as input a second depth layer, using the multi-layer SSAO approach from [Bavoil and Sainz 2009] and [McGuire et al. 2013].</li>
 </ol>
 <img alt="_images/hbao-plus-in-tom-clancys-splinter-cell-blacklist-2.jpg" src="_images/hbao-plus-in-tom-clancys-splinter-cell-blacklist-2.jpg" />
 </div>
@@ -151,6 +153,7 @@ assert(status == GFSDK_SSAO_OK); // HBAO+ requires feature level 11_0 or above</
 <div class="highlight-python"><pre>GFSDK_SSAO_InputData_D3D11 Input;
 Input.DepthData.DepthTextureType = GFSDK_SSAO_HARDWARE_DEPTHS;
 Input.DepthData.pFullResDepthTextureSRV = pDepthStencilTextureSRV;
+Input.DepthData.pFullResDepthTexture2ndLayerSRV = pDepthStencilTexture2ndLayerSRV; // Required only if Params.DualLayerAO=true
 Input.DepthData.ProjectionMatrix.Data = GFSDK_SSAO_Float4x4(pProjectionMatrix);
 Input.DepthData.ProjectionMatrix.Layout = GFSDK_SSAO_ROW_MAJOR_ORDER;
 Input.DepthData.MetersToViewSpaceUnits = SceneScale;</pre>
@@ -163,7 +166,8 @@ Params.Bias = 0.1f;
 Params.PowerExponent = 2.f;
 Params.Blur.Enable = true;
 Params.Blur.Radius = GFSDK_SSAO_BLUR_RADIUS_4;
-Params.Blur.Sharpness = 16.f;</pre>
+Params.Blur.Sharpness = 16.f;
+Params.DualLayerAO = true;</pre>
 </div>
 </li>
 <li><p class="first">SET RENDER TARGET:</p>
@@ -195,6 +199,11 @@ assert(status == GFSDK_SSAO_OK);</pre>
 <li>Optionally, can also take as input a viewport rectangle associated with the input textures:<ul>
 <li>Defines a sub-area of the input &amp; output full-resolution textures to be sourced and rendered to.</li>
 <li>The library re-allocates its internal render targets if the Viewport.Width or Viewport.Height changes for a given AO context.</li>
+</ul>
+</li>
+<li>Optionally, can also take as input a second depth texture (second depth layer), to add information about the scene geometry that is hidden behind the first depth layer.<ul>
+<li>This enables removing halo artifacts behind foreground characters, and that with a single call to RenderAO.</li>
+<li>The second depth layer can simply be a copy of the scene depth buffer before the dynamic geometry is rendered into it.</li>
 </ul>
 </li>
 </ul>
@@ -330,6 +339,18 @@ assert(status == GFSDK_SSAO_OK);</pre>
 <img alt="_images/Blur_Sharpness_0.png" src="_images/Blur_Sharpness_0.png" />
 <img alt="_images/Blur_Sharpness_8.png" src="_images/Blur_Sharpness_8.png" />
 </div>
+<div class="section" id="dual-layer">
+<h3>Dual Layer<a class="headerlink" href="#dual-layer" title="Permalink to this headline">¶</a></h3>
+<p>The dual layer feature increases the overall quality of the AO, by removing halo artifacts behind foreground objects. To use this feature, the application needs to provide a second depth texture via Input.DepthData.pFullResDepthTexture2ndLayerSRV, and set Params.DualLayerAO = true.</p>
+<p>Here are screenshots from our DX11 sample app, which is drawing</p>
+<ul class="simple">
+<li>the shader-ball object into a first depth buffer</li>
+<li>the shader-ball and background box into a second depth buffer</li>
+</ul>
+<p>and feeding these 2 depth layers as input to RenderAO.</p>
+<img alt="_images/DualLayer_Disabled.png" src="_images/DualLayer_Disabled.png" />
+<img alt="_images/DualLayer_Enabled.png" src="_images/DualLayer_Enabled.png" />
+</div>
 </div>
 <div class="section" id="integration-time-estimates">
 <h2>Integration Time Estimates<a class="headerlink" href="#integration-time-estimates" title="Permalink to this headline">¶</a></h2>
@@ -350,9 +371,11 @@ assert(status == GFSDK_SSAO_OK);</pre>
 <div class="section" id="additional-links">
 <h2>Additional Links<a class="headerlink" href="#additional-links" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="http://www.nvidia.com/object/siggraph-2008-HBAO.html">[Bavoil et al. 2008] &#8220;Image-Space Horizon-Based Ambient Occlusion&#8221;</a></p>
+<p><a class="reference external" href="https://dl.acm.org/citation.cfm?id=1598035">[Bavoil and Sainz 2009] &#8220;Multi-Layer Dual-Resolution Screen-Space Ambient Occlusion&#8221;</a></p>
 <p><a class="reference external" href="http://graphics.cs.williams.edu/papers/SAOHPG12/">[McGuire et al. 2012] &#8220;Scalable Ambient Obscurance&#8221;</a></p>
 <p><a class="reference external" href="http://graphics.cs.williams.edu/papers/VVSIGGRAPH12/">[Bukowski et al. 2012] &#8220;Scalable High-Quality Motion Blur and Ambient Occlusion&#8221;</a></p>
 <p><a class="reference external" href="https://developer.nvidia.com/gdc-2013">[Bavoil and Jansen 2013] &#8220;Particle Shadows &amp; Cache-Efficient Post-Processing&#8221;</a></p>
+<p><a class="reference external" href="http://research.nvidia.com/publication/lighting-deep-g-buffers-single-pass-layered-depth-images-minimum-separation-applied">[McGuire et al. 2013] &#8220;Lighting Deep G-Buffers: Single-Pass, Layered Depth Images with Minimum Separation Applied to Indirect Illumination&#8221;</a></p>
 <div class="toctree-wrapper compound">
 <ul class="simple">
 </ul>
@@ -369,7 +392,7 @@ assert(status == GFSDK_SSAO_OK);</pre>
 <div class="masthead">
     <div class="row">
       <ul class="breadcrumb">
-        <li><a href="index.html">NVIDIA HBAO+ 3.1. documentation</a></li> 
+        <li><a href="index.html">NVIDIA HBAO+ 4.0. documentation</a></li> 
       </ul>
     </div>
 </div>

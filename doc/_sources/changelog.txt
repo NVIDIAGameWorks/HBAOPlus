@@ -4,6 +4,14 @@ Change Log
 
 |PRODUCTNAMEDOCRELEASEBOLD|
 
+**New in release 4.0**
+
+* Add a StepCount parameter. The default value behaves the same as in previous HBAO+ versions.
+* Added support for a second input depth texture (to reduce halo artifacts behind foreground objects).
+* Fixed possible crash bug (released PSOs still in use on the GPU) when changing AO parameters at runtime on DX12.
+* Removed the two-pass-blend option from the DX11 interface.
+* Removed support for OpenGL.
+
 **New in release 3.1**
 
 * The D3D11 non-UWP DLL now calls NVAPI (when available) to disable any SLI transfers for all render targets.

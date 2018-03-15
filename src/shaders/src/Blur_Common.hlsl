@@ -22,18 +22,6 @@ sampler LinearClampSampler          : register(s1);
 #define USE_DEPTH_SLOPE 1
 
 //----------------------------------------------------------------------------------
-#if API_GL
-Texture2D<float2> g_t0;
-Texture2D<float2> g_t1;
-float2 PointSampleAODepth(float2 UV)
-{
-    return g_t0.Sample(PointClampSampler, UV).xy;
-}
-float2 LinearSampleAODepth(float2 UV)
-{
-    return g_t1.Sample(LinearClampSampler, UV).xy;
-}
-#else
 float2 PointSampleAODepth(float2 UV)
 {
     return AODepthTexture.Sample(PointClampSampler, UV).xy;
@@ -42,7 +30,6 @@ float2 LinearSampleAODepth(float2 UV)
 {
     return AODepthTexture.Sample(LinearClampSampler, UV).xy;
 }
-#endif
 
 //----------------------------------------------------------------------------------
 struct CenterPixelData

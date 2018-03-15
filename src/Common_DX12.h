@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -113,6 +113,7 @@ enum CBVSRVUAVLayoutBase
     ePerPassCB,
     ePerPassCBEnd = ePerPassCB + 16 - 1,
     eFullResViewDepthTexture,
+    eFullResViewDepthTexture2,
     eFullResNormalTexture,
     eQuarterResViewDepthTextureArray,
     eQuarterResViewDepthTextureArrayEnd = eQuarterResViewDepthTextureArray + 16,
@@ -126,6 +127,7 @@ enum CBVSRVUAVLayoutBase
 enum RTVLayoutBase
 {
     eFullResViewDepthTextureRTV,
+    eFullResViewDepthTexture2RTV,
     eFullResNormalTextureRTV,
     eQuarterResViewDepthTextureArrayRTV,
     eQuarterResAOTextureArrayRTV = eQuarterResViewDepthTextureArrayRTV + 1 + 16,

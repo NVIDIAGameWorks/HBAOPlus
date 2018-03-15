@@ -87,7 +87,6 @@ CBUFFER GlobalConstantBuffer REGISTER(b0)
     PAD_FLOAT2;
 };
 
-// Must match the GS from Shaders_GL.cpp
 struct PerPassConstantStruct
 {
     float4 f4Jitter;

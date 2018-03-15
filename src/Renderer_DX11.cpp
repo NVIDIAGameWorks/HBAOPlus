@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -64,27 +64,36 @@ void GFSDK::SSAO::D3D11::Renderer::DrawLinearDepthPS(ID3D11DeviceContext* pDevic
     GPU_TIMER_SCOPE(LINEAR_Z);
 #endif
 
-    if (m_InputDepth.DepthTextureType == GFSDK_SSAO_VIEW_DEPTHS &&
-        m_InputDepth.Texture.SampleCount == 1 &&
-        m_InputDepth.Viewport.RectCoversFullInputTexture)
-    {
-        m_FullResViewDepthSRV = m_InputDepth.Texture.pSRV;
-        return;
-    }
-
     {
         ID3D11PixelShader* pPS = (m_InputDepth.DepthTextureType == GFSDK_SSAO_VIEW_DEPTHS) ?
-            m_Shaders.CopyDepth_PS.Get(GetResolveDepthPermutation()) :
-            m_Shaders.LinearizeDepth_PS.Get(GetResolveDepthPermutation());
+            m_Shaders.CopyDepth_PS.Get(GetResolveDepthPermutation(), GetDepthLayerCountPermutation()) :
+            m_Shaders.LinearizeDepth_PS.Get(GetResolveDepthPermutation(), GetDepthLayerCountPermutation());
 
-        pDeviceContext->OMSetRenderTargets(1, &m_RTs.GetFullResViewDepthTexture()->pRTV, NULL);
+        ID3D11ShaderResourceView* pSRVs[] =
+        {
+            m_InputDepth.Texture0.pSRV,
+            m_InputDepth.Texture1.pSRV
+        };
+
+        if (m_Options.EnableDualLayerAO)
+        {
+            ID3D11RenderTargetView* pRTVs[] =
+            {
+                m_RTs.GetFullResViewDepthTexture()->pRTV,
+                m_RTs.GetFullResViewDepthTexture2()->pRTV
+            };
+            pDeviceContext->OMSetRenderTargets(SIZEOF_ARRAY(pRTVs), pRTVs, NULL);
+        }
+        else
+        {
+            pDeviceContext->OMSetRenderTargets(1, &m_RTs.GetFullResViewDepthTexture()->pRTV, NULL);
+        }
+
         pDeviceContext->RSSetViewports(1, &m_Viewports.FullRes);
         pDeviceContext->PSSetShader(pPS, NULL, 0);
-        pDeviceContext->PSSetShaderResources(0, 1, &m_InputDepth.Texture.pSRV);
+        pDeviceContext->PSSetShaderResources(0, SIZEOF_ARRAY(pSRVs), pSRVs);
 
         pDeviceContext->Draw(3, 0);
-
-        m_FullResViewDepthSRV = m_RTs.GetFullResViewDepthTexture()->pSRV;
     }
 }
 
@@ -100,13 +109,19 @@ void GFSDK::SSAO::D3D11::Renderer::DrawDeinterleavedDepthPS(ID3D11DeviceContext*
 #endif
 
     pDeviceContext->RSSetViewports(1, &m_Viewports.QuarterRes);
-    pDeviceContext->PSSetShader(m_Shaders.DeinterleaveDepth_PS.Get(), NULL, 0);
+    pDeviceContext->PSSetShader(m_Shaders.DeinterleaveDepth_PS.Get(GetDepthLayerCountPermutation()), NULL, 0);
     pDeviceContext->PSSetSamplers(0, 1, &m_States.GetSamplerStatePointClamp());
+
+    ID3D11ShaderResourceView* pSRVs[] =
+    {
+        m_RTs.GetFullResViewDepthTexture()->pSRV,
+        GetFullResViewDepthTexture2SRV()
+    };
 
     for (UINT SliceIndex = 0; SliceIndex < 16; SliceIndex += MAX_NUM_MRTS)
     {
         pDeviceContext->OMSetRenderTargets(MAX_NUM_MRTS, &m_RTs.GetQuarterResViewDepthTextureArray(m_Options)->pRTVs[SliceIndex], NULL);
-        pDeviceContext->PSSetShaderResources(0, 1, &m_FullResViewDepthSRV);
+        pDeviceContext->PSSetShaderResources(0, SIZEOF_ARRAY(pSRVs), pSRVs);
         pDeviceContext->PSSetConstantBuffers(1, 1, &m_PerPassCBs.GetCB(SliceIndex));
 
         pDeviceContext->Draw(3, 0);
@@ -129,7 +144,7 @@ void GFSDK::SSAO::D3D11::Renderer::DrawReconstructedNormalPS(ID3D11DeviceContext
 
     pDeviceContext->PSSetShader(m_Shaders.ReconstructNormal_PS.Get(), NULL, 0);
     pDeviceContext->PSSetSamplers(0, 1, &GetAODepthSamplerState());
-    pDeviceContext->PSSetShaderResources(0, 1, &m_FullResViewDepthSRV);
+    pDeviceContext->PSSetShaderResources(0, 1, &m_RTs.GetFullResViewDepthTexture()->pSRV);
 
     pDeviceContext->Draw(3, 0);
 }
@@ -147,7 +162,7 @@ void GFSDK::SSAO::D3D11::Renderer::DrawDebugNormalsPS(ID3D11DeviceContext* pDevi
 
     ID3D11ShaderResourceView* pSRVs[] = 
     {
-        m_FullResViewDepthSRV,
+        m_RTs.GetFullResViewDepthTexture()->pSRV,
         m_InputNormal.Texture.pSRV
     };
 
@@ -187,7 +202,7 @@ void GFSDK::SSAO::D3D11::Renderer::DrawFullResAOPS(ID3D11DeviceContext* pDeviceC
 
     ID3D11ShaderResourceView* pSRVs[] =
     {
-        m_FullResViewDepthSRV,
+        m_RTs.GetFullResViewDepthTexture()->pSRV,
         m_RandomTexture.pSRV
     };
 
@@ -197,7 +212,7 @@ void GFSDK::SSAO::D3D11::Renderer::DrawFullResAOPS(ID3D11DeviceContext* pDeviceC
         pSamplers[1] = m_States.GetSamplerStatePointWrap()
     };
 
-    pDeviceContext->PSSetShader(m_DebugShaders.DebugAO_PS.Get(GetEnableBlurPermutation()), NULL, 0);
+    pDeviceContext->PSSetShader(m_DebugShaders.DebugAO_PS.Get(GetEnableBlurPermutation(), GetNumStepsPermutation()), NULL, 0);
     pDeviceContext->PSSetShaderResources(0, SIZEOF_ARRAY(pSRVs), pSRVs);
     pDeviceContext->PSSetSamplers(0, SIZEOF_ARRAY(pSamplers), pSamplers);
     pDeviceContext->Draw(3, 0);
@@ -236,7 +251,7 @@ void GFSDK::SSAO::D3D11::Renderer::DrawCoarseAOPS(ID3D11DeviceContext* pDeviceCo
 
     pDeviceContext->RSSetViewports(1, &m_Viewports.QuarterRes);
     pDeviceContext->PSSetSamplers(0, 1, &GetAODepthSamplerState());
-    pDeviceContext->PSSetShader(m_Shaders.CoarseAO_PS.Get(GetEnableForegroundAOPermutation(), GetEnableBackgroundAOPermutation(), GetEnableDepthThresholdPermutation(), GetFetchNormalPermutation()), NULL, 0);
+    pDeviceContext->PSSetShader(m_Shaders.CoarseAO_PS.Get(GetFetchNormalPermutation(), GetDepthLayerCountPermutation(), GetNumStepsPermutation()), NULL, 0);
 
     for (UINT SliceIndex = 0; SliceIndex < 16; ++SliceIndex)
     {
@@ -270,18 +285,15 @@ void GFSDK::SSAO::D3D11::Renderer::DrawReinterleavedAOPS(ID3D11DeviceContext* pD
 
     ASSERT(!m_Options.Blur.Enable);
 
-    for (UINT PassIndex = 0; PassIndex < m_Output.BlendPassCount; ++PassIndex)
     {
-        const BlendPassEnumType BlendPass = GetBlendPassEnum(PassIndex);
-
-        pDeviceContext->OMSetDepthStencilState(GetOutputDepthStencilState(BlendPass), GetOutputDepthStencilRef(BlendPass));
-        pDeviceContext->OMSetBlendState(GetOutputBlendState(BlendPass), GetOutputBlendFactor(BlendPass), GetOutputMSAASampleMask());
+        pDeviceContext->OMSetDepthStencilState(GetOutputDepthStencilState(), GetOutputDepthStencilRef());
+        pDeviceContext->OMSetBlendState(GetOutputBlendState(), GetOutputBlendFactor(), GetOutputMSAASampleMask());
         pDeviceContext->OMSetRenderTargets(1, &m_Output.RenderTarget.pRTV, GetOutputDepthStencilView());
         pDeviceContext->RSSetViewports(1, &m_InputDepth.Viewport);
 
         pDeviceContext->PSSetShaderResources(0, 1, &m_RTs.GetQuarterResAOTextureArray()->pSRV);
         pDeviceContext->PSSetSamplers(0, 1, &m_States.GetSamplerStatePointClamp());
-        pDeviceContext->PSSetShader(m_Shaders.ReinterleaveAO_PS.Get(GetEnableBlurPermutation()), NULL, 0);
+        pDeviceContext->PSSetShader(m_Shaders.ReinterleaveAO_PS.Get(GetEnableBlurPermutation(), GetDepthLayerCountPermutation()), NULL, 0);
 
         pDeviceContext->Draw(3, 0);
     }
@@ -303,7 +315,8 @@ void GFSDK::SSAO::D3D11::Renderer::DrawReinterleavedAOPS_PreBlur(ID3D11DeviceCon
     ID3D11ShaderResourceView* pSRVs[] =
     {
         m_RTs.GetQuarterResAOTextureArray()->pSRV,
-        m_FullResViewDepthSRV
+        m_RTs.GetFullResViewDepthTexture()->pSRV,
+        GetFullResViewDepthTexture2SRV()
     };
 
     pDeviceContext->OMSetRenderTargets(1, &m_RTs.GetFullResAOZTexture2()->pRTV, NULL);
@@ -311,7 +324,7 @@ void GFSDK::SSAO::D3D11::Renderer::DrawReinterleavedAOPS_PreBlur(ID3D11DeviceCon
 
     pDeviceContext->PSSetShaderResources(0, SIZEOF_ARRAY(pSRVs), pSRVs);
     pDeviceContext->PSSetSamplers(0, 1, &m_States.GetSamplerStatePointClamp());
-    pDeviceContext->PSSetShader(m_Shaders.ReinterleaveAO_PS.Get(GetEnableBlurPermutation()), NULL, 0);
+    pDeviceContext->PSSetShader(m_Shaders.ReinterleaveAO_PS.Get(GetEnableBlurPermutation(), GetDepthLayerCountPermutation()), NULL, 0);
 
     pDeviceContext->Draw(3, 0);
 }
@@ -354,12 +367,9 @@ void GFSDK::SSAO::D3D11::Renderer::DrawBlurYPS(ID3D11DeviceContext* pDeviceConte
     GPU_TIMER_SCOPE(BLURY);
 #endif
 
-    for (UINT PassIndex = 0; PassIndex < m_Output.BlendPassCount; ++PassIndex)
     {
-        const BlendPassEnumType BlendPass = GetBlendPassEnum(PassIndex);
-
-        pDeviceContext->OMSetDepthStencilState(GetOutputDepthStencilState(BlendPass), GetOutputDepthStencilRef(BlendPass));
-        pDeviceContext->OMSetBlendState(GetOutputBlendState(BlendPass), GetOutputBlendFactor(BlendPass), GetOutputMSAASampleMask());
+        pDeviceContext->OMSetDepthStencilState(GetOutputDepthStencilState(), GetOutputDepthStencilRef());
+        pDeviceContext->OMSetBlendState(GetOutputBlendState(), GetOutputBlendFactor(), GetOutputMSAASampleMask());
 
         pDeviceContext->OMSetRenderTargets(1, &m_Output.RenderTarget.pRTV, GetOutputDepthStencilView());
         pDeviceContext->RSSetViewports(1, &m_InputDepth.Viewport);
@@ -486,7 +496,7 @@ GFSDK_SSAO_Status GFSDK::SSAO::D3D11::Renderer::PreCreateRTs(
 {
     SetAOResolution(ViewportWidth, ViewportHeight);
 
-    m_Options.SetRenderOptions(Parameters);
+    m_Options = Parameters;
 
     return m_RTs.PreCreate(m_Options);
 }
@@ -669,12 +679,12 @@ GFSDK_SSAO_Status GFSDK::SSAO::D3D11::Renderer::ValidateDataFlow()
 {
     if (m_InputNormal.Texture.IsSet())
     {
-        if (m_InputNormal.Texture.Width    != m_InputDepth.Texture.Width ||
-            m_InputNormal.Texture.Height   != m_InputDepth.Texture.Height)
+        if (m_InputNormal.Texture.Width    != m_InputDepth.Texture0.Width ||
+            m_InputNormal.Texture.Height   != m_InputDepth.Texture0.Height)
         {
             return GFSDK_SSAO_INVALID_NORMAL_TEXTURE_RESOLUTION;
         }
-        if (m_InputNormal.Texture.SampleCount != m_InputDepth.Texture.SampleCount)
+        if (m_InputNormal.Texture.SampleCount != m_InputDepth.Texture0.SampleCount)
         {
             return GFSDK_SSAO_INVALID_NORMAL_TEXTURE_SAMPLE_COUNT;
         }
@@ -693,6 +703,11 @@ GFSDK_SSAO_Status GFSDK::SSAO::D3D11::Renderer::ValidateDataFlow()
         }
     }
 
+	if (m_Options.EnableDualLayerAO && !m_InputDepth.Texture1.IsSet())
+    {
+        return GFSDK_SSAO_NO_SECOND_LAYER_PROVIDED;
+    }
+
     return GFSDK_SSAO_OK;
 }
 
@@ -700,13 +715,14 @@ GFSDK_SSAO_Status GFSDK::SSAO::D3D11::Renderer::ValidateDataFlow()
 GFSDK_SSAO_Status GFSDK::SSAO::D3D11::Renderer::SetAOParameters(const GFSDK_SSAO_Parameters& Params)
 {
     if (Params.Blur.Enable != m_Options.Blur.Enable ||
-        Params.DepthStorage != m_Options.DepthStorage)
+        Params.DepthStorage != m_Options.DepthStorage ||
+        Params.EnableDualLayerAO != m_Options.EnableDualLayerAO)
     {
         m_RTs.ReleaseResources();
     }
 
     m_GlobalCB.SetAOParameters(Params, m_InputDepth);
-    m_Options.SetRenderOptions(Params);
+    m_Options = Params;
 
     return GFSDK_SSAO_OK;
 }

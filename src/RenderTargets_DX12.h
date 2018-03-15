@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -12,7 +12,6 @@
 
 #pragma once
 #include "Common.h"
-#include "RenderOptions.h"
 
 namespace GFSDK
 {
@@ -57,6 +56,7 @@ public:
         switch (Format)
         {
         case DXGI_FORMAT_R16G16B16A16_FLOAT:
+        case DXGI_FORMAT_R32G32_FLOAT:
             NumBytes = 8;
             break;
         case DXGI_FORMAT_R32_FLOAT:
@@ -214,8 +214,6 @@ void RTTexture2DArray<ARRAY_SIZE>::CreateOnce(GFSDK_D3D12_GraphicsContext* pCont
         for (UINT SliceId = 0; SliceId < SIZEOF_ARRAY(SRVs); ++SliceId)
         {
             SRVs[SliceId].pResource = pResource;
-            //SRVs[SliceId].CpuHandle.ptr = ~0ull;
-            SRVs[SliceId].GpuHandle.ptr = ~0ull;
 
             D3D12_SHADER_RESOURCE_VIEW_DESC Desc = {};
             Desc.Format = Format;
@@ -257,6 +255,7 @@ public:
         m_FullResAOZTexture2.SafeRelease();
         m_FullResNormalTexture.SafeRelease();
         m_FullResViewDepthTexture.SafeRelease();
+        m_FullResViewDepthTexture2.SafeRelease();
         m_QuarterResAOTextureArray.SafeRelease();
         m_QuarterResViewDepthTextureArray.SafeRelease();
     }
@@ -289,9 +288,9 @@ public:
         return m_FullHeight;
     }
 
-#if _DEBUG
+#if ENABLE_DEBUG_NAMES
 #define SET_TEXTURE_DEBUG_NAME(Name) \
-	m_##Name.pResource->SetName(L#Name);
+    m_##Name.pResource->SetName(L#Name);
 #else
 #define SET_TEXTURE_DEBUG_NAME(Name)
 #endif
@@ -317,14 +316,21 @@ public:
         return &m_FullResViewDepthTexture;
     }
 
+    const RTTexture2D* GetFullResViewDepthTexture2()
+    {
+        m_FullResViewDepthTexture2.CreateOnce(m_pContext, m_FullWidth, m_FullHeight, DXGI_FORMAT_R32_FLOAT, eFullResViewDepthTexture2, eFullResViewDepthTexture2RTV);
+        SET_TEXTURE_DEBUG_NAME(FullResViewDepthTexture2);
+        return &m_FullResViewDepthTexture2;
+    }
+
     DXGI_FORMAT GetViewDepthTextureFormat(GFSDK_SSAO_DepthStorage DepthStorage)
     {
         return (DepthStorage == GFSDK_SSAO_FP16_VIEW_DEPTHS) ? DXGI_FORMAT_R16_FLOAT : DXGI_FORMAT_R32_FLOAT;
     }
 
-    const RTTexture2DArray<16>* GetQuarterResViewDepthTextureArray(const RenderOptions &Options)
+    const RTTexture2DArray<16>* GetQuarterResViewDepthTextureArray(const GFSDK_SSAO_Parameters &Options)
     {
-        m_QuarterResViewDepthTextureArray.CreateOnce(m_pContext, iDivUp(m_FullWidth, 4), iDivUp(m_FullHeight, 4), GetViewDepthTextureFormat(Options.DepthStorage), eQuarterResViewDepthTextureArray, eQuarterResViewDepthTextureArrayRTV);
+        m_QuarterResViewDepthTextureArray.CreateOnce(m_pContext, iDivUp(m_FullWidth, 4), iDivUp(m_FullHeight, 4), Options.EnableDualLayerAO ? DXGI_FORMAT_R16G16_FLOAT : GetViewDepthTextureFormat(Options.DepthStorage), eQuarterResViewDepthTextureArray, eQuarterResViewDepthTextureArrayRTV);
         SET_TEXTURE_DEBUG_NAME(QuarterResViewDepthTextureArray);
         return &m_QuarterResViewDepthTextureArray;
     }
@@ -343,12 +349,17 @@ public:
         return &m_FullResNormalTexture;
     }
 
-    void CreateOnceAll(const RenderOptions &Options)
+    void CreateOnceAll(const GFSDK_SSAO_Parameters &Options)
     {
         GetFullResViewDepthTexture();
         GetFullResNormalTexture();
         GetQuarterResViewDepthTextureArray(Options);
         GetQuarterResAOTextureArray();
+
+        if (Options.EnableDualLayerAO)
+        {
+            GetFullResViewDepthTexture2();
+        }
 
         if (Options.Blur.Enable)
         {
@@ -357,7 +368,7 @@ public:
         }
     }
 
-    GFSDK_SSAO_Status PreCreate(const RenderOptions &Options)
+    GFSDK_SSAO_Status PreCreate(const GFSDK_SSAO_Parameters &Options)
     {
 #if ENABLE_EXCEPTIONS
         try
@@ -383,6 +394,7 @@ public:
             m_FullResAOZTexture2.GetAllocatedSizeInBytes() +
             m_FullResNormalTexture.GetAllocatedSizeInBytes() +
             m_FullResViewDepthTexture.GetAllocatedSizeInBytes() +
+            m_FullResViewDepthTexture2.GetAllocatedSizeInBytes() +
             m_QuarterResAOTextureArray.GetAllocatedSizeInBytes() +
             m_QuarterResViewDepthTextureArray.GetAllocatedSizeInBytes();
     }
@@ -395,6 +407,7 @@ private:
     RTTexture2D m_FullResAOZTexture2;
     RTTexture2D m_FullResNormalTexture;
     RTTexture2D m_FullResViewDepthTexture;
+    RTTexture2D m_FullResViewDepthTexture2;
     RTTexture2DArray<16> m_QuarterResAOTextureArray;
     RTTexture2DArray<16> m_QuarterResViewDepthTextureArray;
 };

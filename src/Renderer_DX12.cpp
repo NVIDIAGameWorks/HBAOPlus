@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -251,7 +251,7 @@ GFSDK_SSAO_Status GFSDK::SSAO::D3D12::Renderer::PreCreateRTs(ID3D12CommandQueue*
 
     SetAOResolution(ViewportWidth, ViewportHeight);
 
-    m_Options.SetRenderOptions(Parameters);
+    m_Options = Parameters;
 
     return m_RTs.PreCreate(m_Options);
 }
@@ -282,30 +282,41 @@ void GFSDK::SSAO::D3D12::Renderer::DrawLinearDepthPS(GFSDK_D3D12_GraphicsContext
     PERF_MARKER_SCOPE(L"DrawLinearDepthPS");
 #endif
 
-    if (m_InputDepth.DepthTextureType == GFSDK_SSAO_VIEW_DEPTHS &&
-        m_InputDepth.Texture.SampleCount == 1 &&
-        m_InputDepth.Viewport.RectCoversFullInputTexture)
-    {
-        m_FullResViewDepthSRV = m_InputDepth.Texture.SRV;
-        return;
-    }
-
     ID3D12GraphicsCommandList* pCmdList = pGraphicsContext->pCmdList;
 
-    RT_BARRIER_SCOPE(pCmdList, m_RTs.GetFullResViewDepthTexture()->RTV.pResource);
-
-    pCmdList->OMSetRenderTargets(1, &m_RTs.GetFullResViewDepthTexture()->RTV.CpuHandle, false, nullptr);
     pCmdList->RSSetViewports(1, &m_Viewports.FullRes);
+
+    pCmdList->SetPipelineState(m_LinearDepthPSO.GetPSO(pGraphicsContext, m_Shaders, GetResolveDepthPermutation(), GetDepthLayerCountPermutation(), m_InputDepth.DepthTextureType));
 
     pCmdList->SetGraphicsRootSignature(m_LinearDepthPSO.GetRS());
     pCmdList->SetGraphicsRootDescriptorTable(LinearDepthPSO::RootParameters::Buffer0, m_GraphicsContext.DescHeaps.GetGpuHandle(eGlobalCB, 0));
-    pCmdList->SetGraphicsRootDescriptorTable(LinearDepthPSO::RootParameters::Texture0, m_InputDepth.Texture.SRV.GpuHandle);
 
-    pCmdList->SetPipelineState(m_LinearDepthPSO.GetPSO(pGraphicsContext, m_Shaders, GetResolveDepthPermutation(), m_InputDepth.DepthTextureType));
+    RT_BARRIER_SCOPE(pCmdList, m_RTs.GetFullResViewDepthTexture()->RTV.pResource);
 
-    pCmdList->DrawInstanced(3, 1, 0, 0);
+    if (m_Options.EnableDualLayerAO)
+    {
+        RT_BARRIER_SCOPE(pCmdList, m_RTs.GetFullResViewDepthTexture2()->RTV.pResource);
 
-    m_FullResViewDepthSRV = m_RTs.GetFullResViewDepthTexture()->SRV;
+        D3D12_CPU_DESCRIPTOR_HANDLE RTHandles[] = 
+        {
+            m_RTs.GetFullResViewDepthTexture()->RTV.CpuHandle,
+            m_RTs.GetFullResViewDepthTexture2()->RTV.CpuHandle
+        };
+        pCmdList->OMSetRenderTargets(SIZEOF_ARRAY(RTHandles), RTHandles, false, nullptr);
+
+        pCmdList->SetGraphicsRootDescriptorTable(LinearDepthPSO::RootParameters::Texture0, m_InputDepth.Texture0.SRV.GpuHandle);
+        pCmdList->SetGraphicsRootDescriptorTable(LinearDepthPSO::RootParameters::Texture1, m_InputDepth.Texture1.SRV.GpuHandle);
+
+        pCmdList->DrawInstanced(3, 1, 0, 0);
+    }
+    else
+    {
+        pCmdList->OMSetRenderTargets(1, &m_RTs.GetFullResViewDepthTexture()->RTV.CpuHandle, false, nullptr);
+
+        pCmdList->SetGraphicsRootDescriptorTable(LinearDepthPSO::RootParameters::Texture0, m_InputDepth.Texture0.SRV.GpuHandle);
+
+        pCmdList->DrawInstanced(3, 1, 0, 0);
+    }
 }
 
 //--------------------------------------------------------------------------------
@@ -323,7 +334,12 @@ void GFSDK::SSAO::D3D12::Renderer::DrawDeinterleavedDepthPS(GFSDK_D3D12_Graphics
     pCmdList->SetGraphicsRootDescriptorTable(DeinterleavedDepthPSO::RootParameters::Buffer0, m_GraphicsContext.DescHeaps.GetGpuHandle(eGlobalCB, 0));
     pCmdList->SetGraphicsRootDescriptorTable(DeinterleavedDepthPSO::RootParameters::Texture0, m_GraphicsContext.DescHeaps.GetGpuHandle(eFullResViewDepthTexture, 0));
 
-    pCmdList->SetPipelineState(m_DeinterleavedDepthPSO.GetPSO(pGraphicsContext, m_Shaders, m_States, m_RTs, m_Options.DepthStorage));
+    if (m_Options.EnableDualLayerAO)
+    {
+        pCmdList->SetGraphicsRootDescriptorTable(DeinterleavedDepthPSO::RootParameters::Texture1, m_GraphicsContext.DescHeaps.GetGpuHandle(eFullResViewDepthTexture2, 0));
+    }
+
+    pCmdList->SetPipelineState(m_DeinterleavedDepthPSO.GetPSO(pGraphicsContext, m_Shaders, m_States, m_RTs, m_Options.DepthStorage, GetDepthLayerCountPermutation()));
 
     RT_BARRIER_SCOPE(pCmdList, m_RTs.GetQuarterResViewDepthTextureArray(m_Options)->pResource);
 
@@ -398,7 +414,7 @@ void GFSDK::SSAO::D3D12::Renderer::DrawCoarseAOPS(GFSDK_D3D12_GraphicsContext* p
 
     ID3D12GraphicsCommandList* pCmdList = pGraphicsContext->pCmdList;
 
-    pCmdList->SetPipelineState(m_CoarseAOPSO.GetPSO(pGraphicsContext, m_Shaders, GetEnableForegroundAOPermutation(), GetEnableBackgroundAOPermutation(), GetEnableDepthThresholdPermutation(), GetFetchNormalPermutation()));
+    pCmdList->SetPipelineState(m_CoarseAOPSO.GetPSO(pGraphicsContext, m_Shaders, GetFetchNormalPermutation(), GetDepthLayerCountPermutation(), GetNumStepsPermutation()));
 
     RT_BARRIER_SCOPE(pCmdList, m_RTs.GetQuarterResAOTextureArray()->pResource);
 
@@ -432,12 +448,17 @@ void GFSDK::SSAO::D3D12::Renderer::DrawReinterleavedAOPS_PreBlur(GFSDK_D3D12_Gra
     pCmdList->OMSetRenderTargets(1, &m_RTs.GetFullResAOZTexture2()->RTV.CpuHandle, false, nullptr);
     pCmdList->RSSetViewports(1, &m_Viewports.FullRes);
 
-    pCmdList->SetPipelineState(m_ReinterleavedAOBlurPSO.GetPSO(pGraphicsContext, m_Shaders));
+    pCmdList->SetPipelineState(m_ReinterleavedAOBlurPSO.GetPSO(pGraphicsContext, m_Shaders, GetDepthLayerCountPermutation()));
 
     pCmdList->SetGraphicsRootSignature(m_ReinterleavedAOBlurPSO.GetRS());
     pCmdList->SetGraphicsRootDescriptorTable(ReinterleavedAOBlurPSO::RootParameters::Buffer0, m_GraphicsContext.DescHeaps.GetGpuHandle(eGlobalCB, 0));
     pCmdList->SetGraphicsRootDescriptorTable(ReinterleavedAOBlurPSO::RootParameters::Texture0, m_RTs.GetQuarterResAOTextureArray()->SRV.GpuHandle);
-    pCmdList->SetGraphicsRootDescriptorTable(ReinterleavedAOBlurPSO::RootParameters::Texture1, m_FullResViewDepthSRV.GpuHandle);
+    pCmdList->SetGraphicsRootDescriptorTable(ReinterleavedAOBlurPSO::RootParameters::Texture1, m_RTs.GetFullResViewDepthTexture()->SRV.GpuHandle);
+
+    if (m_Options.EnableDualLayerAO)
+    {
+        pCmdList->SetGraphicsRootDescriptorTable(ReinterleavedAOBlurPSO::RootParameters::Texture2, m_RTs.GetFullResViewDepthTexture2()->SRV.GpuHandle);
+    }
 
     pCmdList->DrawInstanced(3, 1, 0, 0);
 }
@@ -459,7 +480,7 @@ void GFSDK::SSAO::D3D12::Renderer::DrawReinterleavedAOPS(GFSDK_D3D12_GraphicsCon
         pCmdList->OMSetBlendFactor(GetOutputBlendFactor());
     }
 
-    pCmdList->SetPipelineState(m_ReinterleavedAOPSO.GetPSO(pGraphicsContext, m_Shaders, m_States, m_Output));
+    pCmdList->SetPipelineState(m_ReinterleavedAOPSO.GetPSO(pGraphicsContext, m_Shaders, m_States, m_Output, GetDepthLayerCountPermutation()));
 
     pCmdList->SetGraphicsRootSignature(m_ReinterleavedAOPSO.GetRS());
     pCmdList->SetGraphicsRootDescriptorTable(ReinterleavedAOPSO::RootParameters::Buffer0, m_GraphicsContext.DescHeaps.GetGpuHandle(eGlobalCB, 0));
@@ -655,17 +676,20 @@ GFSDK_SSAO_Status GFSDK::SSAO::D3D12::Renderer::ValidateDataFlow()
 {
     if (m_InputNormal.Texture.IsSet())
     {
-        if (m_InputNormal.Texture.Width != m_InputDepth.Texture.Width ||
-            m_InputNormal.Texture.Height != m_InputDepth.Texture.Height)
+        if (m_InputNormal.Texture.Width  != m_InputDepth.Texture0.Width ||
+            m_InputNormal.Texture.Height != m_InputDepth.Texture0.Height)
         {
             return GFSDK_SSAO_INVALID_NORMAL_TEXTURE_RESOLUTION;
         }
-        if (m_InputNormal.Texture.SampleCount != m_InputDepth.Texture.SampleCount)
+        if (m_InputNormal.Texture.SampleCount != m_InputDepth.Texture0.SampleCount)
         {
             return GFSDK_SSAO_INVALID_NORMAL_TEXTURE_SAMPLE_COUNT;
         }
     }
-
+    if (m_Options.EnableDualLayerAO && !m_InputDepth.Texture1.IsSet())
+    {
+        return GFSDK_SSAO_NO_SECOND_LAYER_PROVIDED;
+    }
     return GFSDK_SSAO_OK;
 }
 
@@ -678,14 +702,15 @@ GFSDK_SSAO_Status GFSDK::SSAO::D3D12::Renderer::SetAOParameters(const GFSDK_SSAO
     }
 
     if (Params.Blur.Enable != m_Options.Blur.Enable ||
-        Params.DepthStorage != m_Options.DepthStorage)
+        Params.DepthStorage != m_Options.DepthStorage ||
+        Params.EnableDualLayerAO != m_Options.EnableDualLayerAO)
     {
         m_GraphicsContext.WaitGPUIdle();
         m_RTs.ReleaseResources();
     }
 
     m_GlobalCB.SetAOParameters(Params, m_InputDepth);
-    m_Options.SetRenderOptions(Params);
+    m_Options = Params;
 
     return GFSDK_SSAO_OK;
 }

@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -22,22 +22,13 @@ namespace D3D11
 {
 
 //--------------------------------------------------------------------------------
-enum BlendPassEnumType
-{
-    BLEND_PASS_0,
-    BLEND_PASS_1,
-    BLEND_PASS_COUNT,
-};
-
-//--------------------------------------------------------------------------------
 struct OutputInfo
 {
     GFSDK::SSAO::D3D11::UserTextureRTV RenderTarget;
     GFSDK::SSAO::D3D11::UserTextureDSV DepthStencilBuffer;
 
-    UINT BlendPassCount;
-    GFSDK_SSAO_BlendState_D3D11 Blend[BLEND_PASS_COUNT];
-    GFSDK_SSAO_DepthStencilState_D3D11 DepthStencil[BLEND_PASS_COUNT];
+    GFSDK_SSAO_BlendState_D3D11 Blend;
+    GFSDK_SSAO_DepthStencilState_D3D11 DepthStencil;
 
     OutputInfo()
     {
@@ -65,36 +56,13 @@ struct OutputInfo
 
     GFSDK_SSAO_Status InitBlendState(const GFSDK_SSAO_Output_D3D11& Output)
     {
-        if (Output.TwoPassBlend.Enable)
-        {
-            return InitTwoPassBlend(Output.TwoPassBlend);
-        }
-
         return InitSinglePassBlend(Output.Blend);
     }
 
 private:
     GFSDK_SSAO_Status InitSinglePassBlend(const GFSDK_SSAO_BlendState_D3D11& BlendState)
     {
-        BlendPassCount = 1;
-        Blend[BLEND_PASS_0] = BlendState;
-
-        return GFSDK_SSAO_OK;
-    }
-
-    GFSDK_SSAO_Status InitTwoPassBlend(const GFSDK_SSAO_TwoPassBlend_D3D11& TwoPassBlend)
-    {
-        GFSDK_SSAO_Status Status = DepthStencilBuffer.Init(TwoPassBlend.pDepthStencilView);
-        if (Status != GFSDK_SSAO_OK)
-        {
-            return Status;
-        }
-
-        BlendPassCount = 2;
-        Blend[BLEND_PASS_0] = TwoPassBlend.FirstPass.Blend;
-        Blend[BLEND_PASS_1] = TwoPassBlend.SecondPass.Blend;
-        DepthStencil[BLEND_PASS_0] = TwoPassBlend.FirstPass.DepthStencil;
-        DepthStencil[BLEND_PASS_1] = TwoPassBlend.SecondPass.DepthStencil;
+        Blend = BlendState;
 
         return GFSDK_SSAO_OK;
     }
@@ -135,36 +103,6 @@ struct OutputInfo
 
 } // namespace D3D12
 #endif // SUPPORT_D3D12
-
-//--------------------------------------------------------------------------------
-#if SUPPORT_GL
-namespace GL
-{
-
-struct OutputInfo
-{
-    OutputInfo()
-        : FboId(0)
-        , SampleCount(0)
-    {
-    }
-
-    GFSDK_SSAO_Status Init(const GFSDK_SSAO_Output_GL& Output)
-    {
-        FboId = Output.OutputFBO;
-        SampleCount = 1;
-        Blend = Output.Blend;
-
-        return GFSDK_SSAO_OK;
-    }
-
-    GLuint FboId;
-    UINT SampleCount;
-    GFSDK_SSAO_BlendState_GL Blend;
-};
-
-} // namespace GL
-#endif // SUPPORT_GL
 
 } // namespace SSAO
 } // namespace GFSDK

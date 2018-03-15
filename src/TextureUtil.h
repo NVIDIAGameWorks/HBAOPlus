@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -72,62 +72,6 @@ public:
 };
 
 } // namespace D3D12
-
-#endif
-
-#if SUPPORT_GL
-
-namespace GL
-{
-
-//--------------------------------------------------------------------------------
-struct TextureDesc2D
-{
-    TextureDesc2D()
-        : Width(0)
-        , Height(0)
-        , SampleCount(1)
-    {
-    }
-
-    GLint Width;
-    GLint Height;
-    GLint SampleCount;
-};
-
-//--------------------------------------------------------------------------------
-class TextureUtil
-{
-public:
-   static bool HasValidTextureTarget(GFSDK_SSAO_Texture_GL Texture)
-   {
-       return (Texture.Target == GL_TEXTURE_2D || Texture.Target == GL_TEXTURE_2D_MULTISAMPLE);
-   }
-
-   static void GetDesc2D(const GFSDK_SSAO_GLFunctions& GL, GFSDK_SSAO_Texture_GL Texture, TextureDesc2D* pTextureDesc)
-   {
-        ASSERT(HasValidTextureTarget(Texture));
-        ASSERT_GL_ERROR(GL);
-
-        GL.glBindTexture(Texture.Target, Texture.TextureId);
-        ASSERT_GL_ERROR(GL);
-
-        GL.glGetTexLevelParameteriv(Texture.Target, 0, GL_TEXTURE_WIDTH, &pTextureDesc->Width);
-        GL.glGetTexLevelParameteriv(Texture.Target, 0, GL_TEXTURE_HEIGHT, &pTextureDesc->Height);
-        ASSERT_GL_ERROR(GL);
-
-        if (Texture.Target == GL_TEXTURE_2D_MULTISAMPLE)
-        {
-            GL.glGetTexLevelParameteriv(Texture.Target, 0, GL_TEXTURE_SAMPLES, &pTextureDesc->SampleCount);
-            ASSERT_GL_ERROR(GL);
-        }
-
-        GL.glBindTexture(Texture.Target, 0);
-        ASSERT_GL_ERROR(GL);
-   }
-};
-
-} // namespace GL
 
 #endif
 

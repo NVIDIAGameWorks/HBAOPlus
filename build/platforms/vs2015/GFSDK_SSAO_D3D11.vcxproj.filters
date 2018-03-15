@@ -54,9 +54,6 @@
     <ClInclude Include="..\..\..\src\Renderer_DX11.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\RenderOptions.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\RenderTargets_DX11.h">
       <Filter>Source Files</Filter>
     </ClInclude>

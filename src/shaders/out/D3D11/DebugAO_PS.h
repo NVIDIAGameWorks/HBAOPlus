@@ -17,21 +17,32 @@ namespace ShaderPermutations
     };
 #endif
 
+#ifndef NUM_STEPS_DEFINED
+#define NUM_STEPS_DEFINED
+    enum NUM_STEPS
+    {
+        NUM_STEPS_4,
+        NUM_STEPS_8,
+        NUM_STEPS_COUNT,
+    };
+#endif
+
 };
 
 struct DebugAO_PS
 {
     void Create(DevicePointer Device);
     void Release(DevicePointer Device);
-    PixelShader& Get(ShaderPermutations::ENABLE_BLUR A)
+    PixelShader& Get(ShaderPermutations::ENABLE_BLUR A, ShaderPermutations::NUM_STEPS B)
     {
-        return m_Shader[A];
+        return m_Shader[A][B];
     }
 
 private:
-    PixelShader m_Shader[ShaderPermutations::ENABLE_BLUR_COUNT];
+    PixelShader m_Shader[ShaderPermutations::ENABLE_BLUR_COUNT][ShaderPermutations::NUM_STEPS_COUNT];
 #if _WIN32
     static_assert(ShaderPermutations::ENABLE_BLUR_COUNT == 2, "");
+    static_assert(ShaderPermutations::NUM_STEPS_COUNT == 2, "");
 #endif
 };
 

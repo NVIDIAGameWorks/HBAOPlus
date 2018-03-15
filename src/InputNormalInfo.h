@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -94,36 +94,6 @@ struct InputNormalInfo
 
 } // namespace D3D12
 #endif
-
-//--------------------------------------------------------------------------------
-#if SUPPORT_GL
-namespace GL
-{
-
-struct InputNormalInfo
-{
-    GFSDK_SSAO_Status SetData(const GFSDK_SSAO_GLFunctions& GL, const GFSDK_SSAO_InputNormalData_GL& NormalData)
-    {
-        if (!GFSDK::SSAO::GL::TextureUtil::HasValidTextureTarget(NormalData.FullResNormalTexture))
-        {
-            return GFSDK_SSAO_GL_INVALID_TEXTURE_TARGET;
-        }
-
-        if (!GFSDK::SSAO::WorldToViewMatrix::IsValid(NormalData.WorldToViewMatrix))
-        {
-            return GFSDK_SSAO_INVALID_WORLD_TO_VIEW_MATRIX;
-        }
-
-        Texture.Init(GL, NormalData.FullResNormalTexture);
-
-        return GFSDK_SSAO_OK;
-    }
-
-    SSAO::GL::UserTexture Texture;
-};
-
-} // namespace GL
-#endif // SUPPORT_GL
 
 } // namespace SSAO
 } // namespace GFSDK

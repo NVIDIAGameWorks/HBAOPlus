@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -57,13 +57,31 @@ struct InputDepthInfo : SSAO::InputDepthInfo
             return Status;
         }
 
-        Status = Texture.Init(DepthData.pFullResDepthTextureSRV);
+        Status = Texture0.Init(DepthData.pFullResDepthTextureSRV);
         if (Status != GFSDK_SSAO_OK)
         {
             return Status;
         }
 
-        Status = Viewport.Init(DepthData.Viewport, Texture);
+        if (DepthData.pFullResDepthTexture2ndLayerSRV) // the second texture can be nullptr if DualLayer is not enabled
+        {
+            Status = Texture1.Init(DepthData.pFullResDepthTexture2ndLayerSRV);
+            if (Status != GFSDK_SSAO_OK)
+            {
+                return Status;
+            }
+            if (Texture1.Width  != Texture0.Width ||
+                Texture1.Height != Texture0.Height)
+            {
+                return GFSDK_SSAO_INVALID_SECOND_DEPTH_TEXTURE_RESOLUTION;
+            }
+            if (Texture1.SampleCount != Texture0.SampleCount)
+            {
+                return GFSDK_SSAO_INVALID_SECOND_DEPTH_TEXTURE_RESOLUTION;
+            }
+        }
+
+        Status = Viewport.Init(DepthData.Viewport, Texture0);
         if (Status != GFSDK_SSAO_OK)
         {
             return Status;
@@ -75,7 +93,8 @@ struct InputDepthInfo : SSAO::InputDepthInfo
         return GFSDK_SSAO_OK;
     }
 
-    SSAO::D3D11::UserTextureSRV Texture;
+    SSAO::D3D11::UserTextureSRV Texture0;
+    SSAO::D3D11::UserTextureSRV Texture1;
 };
 
 } // namespace D3D11
@@ -103,13 +122,31 @@ struct InputDepthInfo : SSAO::InputDepthInfo
             return Status;
         }
 
-        Status = Texture.Init(&DepthData.FullResDepthTextureSRV);
+        Status = Texture0.Init(&DepthData.FullResDepthTextureSRV); 
         if (Status != GFSDK_SSAO_OK)
         {
             return Status;
         }
 
-        Status = Viewport.Init(DepthData.Viewport, Texture);
+        if (DepthData.FullResDepthTexture2ndLayerSRV.pResource)
+        {
+            Status = Texture1.Init(&DepthData.FullResDepthTexture2ndLayerSRV);
+            if (Status != GFSDK_SSAO_OK)
+            {
+                return Status;
+            }
+            if (Texture1.Width  != Texture0.Width ||
+                Texture1.Height != Texture0.Height)
+            {
+                return GFSDK_SSAO_INVALID_SECOND_DEPTH_TEXTURE_RESOLUTION;
+            }
+            if (Texture1.SampleCount != Texture0.SampleCount)
+            {
+                return GFSDK_SSAO_INVALID_SECOND_DEPTH_TEXTURE_RESOLUTION;
+            }
+        }
+
+        Status = Viewport.Init(DepthData.Viewport, Texture0);
         if (Status != GFSDK_SSAO_OK)
         {
             return Status;
@@ -121,58 +158,12 @@ struct InputDepthInfo : SSAO::InputDepthInfo
         return GFSDK_SSAO_OK;
     }
 
-    SSAO::D3D12::UserTextureSRV Texture;
+    SSAO::D3D12::UserTextureSRV Texture0;
+    SSAO::D3D12::UserTextureSRV Texture1;
 };
 
 } // namespace D3D12
 #endif // SUPPORT_D3D12
-
-//--------------------------------------------------------------------------------
-#if SUPPORT_GL
-namespace GL
-{
-
-//--------------------------------------------------------------------------------
-struct InputDepthInfo : SSAO::InputDepthInfo
-{
-    InputDepthInfo()
-        : SSAO::InputDepthInfo()
-    {
-    }
-
-    GFSDK_SSAO_Status SetData(const GFSDK_SSAO_GLFunctions& GL, const GFSDK_SSAO_InputDepthData_GL& DepthData)
-    {
-        GFSDK_SSAO_Status Status;
-
-        Status = ProjectionMatrixInfo.Init(DepthData.ProjectionMatrix, API_GL);
-        if (Status != GFSDK_SSAO_OK)
-        {
-            return Status;
-        }
-
-        Status = Texture.Init(GL, DepthData.FullResDepthTexture);
-        if (Status != GFSDK_SSAO_OK)
-        {
-            return Status;
-        }
-
-        Status = Viewport.InitFromTexture(DepthData.Viewport, Texture);
-        if (Status != GFSDK_SSAO_OK)
-        {
-            return Status;
-        }
-
-        DepthTextureType = DepthData.DepthTextureType;
-        MetersToViewSpaceUnits = Max(DepthData.MetersToViewSpaceUnits, 0.f);
-
-        return GFSDK_SSAO_OK;
-    }
-
-    SSAO::GL::UserTexture Texture;
-};
-
-} // namespace GL
-#endif // SUPPORT_GL
 
 } // namespace SSAO
 } // namespace GFSDK

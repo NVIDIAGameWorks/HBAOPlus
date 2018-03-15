@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="x-ua-compatible" content="IE=Edge"/>
     
-    <title>Release Notes &mdash; NVIDIA HBAO+ 3.1. documentation</title>
+    <title>Release Notes &mdash; NVIDIA HBAO+ 4.0. documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.1.',
+        VERSION:     '4.0.',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/bootstrap.js"></script>
-    <link rel="top" title="NVIDIA HBAO+ 3.1. documentation" href="index.html" /> 
+    <link rel="top" title="NVIDIA HBAO+ 4.0. documentation" href="index.html" /> 
   </head>
   <body>
 <nav class="navbar navbar-inverse navbar-default">
@@ -42,7 +42,7 @@
 <div class="masthead">
     <div class="row">
       <ul class="breadcrumb">
-        <li><a href="index.html">NVIDIA HBAO+ 3.1. documentation</a></li> 
+        <li><a href="index.html">NVIDIA HBAO+ 4.0. documentation</a></li> 
       </ul>
     </div>
 </div>
@@ -52,7 +52,7 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <div id="sidebar_toc">
   <ul>
-<li class="toctree-l1"><a class="reference internal" href="product.html">NVIDIA HBAO+ 3.1.</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="product.html">NVIDIA HBAO+ 4.0.</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="product.html#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="product.html#package">Package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="product.html#getting-started">Getting Started</a></li>
@@ -72,6 +72,7 @@
 <li class="toctree-l3"><a class="reference internal" href="product.html#background-ao">Background AO</a></li>
 <li class="toctree-l3"><a class="reference internal" href="product.html#ao-blur">AO Blur</a></li>
 <li class="toctree-l3"><a class="reference internal" href="product.html#blur-sharpness">Blur Sharpness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="product.html#dual-layer">Dual Layer</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="product.html#integration-time-estimates">Integration Time Estimates</a></li>
@@ -108,18 +109,15 @@
             
   <div class="section" id="release-notes">
 <h1>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h1>
-<p><strong>NVIDIA HBAO+ 3.1.</strong></p>
+<p><strong>NVIDIA HBAO+ 4.0.</strong></p>
 <p>NVIDIA HBAO+ improves upon existing Ambient Occlusion techniques to add richer, more detailed, more realistic shadows around objects that occlude rays of light. Compared to previous techniques, HBAO+ is faster, more efficient, and significantly better.</p>
 <div class="section" id="what-s-new">
 <h2>What&#8217;s New<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h2>
 <p><strong>General</strong></p>
-<p><strong>3.1.</strong></p>
+<p><strong>4.0.</strong></p>
 <ul class="simple">
-<li>Added entry points for D3D12.</li>
-<li>Now shipping separate DLLs and LIB files for D3D11 and GL.</li>
-<li>Added the BackgroundAO parameter, which can be used to add larger-scale occlusion in the distance.</li>
-<li>Removed the BLUR_RADIUS_8 mode (BLUR_RADIUS_4 looks better in general, and runs faster).</li>
-<li>Added per-component debug-normal visualization modes in GFSDK_SSAO_RenderMask.</li>
+<li>Added support for a second input depth texture (to reduce halo artifacts behind foreground objects)</li>
+<li>Removed support for OpenGL.</li>
 </ul>
 <div class="toctree-wrapper compound">
 <ul class="simple">
@@ -137,7 +135,7 @@
 <div class="masthead">
     <div class="row">
       <ul class="breadcrumb">
-        <li><a href="index.html">NVIDIA HBAO+ 3.1. documentation</a></li> 
+        <li><a href="index.html">NVIDIA HBAO+ 4.0. documentation</a></li> 
       </ul>
     </div>
 </div>

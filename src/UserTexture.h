@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -210,48 +210,6 @@ struct UserTextureRTV : public SSAO::UserTextureDesc
 
 } // namespace D3D12
 #endif // SUPPORT_D3D12
-
-//--------------------------------------------------------------------------------
-#if SUPPORT_GL
-namespace GL
-{
-
-struct UserTexture : public SSAO::UserTextureDesc
-{
-    GFSDK_SSAO_Status Init(const GFSDK_SSAO_GLFunctions& GL, const GFSDK_SSAO_Texture_GL &InputGLTexture)
-    {
-        if (!GFSDK::SSAO::GL::TextureUtil::HasValidTextureTarget(InputGLTexture))
-        {
-            return GFSDK_SSAO_GL_INVALID_TEXTURE_TARGET;
-        }
-
-        if (!InputGLTexture.TextureId)
-        {
-            // The name space for texture objects is the unsigned integers, with zero reserved by the GL.
-            return GFSDK_SSAO_GL_INVALID_TEXTURE_OBJECT;
-        }
-
-        GFSDK::SSAO::GL::TextureDesc2D TextureDesc;
-        GFSDK::SSAO::GL::TextureUtil::GetDesc2D(GL, InputGLTexture, &TextureDesc);
-
-        GLTexture = InputGLTexture;
-        Width = TextureDesc.Width;
-        Height = TextureDesc.Height;
-        SampleCount = TextureDesc.SampleCount;
-
-        return GFSDK_SSAO_OK;
-    }
-
-    bool IsSet()
-    {
-        return (GLTexture.TextureId != 0);
-    }
-
-    GFSDK_SSAO_Texture_GL GLTexture;
-};
-
-} // namespace GL
-#endif
 
 } // namespace SSAO
 } // namespace GFSDK

@@ -1,5 +1,5 @@
 /* 
-* Copyright (c) 2008-2017, NVIDIA CORPORATION. All rights reserved. 
+* Copyright (c) 2008-2018, NVIDIA CORPORATION. All rights reserved. 
 * 
 * NVIDIA CORPORATION and its licensors retain all intellectual property 
 * and proprietary rights in and to this software, related documentation 
@@ -95,13 +95,15 @@ public:
         SignatureBlob->Release();
     }
 
-    static void CreateGraphicsPipelineState(
-        GFSDK_D3D12_GraphicsContext* pGraphicsContext,
-        const D3D12_GRAPHICS_PIPELINE_STATE_DESC *pDesc,
-        REFIID riid,
-        void **ppPipelineState)
+    static void SafeCreateGraphicsPipelineState(GFSDK_D3D12_GraphicsContext* pGraphicsContext, GraphicsPSO &PSO)
     {
-        THROW_IF_FAILED(pGraphicsContext->pDevice->CreateGraphicsPipelineState(pDesc, riid, ppPipelineState));
+        //To avoid this debug runtime error:
+        //D3D12 ERROR: ID3D12PipelineState::<final-release>: CORRUPTION: An ID3D12PipelineState object (0x00000243251F2850:'Unnamed Object') is referenced by GPU operations in-flight on Command Queue (0x000002431EAF1B20:'Unnamed ID3D12CommandQueue Object').  It is not safe to final-release objects that may have GPU operations pending.  This can result in application instability. 
+        pGraphicsContext->WaitGPUIdle();
+
+        SAFE_RELEASE(PSO.pPSO);
+
+        THROW_IF_FAILED(pGraphicsContext->pDevice->CreateGraphicsPipelineState(&PSO.Desc, IID_PPV_ARGS(&PSO.pPSO)));
     }
 
     static void CopySamplerFrom(D3D12_STATIC_SAMPLER_DESC* Dest, D3D12_SAMPLER_DESC* Src)
@@ -136,18 +138,20 @@ public:
 };
 
 //--------------------------------------------------------------------------------
-class LinearDepthPSO: public BasePSO
+class LinearDepthPSO : public BasePSO
 {
 private:
     GraphicsPSO m_LinearDepthPSO;
     ID3D12RootSignature* m_LinearDepthRS;
     int m_ResolveDepthPermutation;
+    int m_DepthLayerCountPermutation;
     int m_InputDepthTextureType;
 
 public:
     LinearDepthPSO()
         : m_LinearDepthRS(nullptr)
         , m_ResolveDepthPermutation(-1)
+        , m_DepthLayerCountPermutation(-1)
         , m_InputDepthTextureType(-1)
     {
     }
@@ -158,6 +162,7 @@ public:
         {
             Buffer0,
             Texture0,
+            Texture1,
             Count
         };
     };
@@ -180,6 +185,7 @@ public:
         GFSDK_D3D12_GraphicsContext* pGraphicsContext,
         Shaders &Shaders,
         Generated::ShaderPermutations::RESOLVE_DEPTH ResolveDepthPermutation,
+        Generated::ShaderPermutations::DEPTH_LAYER_COUNT DepthLayerCountPermutation,
         GFSDK_SSAO_DepthTextureType InputDepthTextureType);
 };
 
@@ -244,11 +250,13 @@ private:
     GraphicsPSO m_DeinterleavedDepthPSO;
     ID3D12RootSignature* m_DeinterleavedDepthRS;
     int m_DepthStorage;
+    int m_DepthLayerCountPermutation;
 
 public:
     DeinterleavedDepthPSO()
         : m_DeinterleavedDepthRS(nullptr)
         , m_DepthStorage(-1)
+        , m_DepthLayerCountPermutation(-1)
     {
     }
 
@@ -261,6 +269,7 @@ public:
             Buffer0,
             Buffer1,
             Texture0,
+            Texture1,
             Count
         };
     };
@@ -286,7 +295,8 @@ public:
         GFSDK::SSAO::D3D12::Shaders &Shaders,
         GFSDK::SSAO::D3D12::States &States,
         GFSDK::SSAO::D3D12::RenderTargets& RTs,
-        GFSDK_SSAO_DepthStorage DepthStorage);
+        GFSDK_SSAO_DepthStorage DepthStorage,
+        Generated::ShaderPermutations::DEPTH_LAYER_COUNT DepthLayerCountPermutation);
 };
 
 //--------------------------------------------------------------------------------
@@ -308,6 +318,7 @@ public:
         {
             Buffer0,
             Texture0,
+            Texture1,
             Count
         };
     };
@@ -339,18 +350,16 @@ class CoarseAOPSO : public BasePSO
 private:
     GraphicsPSO m_CoarseAOPSO;
     ID3D12RootSignature* m_CoarseAORS;
-    int m_EnableForegroundAOPermutation;
-    int m_EnableBackgroundAOPermutation;
-    int m_EnableDepthThresholdPermutation;
     int m_FetchNormalPermutation;
+    int m_DepthLayerCountPermutation;
+    int m_NumStepsPermutation;
 
 public:
     CoarseAOPSO()
         : m_CoarseAORS(nullptr)
-        , m_EnableForegroundAOPermutation(-1)
-        , m_EnableBackgroundAOPermutation(-1)
-        , m_EnableDepthThresholdPermutation(-1)
         , m_FetchNormalPermutation(-1)
+        , m_DepthLayerCountPermutation(-1)
+        , m_NumStepsPermutation(-1)
     {
     }
 
@@ -385,10 +394,9 @@ public:
     ID3D12PipelineState* GetPSO(
         GFSDK_D3D12_GraphicsContext* pGraphicsContext,
         Shaders &Shaders,
-        Generated::ShaderPermutations::ENABLE_FOREGROUND_AO EnableForegroundAOPermutation,
-        Generated::ShaderPermutations::ENABLE_BACKGROUND_AO EnableBackgroundAOPermutation,
-        Generated::ShaderPermutations::ENABLE_DEPTH_THRESHOLD EnableDepthThresholdPermutation,
-        Generated::ShaderPermutations::FETCH_GBUFFER_NORMAL FetchNormalPermutation);
+        Generated::ShaderPermutations::FETCH_GBUFFER_NORMAL FetchNormalPermutation,
+        Generated::ShaderPermutations::DEPTH_LAYER_COUNT DepthLayerPermutation,
+        Generated::ShaderPermutations::NUM_STEPS NumStepsPermutation);
 };
 
 //--------------------------------------------------------------------------------
@@ -397,10 +405,12 @@ class ReinterleavedAOBlurPSO : public BasePSO
 private:
     GraphicsPSO m_ReinterleavedAOBlurPSO;
     ID3D12RootSignature* m_ReinterleavedAOBlurRS;
+    int m_DepthLayerCountPermutation;
 
 public:
     ReinterleavedAOBlurPSO()
         : m_ReinterleavedAOBlurRS(nullptr)
+        , m_DepthLayerCountPermutation(-1)
     {
     }
 
@@ -411,6 +421,7 @@ public:
             Buffer0,
             Texture0,
             Texture1,
+            Texture2,
             Count
         };
     };
@@ -433,7 +444,8 @@ public:
 
     ID3D12PipelineState* GetPSO(
         GFSDK_D3D12_GraphicsContext* pGraphicsContext,
-        Shaders &Shaders);
+        Shaders &Shaders,
+        Generated::ShaderPermutations::DEPTH_LAYER_COUNT DepthLayerCountPermutation);
 };
 
 //--------------------------------------------------------------------------------
@@ -445,6 +457,7 @@ private:
     UINT m_RTSampleCount;
     DXGI_FORMAT m_RTFormat;
     int m_BlendMode;
+    int m_DepthLayerCountPermutation;
 
 public:
     ReinterleavedAOPSO()
@@ -452,6 +465,7 @@ public:
         , m_RTSampleCount(0)
         , m_RTFormat(DXGI_FORMAT_UNKNOWN)
         , m_BlendMode(-1)
+        , m_DepthLayerCountPermutation(-1)
     {
     }
 
@@ -485,7 +499,8 @@ public:
         GFSDK_D3D12_GraphicsContext* pGraphicsContext,
         Shaders &Shaders,
         States& States,
-        OutputInfo& Output);
+        OutputInfo& Output,
+        Generated::ShaderPermutations::DEPTH_LAYER_COUNT DepthLayerCountPermutation);
 };
 
 //--------------------------------------------------------------------------------
