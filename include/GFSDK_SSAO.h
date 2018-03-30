@@ -197,7 +197,7 @@ struct GFSDK_SSAO_Version
         : Major(4)
         , Minor(0)
         , Branch(0)
-        , Revision(23740451)
+        , Revision(23827312)
     {
     }
 
@@ -231,7 +231,7 @@ enum GFSDK_SSAO_Status
     GFSDK_SSAO_D3D_RESOURCE_CREATION_FAILED,                // A resource-creation call has failed (running out of memory?)
     GFSDK_SSAO_D3D12_UNSUPPORTED_DEPTH_CLAMP_MODE,          // CLAMP_TO_BORDER is used (implemented on D3D11 & GL, but not on D3D12)
     GFSDK_SSAO_D3D12_INVALID_HEAP_TYPE,                     // One of the heaps provided to GFSDK_SSAO_CreateContext_D3D12 has an unexpected type
-    GFSDK_SSAO_D3D12_INSUFFICIENT_DESCRIPTORS,              // One of the heaps provided to GFSDK_SSAO_CreateContext_D3D12 has insufficient descriptors
+    GFSDK_SSAO_D3D12_INSUFFICIENT_DESCRIPTORS,              // One of the heaps provided to GFSDK_SSAO_CreateContext_D3D12 has an insufficient number of descriptors
     GFSDK_SSAO_D3D12_INVALID_NODE_MASK,                     // NodeMask has more than one bit set. HBAO+ only supports operation on one D3D12 device node.
     GFSDK_SSAO_NO_SECOND_LAYER_PROVIDED                     // FullResDepthTexture2ndLayerSRV is not set, but DualLayerAO is enabled.
 };
@@ -911,6 +911,8 @@ public:
     // Remarks:
     //    * Allocates internal D3D render targets on first use, and re-allocates them when the viewport dimensions change.
     //    * Setting RenderMask = GFSDK_SSAO_RENDER_DEBUG_NORMAL_Z can be useful to visualize the normals used for the AO rendering.
+    //    * The input depth & normal textures are assumed to have state D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE.
+    //    * The output AO render target is assumed to have state D3D12_RESOURCE_STATE_RENDER_TARGET.
     //
     // Returns:
     //     GFSDK_SSAO_NULL_ARGUMENT                        - One of the required argument pointers is NULL
@@ -986,12 +988,10 @@ struct GFSDK_SSAO_DescriptorHeapRange_D3D12
 {
     ID3D12DescriptorHeap* pDescHeap;           // Pointer to the descriptor heap
     GFSDK_SSAO_UINT       BaseIndex;           // The base index that can be used as a start index of the pDescHeap
-    GFSDK_SSAO_UINT       NumDescriptors;      // The maximum number of descriptors that are allowed to be used in the library
 
     GFSDK_SSAO_DescriptorHeapRange_D3D12()
         : pDescHeap(NULL)
         , BaseIndex(0)
-        , NumDescriptors(0)
     {
     }
 };
@@ -1016,7 +1016,7 @@ struct GFSDK_SSAO_DescriptorHeaps_D3D12
 //     GFSDK_SSAO_D3D_FEATURE_LEVEL_NOT_SUPPORTED      - The D3D feature level of pD3DDevice is lower than 11_0
 //     GFSDK_SSAO_D3D_RESOURCE_CREATION_FAILED         - A resource-creation call has failed (running out of memory?)
 //     GFSDK_SSAO_D3D12_INVALID_HEAP_TYPE              - One of the heaps provided to GFSDK_SSAO_CreateContext_D3D12 has an unexpected type
-//     GFSDK_SSAO_D3D12_INSUFFICIENT_DESCRIPTORS       - One of the heaps described in pHeapInfo has insufficient descriptors
+//     GFSDK_SSAO_D3D12_INSUFFICIENT_DESCRIPTORS       - One of the heaps described in pHeapInfo has an insufficient number of descriptors
 //     GFSDK_SSAO_D3D12_INVALID_NODE_MASK              - NodeMask has more than one bit set, or is zero
 //     GFSDK_SSAO_OK                                   - Success
 //---------------------------------------------------------------------------------------------------

@@ -216,6 +216,11 @@ DeviceManager::CreateWindowDeviceAndSwapChain(const DeviceCreationParameters& pa
     for(UINT bufferIndex = 0; bufferIndex < m_SwapChainDesc.BufferCount; bufferIndex++)
     {
         m_FrameFenceEvents.push_back( CreateEvent(NULL, false, true, NULL) );
+
+        ID3D12CommandAllocator* commandAllocator = nullptr;
+        m_Device12->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator));
+
+        m_CommandAllocators.push_back(commandAllocator);
     }
 
     DeviceCreated();
@@ -245,7 +250,9 @@ DeviceManager::Shutdown()
 
     SAFE_RELEASE(m_FrameFence);
 
-    SAFE_RELEASE(m_DefaultCommandAllocator);
+    for (auto& commandAllocator : m_CommandAllocators)
+        SAFE_RELEASE(commandAllocator);
+
 	SAFE_RELEASE(m_PreRenderCommandList);
 	SAFE_RELEASE(m_PostRenderCommandList);
 
@@ -288,19 +295,20 @@ HRESULT DeviceManager::CreatePrePostRenderCommandLists()
 {
     HRESULT hr; 
 
-    if (!m_DefaultCommandAllocator)
+    ID3D12CommandAllocator* commandAllocator = m_CommandAllocators[m_BufferIndex];
+
+    if (commandAllocator)
     {
-        hr = m_Device12->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_DefaultCommandAllocator));
-        HR_RETURN(hr);
+        commandAllocator->Reset();
     }
 
     if (!m_PreRenderCommandList)
     {
-        hr = m_Device12->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_DefaultCommandAllocator, NULL, IID_PPV_ARGS(&m_PreRenderCommandList));
+        hr = m_Device12->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator, NULL, IID_PPV_ARGS(&m_PreRenderCommandList));
         HR_RETURN(hr);
     }
     else
-		m_PreRenderCommandList->Reset(m_DefaultCommandAllocator, nullptr);
+		m_PreRenderCommandList->Reset(commandAllocator, nullptr);
 
     SetResourceBarrier(m_PreRenderCommandList, m_SwapChainBuffers[m_BufferIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
     if(m_EnableRenderTargetClear)
@@ -312,11 +320,11 @@ HRESULT DeviceManager::CreatePrePostRenderCommandLists()
 
     if (!m_PostRenderCommandList)
     {
-        hr = m_Device12->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_DefaultCommandAllocator, NULL, IID_PPV_ARGS(&m_PostRenderCommandList));
+        hr = m_Device12->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator, NULL, IID_PPV_ARGS(&m_PostRenderCommandList));
         HR_RETURN(hr);
     }
     else
-		m_PostRenderCommandList->Reset(m_DefaultCommandAllocator, nullptr);
+		m_PostRenderCommandList->Reset(commandAllocator, nullptr);
 
     SetResourceBarrier(m_PostRenderCommandList, m_SwapChainBuffers[m_BufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 	m_PostRenderCommandList->Close();
@@ -425,10 +433,6 @@ DeviceManager::MessageLoop()
                 {
                     m_AverageFrameTime = timeSum / (double)m_vFrameTimes.size();
                     m_vFrameTimes.clear();
-
-                    //char buf[256];
-                    //sprintf_s(buf, "Average FPS: %.2f\n", 1.f / m_AverageFrameTime);
-                    //OutputDebugStringA(buf);
                 }
             }
 

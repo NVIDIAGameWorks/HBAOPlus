@@ -43,6 +43,7 @@ void HBAOSampleD3D12::Initialize()
     deviceParams.windowPosY = 0;
 
     mDeviceManager.CreateWindowDeviceAndSwapChain(deviceParams, L"HBAO+ D3D12 Sample");
+    mDeviceManager.SetPrimaryRenderTargetClearColor(false, nullptr);
 
     mDeviceManager.AddControllerToBack(this);
 
@@ -210,11 +211,9 @@ bool HBAOSampleD3D12::InitializeHBAOPlus()
 
     DescriptorHeaps.CBV_SRV_UAV.pDescHeap = mSSAODescriptorHeapCBVSRVUAV.Get();
     DescriptorHeaps.CBV_SRV_UAV.BaseIndex = kNumTotalAppDescriptors;
-    DescriptorHeaps.CBV_SRV_UAV.NumDescriptors = GFSDK_SSAO_NUM_DESCRIPTORS_CBV_SRV_UAV_HEAP_D3D12;
 
     DescriptorHeaps.RTV.pDescHeap = mSSAODescriptorHeapRTV.Get();
     DescriptorHeaps.RTV.BaseIndex = 0;
-    DescriptorHeaps.RTV.NumDescriptors = GFSDK_SSAO_NUM_DESCRIPTORS_RTV_HEAP_D3D12;
 
     GFSDK_SSAO_Status status = GFSDK_SSAO_CreateContext_D3D12(mDevice, NodeMask, DescriptorHeaps, &mSSAOContext, &CustomHeap);
     assert(status == GFSDK_SSAO_OK);

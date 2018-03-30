@@ -144,6 +144,8 @@ private:
     GFSDK_SSAO_Status SetAOParameters(const GFSDK_SSAO_Parameters& Parameters);
     GFSDK_SSAO_Status SetOutput(const GFSDK_SSAO_Output_D3D12& Output);
     GFSDK_SSAO_Status ValidateDataFlow();
+    GFSDK_SSAO_Status ValidateDescriptorHeap(const GFSDK_SSAO_DescriptorHeapRange_D3D12& DescHeapRange, D3D12_DESCRIPTOR_HEAP_TYPE RequiredHeapType, UINT RequiredNumDescriptors);
+    GFSDK_SSAO_Status ValidateDescriptorHeaps(const GFSDK_SSAO_DescriptorHeaps_D3D12& DescriptorHeaps);
 
     void DrawLinearDepthPS(GFSDK_D3D12_GraphicsContext* pGraphicsContext);
     void DrawDeinterleavedDepthPS(GFSDK_D3D12_GraphicsContext* pGraphicsContext);

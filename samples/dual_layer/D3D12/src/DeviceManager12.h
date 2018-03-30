@@ -99,34 +99,34 @@ public:
     };
 
 protected:
-    ID3D12Device*                   m_Device12;
-    ID3D12CommandQueue*             m_DefaultQueue;
-    IDXGISwapChain3*                m_SwapChain;
-    DXGI_SWAP_CHAIN_DESC1           m_SwapChainDesc;
-    DXGI_SWAP_CHAIN_FULLSCREEN_DESC m_FullScreenDesc;
-    ID3D12CommandAllocator*         m_DefaultCommandAllocator;
-    ID3D12GraphicsCommandList*		m_PreRenderCommandList;
-    ID3D12GraphicsCommandList*		m_PostRenderCommandList;
-    ID3D12DescriptorHeap*           m_DescHeapRTV;
-    IDXGIAdapter*                   m_DxgiAdapter;
-    HWND                            m_hWnd;
-    std::list<IVisualController*>   m_vControllers;
-    std::wstring                    m_WindowTitle;
-    double                          m_FixedFrameInterval;
-    UINT                            m_SyncInterval;
-    std::list<double>               m_vFrameTimes;
-    double                          m_AverageFrameTime;
-    double                          m_AverageTimeUpdateInterval;
-    bool                            m_InSizingModalLoop;
-    SIZE                            m_NewWindowSize;
-    std::vector<ID3D12Resource*>    m_SwapChainBuffers;
+    ID3D12Device*                            m_Device12;
+    ID3D12CommandQueue*                      m_DefaultQueue;
+    IDXGISwapChain3*                         m_SwapChain;
+    DXGI_SWAP_CHAIN_DESC1                    m_SwapChainDesc;
+    DXGI_SWAP_CHAIN_FULLSCREEN_DESC          m_FullScreenDesc;
+    std::vector<ID3D12CommandAllocator*>     m_CommandAllocators;
+    ID3D12GraphicsCommandList*               m_PreRenderCommandList;
+    ID3D12GraphicsCommandList*               m_PostRenderCommandList;
+    ID3D12DescriptorHeap*                    m_DescHeapRTV;
+    IDXGIAdapter*                            m_DxgiAdapter;
+    HWND                                     m_hWnd;
+    std::list<IVisualController*>            m_vControllers;
+    std::wstring                             m_WindowTitle;
+    double                                   m_FixedFrameInterval;
+    UINT                                     m_SyncInterval;
+    std::list<double>                        m_vFrameTimes;
+    double                                   m_AverageFrameTime;
+    double                                   m_AverageTimeUpdateInterval;
+    bool                                     m_InSizingModalLoop;
+    SIZE                                     m_NewWindowSize;
+    std::vector<ID3D12Resource*>             m_SwapChainBuffers;
     std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> m_SwapChainRTVs;
-    ID3D12Fence*                    m_FrameFence;
-    std::vector<HANDLE>             m_FrameFenceEvents;
-    int                             m_BufferIndex;
-    UINT64                          m_FrameCount;
-    bool                            m_EnableRenderTargetClear;
-    float                           m_RenderTargetClearColor[4];
+    ID3D12Fence*                             m_FrameFence;
+    std::vector<HANDLE>                      m_FrameFenceEvents;
+    int                                      m_BufferIndex;
+    UINT64                                   m_FrameCount;
+    bool                                     m_EnableRenderTargetClear;
+    float                                    m_RenderTargetClearColor[4];
 private:
     HRESULT                 CreateRenderTargets();
     HRESULT                 CreatePrePostRenderCommandLists();
@@ -146,7 +146,6 @@ public:
         , m_SyncInterval(0)
         , m_AverageFrameTime(0)
         , m_AverageTimeUpdateInterval(0.5)
-        , m_DefaultCommandAllocator(NULL)
 		, m_PreRenderCommandList(NULL)
 		, m_PostRenderCommandList(NULL)
         , m_DescHeapRTV(NULL)

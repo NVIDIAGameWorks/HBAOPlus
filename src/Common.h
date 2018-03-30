@@ -23,10 +23,8 @@
 
 #if _DEBUG
 #define ASSERT(exp)         assert(exp)
-#define ASSERT_GL_ERROR(GL) assert(!GL.glGetError())
 #else
 #define ASSERT(exp)         ((void)0)
-#define ASSERT_GL_ERROR(GL)
 #endif
 
 #ifndef ANDROID

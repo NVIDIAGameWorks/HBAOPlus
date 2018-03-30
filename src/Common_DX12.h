@@ -68,7 +68,7 @@ struct GFSDK_D3D12_DescriptorHeap
 
     void InitDescriptorHeap(ID3D12Device* pDevice, D3D12_DESCRIPTOR_HEAP_TYPE HeapType, const GFSDK_SSAO_DescriptorHeapRange_D3D12* pHeapInfo, bool bShaderVisible)
     {
-        NumDescriptors = pHeapInfo->NumDescriptors;
+        NumDescriptors = pHeapInfo->pDescHeap->GetDesc().NumDescriptors;
         pDescHeap = pHeapInfo->pDescHeap;
         BaseIndex = pHeapInfo->BaseIndex;
 

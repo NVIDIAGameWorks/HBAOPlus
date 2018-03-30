@@ -79,6 +79,52 @@ void GFSDK::SSAO::D3D12::Renderer::ReleaseResources()
 }
 
 //--------------------------------------------------------------------------------
+GFSDK_SSAO_Status GFSDK::SSAO::D3D12::Renderer::ValidateDescriptorHeap(
+    const GFSDK_SSAO_DescriptorHeapRange_D3D12& DescHeapRange,
+    D3D12_DESCRIPTOR_HEAP_TYPE RequiredHeapType,
+    UINT RequiredNumDescriptors)
+{
+    if (!DescHeapRange.pDescHeap)
+    {
+        return GFSDK_SSAO_NULL_ARGUMENT;
+    }
+
+    D3D12_DESCRIPTOR_HEAP_DESC HeapDesc = DescHeapRange.pDescHeap->GetDesc();
+
+    if (HeapDesc.Type != RequiredHeapType)
+    {
+        return GFSDK_SSAO_D3D12_INVALID_HEAP_TYPE;
+    }
+
+    if (HeapDesc.NumDescriptors < DescHeapRange.BaseIndex + RequiredNumDescriptors)
+    {
+        return GFSDK_SSAO_D3D12_INSUFFICIENT_DESCRIPTORS;
+    }
+
+    return GFSDK_SSAO_OK;
+}
+
+//--------------------------------------------------------------------------------
+GFSDK_SSAO_Status GFSDK::SSAO::D3D12::Renderer::ValidateDescriptorHeaps(const GFSDK_SSAO_DescriptorHeaps_D3D12& DescriptorHeaps)
+{
+    GFSDK_SSAO_Status Status;
+
+    Status = ValidateDescriptorHeap(DescriptorHeaps.CBV_SRV_UAV, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, CBVSRVUAVLayoutBase::eCBVSRVUAVLayoutBaseMax);
+    if (Status != GFSDK_SSAO_OK)
+    {
+        return Status;
+    }
+
+    Status = ValidateDescriptorHeap(DescriptorHeaps.RTV, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, RTVLayoutBase::eRTVLayoutBaseMax);
+    if (Status != GFSDK_SSAO_OK)
+    {
+        return Status;
+    }
+
+    return GFSDK_SSAO_OK;
+}
+
+//--------------------------------------------------------------------------------
 GFSDK_SSAO_Status GFSDK::SSAO::D3D12::Renderer::Create(
     ID3D12Device* pDevice, 
     GFSDK_SSAO_UINT NodeMask, 
@@ -107,22 +153,10 @@ GFSDK_SSAO_Status GFSDK::SSAO::D3D12::Renderer::Create(
         return GFSDK_SSAO_D3D12_INVALID_NODE_MASK;
     }
 
-    if (!DescriptorHeaps.CBV_SRV_UAV.pDescHeap ||
-        !DescriptorHeaps.RTV.pDescHeap)
+    GFSDK_SSAO_Status Status = ValidateDescriptorHeaps(DescriptorHeaps);
+    if (Status != GFSDK_SSAO_OK)
     {
-        return GFSDK_SSAO_NULL_ARGUMENT;
-    }
-
-    if (DescriptorHeaps.CBV_SRV_UAV.pDescHeap->GetDesc().Type != D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV ||
-        DescriptorHeaps.RTV.pDescHeap->GetDesc().Type != D3D12_DESCRIPTOR_HEAP_TYPE_RTV)
-    {
-        return GFSDK_SSAO_D3D12_INVALID_HEAP_TYPE;
-    }
-
-    if (DescriptorHeaps.CBV_SRV_UAV.NumDescriptors < GFSDK_SSAO_NUM_DESCRIPTORS_CBV_SRV_UAV_HEAP_D3D12 ||
-        DescriptorHeaps.RTV.NumDescriptors < GFSDK_SSAO_NUM_DESCRIPTORS_RTV_HEAP_D3D12)
-    {
-        return GFSDK_SSAO_D3D12_INSUFFICIENT_DESCRIPTORS;
+        return Status;
     }
 
     m_GraphicsContext.Init(pDevice, DescriptorHeaps, NodeMask);
