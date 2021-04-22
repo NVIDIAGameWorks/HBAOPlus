@@ -14,6 +14,7 @@
 #include <D3D12.h>
 #include <list>
 #include <vector>
+#include <string>
 
 #ifndef SAFE_RELEASE
 #define SAFE_RELEASE(p)      { if (p) { (p)->Release(); (p)=NULL; } }

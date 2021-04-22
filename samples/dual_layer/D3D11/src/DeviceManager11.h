@@ -13,7 +13,7 @@
 #include <DXGI.h>
 #include <D3D11.h>
 #include <list>
-
+#include <string>
 
 struct DeviceCreationParameters
 {
